@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;900&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-serana-cream: #FEFADF;
+  --color-serana-olive: #5F6C37;
+  --color-serana-forest: #273617;
+  --color-serana-ochre: #DCA15D;
+  --color-serana-terracotta: #BC6C25;
+
+  --font-serif: "Playfair Display", serif;
+  --font-sans: "Montserrat", sans-serif;
+
+  --animate-spin-slow: spin 12s linear infinite;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-serana-cream);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-serana-olive);
+  border-radius: 5px;
+  border: 2px solid var(--color-serana-cream);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-serana-forest);
+}
+
+body {
+  background-color: var(--color-serana-cream);
+  color: var(--color-serana-forest);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  cursor: none; /* Hide default cursor */
+}
+
+a, button, [role="button"], input, select, textarea, label {
+  cursor: none; /* Hide default cursor on interactive elements */
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif);
+}
