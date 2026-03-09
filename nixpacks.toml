@@ -1,8 +1,8 @@
 [phases.setup]
-nixPkgs = ["...", "python3"]
+nixPkgs = ["nodejs_20", "python3", "npm"]
 
 [phases.install]
-cmds = ["rm -rf node_modules package-lock.json && npm install --prefer-offline=false"]
+cmds = ["rm -rf node_modules package-lock.json && npm install --force"]
 
 [phases.build]
 cmds = ["npm run build"]
