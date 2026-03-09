@@ -2,7 +2,10 @@
 nixPkgs = ["...", "python3"]
 
 [phases.install]
-cmds = ["rm -f package-lock.json && npm install"]
+cmds = ["rm -rf node_modules package-lock.json && npm install --prefer-offline=false"]
+
+[phases.build]
+cmds = ["npm run build"]
 
 [start]
 cmd = "npx serve -s dist -l 3000"
