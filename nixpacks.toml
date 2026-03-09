@@ -1,0 +1,8 @@
+[phases.setup]
+nixPkgs = ["...", "python3"]
+
+[phases.install]
+cmds = ["rm -f package-lock.json && npm install"]
+
+[start]
+cmd = "npx serve -s dist -l 3000"
