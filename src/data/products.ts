@@ -248,7 +248,7 @@ export const products: Product[] = [
     id: 'jugo-verde',
     name: 'Jugo Verde (x5)',
     price: 18900,
-    description: 'Pack de 5 jugos verdes desintoxicantes.',
+    description: 'Contiene pepino, piña, apio, menta y espinaca: especial para tu sistema digestivo y la desinflamación abdominal.',
     image: 'https://picsum.photos/seed/jugo-verde/400/300',
     category: 'bebidas',
     benefits: ['Detox', 'Energizante']
@@ -257,7 +257,7 @@ export const products: Product[] = [
     id: 'batido-circulacion',
     name: 'Batido Circulación (x5)',
     price: 18900,
-    description: 'Ayuda a mejorar tu circulación.',
+    description: 'Contiene remolacha, cúrcuma, zanahoria y mora: para tus músculos y la circulación efectiva de la sangre.',
     image: 'https://picsum.photos/seed/batido-circulacion/400/300',
     category: 'bebidas',
     benefits: ['Saludable', 'Natural']
@@ -266,7 +266,7 @@ export const products: Product[] = [
     id: 'batido-detox',
     name: 'Batido Detox Antiestrés (x5)',
     price: 18900,
-    description: 'Relájate y limpia tu organismo.',
+    description: 'Contiene papaya, piña, pepino y jengibre: calma el estrés y te activa la microbiota.',
     image: 'https://picsum.photos/seed/batido-detox/400/300',
     category: 'bebidas',
     benefits: ['Relajante', 'Depurativo']
@@ -275,7 +275,7 @@ export const products: Product[] = [
     id: 'jugo-naranja',
     name: 'Jugo de Naranja (x6)',
     price: 39900,
-    description: '100% natural, recién exprimido.',
+    description: 'Jugos siempre frescos, dulcecitos y con naranjas seleccionadas.',
     image: 'https://picsum.photos/seed/jugo-naranja/400/300',
     category: 'bebidas',
     benefits: ['Vitamina C', 'Refrescante']
@@ -284,7 +284,7 @@ export const products: Product[] = [
     id: 'shot-metabolico',
     name: 'Shot Metabólico (x6)',
     price: 48900,
-    description: 'Acelera tu metabolismo naturalmente.',
+    description: 'Una combinación de ingredientes que te activan el metabolismo y te ayudan a bajar de peso.',
     image: 'https://picsum.photos/seed/shot-metabolico/400/300',
     category: 'bebidas',
     benefits: ['Metabolismo', 'Energía']
@@ -293,7 +293,7 @@ export const products: Product[] = [
     id: 'shot-serenidad',
     name: 'Shot Serenidad (x6)',
     price: 49500,
-    description: 'Para momentos de calma.',
+    description: 'Un shot que te calma el estrés y te calma el sistema nervioso central.',
     image: 'https://picsum.photos/seed/shot-serenidad/400/300',
     category: 'bebidas',
     benefits: ['Calma', 'Bienestar']
@@ -302,7 +302,7 @@ export const products: Product[] = [
     id: 'shot-concentracion',
     name: 'Shot Concentración (x6)',
     price: 59500,
-    description: 'Mejora tu enfoque mental.',
+    description: 'Un shot cargado de antioxidantes que tiene repercusión directa y positiva en tu cerebro.',
     image: 'https://picsum.photos/seed/shot-concentracion/400/300',
     category: 'bebidas',
     benefits: ['Enfoque', 'Mental']
@@ -311,7 +311,7 @@ export const products: Product[] = [
     id: 'shot-antiinflamatorio',
     name: 'Shot Antiinflamatorio (x6)',
     price: 49500,
-    description: 'Combate la inflamación.',
+    description: 'Este shot con ingredientes que te desinflaman y te hace sentir más ligero.',
     image: 'https://picsum.photos/seed/shot-antiinflamatorio/400/300',
     category: 'bebidas',
     benefits: ['Salud', 'Recuperación']
@@ -320,7 +320,7 @@ export const products: Product[] = [
     id: 'shot-muscular',
     name: 'Shot Muscular (x6)',
     price: 44500,
-    description: 'Apoyo para tus músculos.',
+    description: 'El shot perfecto para activar tu cuerpo, para deportistas o incluso para un mejor rendimiento sexual.',
     image: 'https://picsum.photos/seed/shot-muscular/400/300',
     category: 'bebidas',
     benefits: ['Recuperación', 'Fuerza']
@@ -329,7 +329,7 @@ export const products: Product[] = [
     id: 'shot-piel',
     name: 'Shot Piel Perfecta (x6)',
     price: 35900,
-    description: 'Nutrición para tu piel desde dentro.',
+    description: 'El shot que tiene todos los ingredientes que tienen beneficios directos a la salud cutánea.',
     image: 'https://picsum.photos/seed/shot-piel/400/300',
     category: 'bebidas',
     benefits: ['Belleza', 'Nutrición']
