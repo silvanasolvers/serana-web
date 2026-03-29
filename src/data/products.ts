@@ -109,7 +109,7 @@ export const products: Product[] = [
     id: 'salsa-cesar',
     name: 'Salsa César (200ml)',
     price: 26900,
-    description: 'El aderezo perfecto para tus ensaladas.',
+    description: 'Sin su salsa la ensalada César está incompleta.',
     image: 'https://picsum.photos/seed/salsa-cesar/400/300',
     category: 'salsas',
     benefits: ['Cremosa', 'Sabor auténtico']
@@ -118,7 +118,7 @@ export const products: Product[] = [
     id: 'vinagreta-mostaza-miel',
     name: 'Vinagreta Mostaza y Miel (200ml)',
     price: 26900,
-    description: 'Dulce y picante en perfecto equilibrio.',
+    description: 'Una clásica pero deliciosa con el toque gourmet Serana.',
     image: 'https://picsum.photos/seed/vinagreta-mostaza-miel/400/300',
     category: 'salsas',
     benefits: ['Versátil', 'Sin conservantes']
@@ -127,7 +127,7 @@ export const products: Product[] = [
     id: 'pesto',
     name: 'Pesto (200ml)',
     price: 33900,
-    description: 'Tradicional salsa de albahaca y nueces.',
+    description: 'La inconfundible, hecho con ingredientes frescos y de alta calidad.',
     image: 'https://picsum.photos/seed/pesto/400/300',
     category: 'salsas',
     benefits: ['Aromático', 'Artesanal']
@@ -136,7 +136,7 @@ export const products: Product[] = [
     id: 'mayonesa-griega',
     name: 'Mayonesa Griega de Ajo (200ml)',
     price: 27900,
-    description: 'Suave y con un toque de ajo.',
+    description: 'La versión más saludable de la mayonesa, con bajo porcentaje de aceite y con altas cantidades de proteína.',
     image: 'https://picsum.photos/seed/mayonesa-griega/400/300',
     category: 'salsas',
     benefits: ['Cremosa', 'Sabor intenso']
@@ -145,7 +145,7 @@ export const products: Product[] = [
     id: 'vinagreta-fresa-menta',
     name: 'Vinagreta Fresa y Menta (200ml)',
     price: 22900,
-    description: 'Fresca y frutal.',
+    description: 'Con un sabor único, la vinagreta de fresa y menta podrá ser tu favorita.',
     image: 'https://picsum.photos/seed/vinagreta-fresa-menta/400/300',
     category: 'salsas',
     benefits: ['Innovadora', 'Refrescante']
@@ -154,7 +154,7 @@ export const products: Product[] = [
     id: 'vinagreta-miel-balsamico',
     name: 'Vinagreta Miel y Balsámico (200ml)',
     price: 29900,
-    description: 'Clásica combinación agridulce.',
+    description: 'Una clásica de la cocina, hecha para paladares educados.',
     image: 'https://picsum.photos/seed/vinagreta-miel-balsamico/400/300',
     category: 'salsas',
     benefits: ['Clásica', 'Elegante']
@@ -163,7 +163,7 @@ export const products: Product[] = [
     id: 'vinagreta-naranja-cilantro',
     name: 'Vinagreta Naranja y Cilantro (200ml)',
     price: 20900,
-    description: 'Cítrica y aromática.',
+    description: 'Una vinagreta muy fresca y acidita para acompañar todo tipo de ensaladas.',
     image: 'https://picsum.photos/seed/vinagreta-naranja-cilantro/400/300',
     category: 'salsas',
     benefits: ['Cítrica', 'Ligera']
@@ -172,7 +172,7 @@ export const products: Product[] = [
     id: 'hummus',
     name: 'Hummus (200ml)',
     price: 22900,
-    description: 'Crema de garbanzos tradicional.',
+    description: 'El clásico mediterráneo que queda bien con todo y con pan.',
     image: 'https://picsum.photos/seed/hummus/400/300',
     category: 'salsas',
     benefits: ['Proteína vegetal', 'Saludable']
@@ -181,7 +181,7 @@ export const products: Product[] = [
     id: 'chimichurri',
     name: 'Chimichurri (200ml)',
     price: 26900,
-    description: 'Ideal para acompañar tus comidas.',
+    description: 'Hecho a mano, con su sabor inconfundible para asados y carnes.',
     image: 'https://picsum.photos/seed/chimichurri/400/300',
     category: 'salsas',
     benefits: ['Especiado', 'Tradicional']
@@ -192,7 +192,7 @@ export const products: Product[] = [
     id: 'crema-tomate',
     name: 'Crema de Tomate (Libra)',
     price: 18900,
-    description: 'Reconfortante crema de tomates frescos.',
+    description: 'Crema de tomate san marzano, con un toque dulce y especial.',
     image: 'https://picsum.photos/seed/crema-tomate/400/300',
     category: 'sopas',
     benefits: ['Casera', 'Natural']
@@ -201,7 +201,7 @@ export const products: Product[] = [
     id: 'crema-auyama',
     name: 'Crema de Auyama (Libra)',
     price: 12900,
-    description: 'Suave crema de calabaza.',
+    description: 'Una crema para alimentar a tu familia.',
     image: 'https://picsum.photos/seed/crema-auyama/400/300',
     category: 'sopas',
     benefits: ['Vitaminas', 'Suave']
@@ -210,7 +210,7 @@ export const products: Product[] = [
     id: 'crema-hongos',
     name: 'Crema de Hongos (Libra)',
     price: 26900,
-    description: 'Deliciosa crema de setas variadas.',
+    description: 'Para hacer una salsa o para hacerla en crema. Con un sabor umami intenso y espectacular.',
     image: 'https://picsum.photos/seed/crema-hongos/400/300',
     category: 'sopas',
     benefits: ['Gourmet', 'Sabor intenso']
@@ -219,7 +219,7 @@ export const products: Product[] = [
     id: 'crema-verduras',
     name: 'Crema de Verduras (Libra)',
     price: 13900,
-    description: 'Mix de verduras en una crema nutritiva.',
+    description: 'Una crema que siempre cae como una caricia al corazón.',
     image: 'https://picsum.photos/seed/crema-verduras/400/300',
     category: 'sopas',
     benefits: ['Nutritiva', 'Ligera']
@@ -228,7 +228,7 @@ export const products: Product[] = [
     id: 'sancocho',
     name: 'Sancocho (Libra)',
     price: 13900,
-    description: 'Tradicional sancocho colombiano.',
+    description: 'Sopa tradicional colombiana de tubérculos sancochados.',
     image: 'https://picsum.photos/seed/sancocho/400/300',
     category: 'sopas',
     benefits: ['Tradicional', 'Completo']
@@ -237,7 +237,7 @@ export const products: Product[] = [
     id: 'frijoles',
     name: 'Frijoles (Libra)',
     price: 18900,
-    description: 'Frijoles caseros listos para servir.',
+    description: 'Sopa tradicional colombiana, especial para tu día a día.',
     image: 'https://picsum.photos/seed/frijoles/400/300',
     category: 'sopas',
     benefits: ['Proteína', 'Caseros']
