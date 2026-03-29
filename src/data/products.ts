@@ -491,6 +491,186 @@ export const products: Product[] = [
     category: 'verduras',
     benefits: ['Orgánico', 'Premium']
   },
+  {
+    id: 'cebolla-roja',
+    name: 'Cebolla Roja Picada (Libra)',
+    price: 12900,
+    description: 'De sabor más fuerte que la blanca pero te realza las comidas de la mejor manera.',
+    image: 'https://picsum.photos/seed/cebolla-roja/400/300',
+    category: 'verduras',
+    benefits: ['Sabor intenso', 'Versátil']
+  },
+  {
+    id: 'cebolla-puerro',
+    name: 'Cebolla Puerro (Unidad)',
+    price: 5900,
+    description: 'Para cremas, salteados y sopas.',
+    image: 'https://picsum.photos/seed/cebolla-puerro/400/300',
+    category: 'verduras',
+    benefits: ['Aromática', 'Versátil']
+  },
+  {
+    id: 'cebolla-larga',
+    name: 'Cebolla Larga (Atado)',
+    price: 4900,
+    description: 'Para guisos y sopas.',
+    image: 'https://picsum.photos/seed/cebolla-larga/400/300',
+    category: 'verduras',
+    benefits: ['Tradicional', 'Sabor']
+  },
+  {
+    id: 'habichuela',
+    name: 'Habichuela (Libra)',
+    price: 8900,
+    description: 'Contiene fibra y le hace bien a tu salud digestiva.',
+    image: 'https://picsum.photos/seed/habichuela/400/300',
+    category: 'verduras',
+    benefits: ['Fibra', 'Digestiva']
+  },
+  {
+    id: 'rabano',
+    name: 'Rábano (Libra)',
+    price: 7900,
+    description: 'Un alimento que favorece la salud cardiovascular y digestiva.',
+    image: 'https://picsum.photos/seed/rabano/400/300',
+    category: 'verduras',
+    benefits: ['Cardiovascular', 'Digestivo']
+  },
+  {
+    id: 'auyama',
+    name: 'Auyama (Libra)',
+    price: 6900,
+    description: 'Para hacer sopas, puré o hacer láminas en el airfryer.',
+    image: 'https://picsum.photos/seed/auyama/400/300',
+    category: 'verduras',
+    benefits: ['Versátil', 'Nutritiva']
+  },
+  {
+    id: 'remolacha',
+    name: 'Remolacha (Libra)',
+    price: 7900,
+    description: 'El vegetal que mejora tu salud cardiovascular.',
+    image: 'https://picsum.photos/seed/remolacha/400/300',
+    category: 'verduras',
+    benefits: ['Cardiovascular', 'Antioxidante']
+  },
+  {
+    id: 'tomate-aliño',
+    name: 'Tomate de Aliño (Libra)',
+    price: 6900,
+    description: 'No es un vegetal, es una fruta, pero especial para hacer ensaladas y guisos.',
+    image: 'https://picsum.photos/seed/tomate-aliño/400/300',
+    category: 'verduras',
+    benefits: ['Esencial', 'Versátil']
+  },
+  {
+    id: 'tomate-uvalina',
+    name: 'Tomate Uvalina (Libra)',
+    price: 12900,
+    description: 'Parecido al cherry pero más dulce y ovalado.',
+    image: 'https://picsum.photos/seed/tomate-uvalina/400/300',
+    category: 'verduras',
+    benefits: ['Dulce', 'Ensaladas']
+  },
+  {
+    id: 'repollo',
+    name: 'Repollo Blanco/Morado (Unidad)',
+    price: 5900,
+    description: 'Un alimento completo que te mejora la digestión.',
+    image: 'https://picsum.photos/seed/repollo/400/300',
+    category: 'verduras',
+    benefits: ['Digestión', 'Fibra']
+  },
+  {
+    id: 'apio',
+    name: 'Apio (Atado)',
+    price: 5900,
+    description: 'Un vegetal potente para tu salud digestiva y metabólica.',
+    image: 'https://picsum.photos/seed/apio/400/300',
+    category: 'verduras',
+    benefits: ['Digestivo', 'Metabólico']
+  },
+  {
+    id: 'brocoli',
+    name: 'Brócoli (Libra)',
+    price: 8900,
+    description: 'Proteína vegetal, un superalimento.',
+    image: 'https://picsum.photos/seed/brocoli/400/300',
+    category: 'verduras',
+    benefits: ['Superalimento', 'Proteína']
+  },
+  {
+    id: 'pepino',
+    name: 'Pepino (Libra)',
+    price: 5900,
+    description: 'Altamente hidratante y bajo en calorías.',
+    image: 'https://picsum.photos/seed/pepino/400/300',
+    category: 'verduras',
+    benefits: ['Hidratante', 'Ligero']
+  },
+  {
+    id: 'penca-sabila',
+    name: 'Penca Sábila (Unidad)',
+    price: 7900,
+    description: 'Sirve como tópico (quemaduras, hidratar la piel y cicatrizar heridas) o para hacer licuados y mejorar tu digestión.',
+    image: 'https://picsum.photos/seed/penca-sabila/400/300',
+    category: 'verduras',
+    benefits: ['Medicinal', 'Digestiva']
+  },
+  {
+    id: 'yuca-pelada',
+    name: 'Yuca Pelada Desvenada (Libra)',
+    price: 6900,
+    description: 'Perfectamente seleccionada, bien lavada y sin vena.',
+    image: 'https://picsum.photos/seed/yuca-pelada/400/300',
+    category: 'verduras',
+    benefits: ['Lista', 'Tradicional']
+  },
+  {
+    id: 'zanahoria',
+    name: 'Zanahoria (Libra)',
+    price: 4900,
+    description: 'Dulce y fresca, especial para tu salud ocular.',
+    image: 'https://picsum.photos/seed/zanahoria/400/300',
+    category: 'verduras',
+    benefits: ['Vitamina A', 'Salud ocular']
+  },
+  {
+    id: 'lechuga-batavia',
+    name: 'Lechuga Batavia (Unidad)',
+    price: 5900,
+    description: 'La inconfundible lechuga batavia para ensaladas, ya lista para consumir.',
+    image: 'https://picsum.photos/seed/lechuga-batavia/400/300',
+    category: 'verduras',
+    benefits: ['Fresca', 'Lista']
+  },
+  {
+    id: 'perejil',
+    name: 'Perejil (150g)',
+    price: 3900,
+    description: 'Lavado y desinfectado, pídelo crespo o liso.',
+    image: 'https://picsum.photos/seed/perejil/400/300',
+    category: 'verduras',
+    benefits: ['Aromático', 'Fresco']
+  },
+  {
+    id: 'coliflor',
+    name: 'Coliflor (Libra)',
+    price: 8900,
+    description: 'Un vegetal que te ayuda a perder peso, bajo en calorías y cargado de proteína.',
+    image: 'https://picsum.photos/seed/coliflor/400/300',
+    category: 'verduras',
+    benefits: ['Bajo en calorías', 'Proteína']
+  },
+  {
+    id: 'cilantro',
+    name: 'Cilantro Lavado (150g)',
+    price: 3900,
+    description: 'Cilantro fresco, desinfectado y lavado.',
+    image: 'https://picsum.photos/seed/cilantro/400/300',
+    category: 'verduras',
+    benefits: ['Aromático', 'Fresco']
+  },
 
   // Combos
   {
