@@ -24,6 +24,7 @@ export default function Navbar() {
   }, []);
 
   const navLinks = [
+    { name: 'Inicio', path: '/' },
     { name: 'Menú', path: '/shop' },
     { name: 'Nosotros', path: '/about' },
     { name: 'Comunidad', path: '/community' },

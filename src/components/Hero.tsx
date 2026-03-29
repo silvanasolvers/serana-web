@@ -57,23 +57,22 @@ export default function Hero() {
               <h1 className="font-serif text-3xl md:text-5xl lg:text-[4rem] text-[#273617] leading-[0.95] mb-3 tracking-tight">
                 Nutrición <br />
                 <span className="relative inline-block text-[#5F6C37] italic pr-4">
-                  Sagrada
+                  Qué se siente
                   <motion.svg 
                     initial={{ pathLength: 0 }}
                     animate={{ pathLength: 1 }}
                     transition={{ duration: 1.5, delay: 0.5 }}
                     className="absolute -bottom-1 left-0 w-full h-3 text-[#DCA15D]" 
-                    viewBox="0 0 200 20" 
+                    viewBox="0 0 300 20" 
                     fill="none"
                   >
-                     <path d="M5 15 Q 100 5 195 15" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+                     <path d="M5 15 Q 150 5 295 15" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
                   </motion.svg>
                 </span>
               </h1>
 
               <p className="text-sm md:text-base text-[#273617]/80 font-light leading-relaxed max-w-md mb-5 ml-1">
-                Ingredientes que sanan. Sabores que despiertan. <br/>
-                Una experiencia culinaria diseñada para elevar tu vibración.
+                En Serana transformamos ingredientes reales en experiencias que nutren tu cuerpo, elevan tu energía y acompañan tu ritmo de vida.
               </p>
 
               <div className="flex flex-wrap gap-3 ml-1">
@@ -90,7 +89,7 @@ export default function Hero() {
                   to="/about"
                   className="inline-flex items-center gap-2 px-4 py-2.5 text-[#273617] font-sans font-medium tracking-widest text-[9px] uppercase hover:text-[#BC6C25] transition-colors"
                 >
-                  Nuestra Historia
+                  Conoce Serana
                 </Link>
               </div>
             </motion.div>
