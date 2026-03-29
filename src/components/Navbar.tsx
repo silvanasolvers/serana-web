@@ -35,8 +35,8 @@ export default function Navbar() {
       className={clsx(
         "fixed top-0 left-0 right-0 z-50 px-6 transition-all duration-500 border-b",
         isScrolled 
-          ? "bg-serana-cream/90 backdrop-blur-md border-serana-forest/5 py-3" 
-          : "bg-transparent border-transparent py-5"
+          ? "bg-serana-cream backdrop-blur-md border-serana-forest/5 py-3 shadow-sm" 
+          : "bg-serana-cream border-transparent py-5"
       )}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -100,7 +100,7 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 bg-serana-cream/95 backdrop-blur-xl z-[60] flex flex-col p-8 md:hidden"
+            className="fixed inset-0 bg-serana-cream z-[60] flex flex-col p-8 md:hidden"
           >
             <div className="flex justify-between items-center mb-16">
               <img 
