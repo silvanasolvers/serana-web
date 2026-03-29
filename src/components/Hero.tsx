@@ -138,18 +138,18 @@ export default function Hero() {
               <motion.div 
                 animate={{ y: [0, -8, 0] }}
                 transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute -bottom-6 -left-6 w-28 h-28 bg-[#F9F7F2] rounded-full p-2 shadow-lg flex items-center justify-center hidden md:flex"
+                className="absolute -bottom-8 -left-8 w-40 h-40 bg-[#F9F7F2] rounded-full p-3 shadow-xl flex items-center justify-center hidden md:flex"
               >
                 <div className="w-full h-full rounded-full border border-[#273617]/10 flex items-center justify-center relative">
                    <svg className="absolute inset-0 w-full h-full animate-spin-slow" viewBox="0 0 100 100">
                       <path id="circlePath" d="M 50, 50 m -35, 0 a 35,35 0 1,1 70,0 a 35,35 0 1,1 -70,0" fill="none" />
-                      <text className="text-[9px] uppercase font-bold tracking-widest fill-[#273617]">
+                      <text className="text-[11px] uppercase font-bold tracking-[0.15em] fill-[#273617]">
                         <textPath href="#circlePath" startOffset="0%">
                           100% Orgánico • Natural • Fresco •
                         </textPath>
                       </text>
                    </svg>
-                   <span className="font-serif text-2xl text-[#BC6C25] italic">S</span>
+                   <span className="font-serif text-4xl text-[#BC6C25] italic">S</span>
                 </div>
               </motion.div>
             </motion.div>
