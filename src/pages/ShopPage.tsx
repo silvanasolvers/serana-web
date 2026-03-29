@@ -16,7 +16,12 @@ export default function ShopPage() {
   const [activeCategory, setActiveCategory] = useState<Category>('all');
 
   const filteredProducts = activeCategory === 'all' 
-    ? products 
+    ? [...products].sort((a, b) => {
+        // Combos first when showing "Todos"
+        if (a.category === 'combos' && b.category !== 'combos') return -1;
+        if (a.category !== 'combos' && b.category === 'combos') return 1;
+        return 0;
+      })
     : products.filter(p => p.category === activeCategory);
 
   const categories = [
