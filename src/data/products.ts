@@ -672,6 +672,188 @@ export const products: Product[] = [
     benefits: ['Aromático', 'Fresco']
   },
 
+  // Verduras sin procesar por libra
+  {
+    id: 'papa-capira', name: 'Papa Capira (Libra)', price: 4900,
+    description: 'Lavadas y desinfectadas.', image: 'https://picsum.photos/seed/papa-capira/400/300',
+    category: 'verduras', benefits: ['Tradicional', 'Lista']
+  },
+  {
+    id: 'papa-criolla', name: 'Papa Criolla (Libra)', price: 6900,
+    description: 'Lavadas y desinfectadas.', image: 'https://picsum.photos/seed/papa-criolla/400/300',
+    category: 'verduras', benefits: ['Colombiana', 'Lista']
+  },
+  {
+    id: 'papa-nevada', name: 'Papa Nevada (Libra)', price: 5900,
+    description: 'Lavadas y desinfectadas.', image: 'https://picsum.photos/seed/papa-nevada/400/300',
+    category: 'verduras', benefits: ['Versátil', 'Lista']
+  },
+  {
+    id: 'frijol-rojo', name: 'Frijol Rojo (Libra)', price: 7900,
+    description: 'Desinfectado y seleccionado.', image: 'https://picsum.photos/seed/frijol-rojo/400/300',
+    category: 'verduras', benefits: ['Proteína', 'Tradicional']
+  },
+  {
+    id: 'guineo', name: 'Guineo (Libra)', price: 4900,
+    description: 'Siempre verde y fresco.', image: 'https://picsum.photos/seed/guineo/400/300',
+    category: 'verduras', benefits: ['Verde', 'Fresco']
+  },
+  {
+    id: 'platano', name: 'Plátano (Libra)', price: 4900,
+    description: 'Pídelo verde, pintón o maduro.', image: 'https://picsum.photos/seed/platano/400/300',
+    category: 'verduras', benefits: ['Versátil', 'Tradicional']
+  },
+  {
+    id: 'yuca-libra', name: 'Yuca (Libra)', price: 4900,
+    description: 'Seleccionada con ojo de halcón.', image: 'https://picsum.photos/seed/yuca-libra/400/300',
+    category: 'verduras', benefits: ['Tradicional', 'Seleccionada']
+  },
+  {
+    id: 'champinon', name: 'Champiñón (Libra)', price: 14900,
+    description: 'Pide media libra, libra o kilo.', image: 'https://picsum.photos/seed/champinon/400/300',
+    category: 'verduras', benefits: ['Gourmet', 'Versátil']
+  },
+  {
+    id: 'orellana', name: 'Orellana (Libra)', price: 16900,
+    description: 'Pide media libra, libra o kilo.', image: 'https://picsum.photos/seed/orellana/400/300',
+    category: 'verduras', benefits: ['Gourmet', 'Premium']
+  },
+  {
+    id: 'tomate-san-marzano', name: 'Tomate San Marzano (Libra)', price: 9900,
+    description: 'Perfectamente seleccionados.', image: 'https://picsum.photos/seed/tomate-san-marzano/400/300',
+    category: 'verduras', benefits: ['Premium', 'Salsas']
+  },
+  {
+    id: 'cebolla-morada', name: 'Cebolla Morada (Libra)', price: 5900,
+    description: 'Lavada, pelada y limpia.', image: 'https://picsum.photos/seed/cebolla-morada/400/300',
+    category: 'verduras', benefits: ['Sabor', 'Lista']
+  },
+  {
+    id: 'cebollin', name: 'Cebollín (Atado)', price: 3900,
+    description: 'Lavado y desinfectado.', image: 'https://picsum.photos/seed/cebollin/400/300',
+    category: 'verduras', benefits: ['Aromático', 'Fresco']
+  },
+  {
+    id: 'cebolla-chalota', name: 'Cebolla Chalota (Libra)', price: 12900,
+    description: 'Son más dulces y delicadas.', image: 'https://picsum.photos/seed/cebolla-chalota/400/300',
+    category: 'verduras', benefits: ['Gourmet', 'Dulce']
+  },
+  {
+    id: 'ajo', name: 'Ajo (3 unidades)', price: 3900,
+    description: 'Seleccionado con cuidado.', image: 'https://picsum.photos/seed/ajo/400/300',
+    category: 'verduras', benefits: ['Esencial', 'Sabor']
+  },
+  {
+    id: 'lechuga-romana', name: 'Lechuga Romana (Unidad)', price: 5900,
+    description: 'Para ensaladas y emparedados.', image: 'https://picsum.photos/seed/lechuga-romana/400/300',
+    category: 'verduras', benefits: ['Fresca', 'Crujiente']
+  },
+  {
+    id: 'cogollo-europeo', name: 'Cogollo Europeo (Unidad)', price: 7900,
+    description: 'Para ensaladas y emparedados.', image: 'https://picsum.photos/seed/cogollo-europeo/400/300',
+    category: 'verduras', benefits: ['Premium', 'Ensaladas']
+  },
+  {
+    id: 'arracacha', name: 'Arracacha (Libra)', price: 5900,
+    description: 'Tubérculo tradicional colombiano.', image: 'https://picsum.photos/seed/arracacha/400/300',
+    category: 'verduras', benefits: ['Tradicional', 'Nutritiva']
+  },
+  {
+    id: 'jengibre', name: 'Jengibre (100g)', price: 4900,
+    description: 'Raíz potente para infusiones y preparaciones.', image: 'https://picsum.photos/seed/jengibre/400/300',
+    category: 'verduras', benefits: ['Medicinal', 'Antiinflamatorio']
+  },
+  {
+    id: 'aji-dulce', name: 'Ají Dulce (Libra)', price: 7900,
+    description: 'Sabor sin picante.', image: 'https://picsum.photos/seed/aji-dulce/400/300',
+    category: 'verduras', benefits: ['Aromático', 'Suave']
+  },
+  {
+    id: 'aji-rocoto', name: 'Ají Rocoto Picante (Libra)', price: 12900,
+    description: 'Para los amantes del picante.', image: 'https://picsum.photos/seed/aji-rocoto/400/300',
+    category: 'verduras', benefits: ['Picante', 'Intenso']
+  },
+  {
+    id: 'jalapeno', name: 'Jalapeño (Libra)', price: 9900,
+    description: 'El clásico picante mexicano.', image: 'https://picsum.photos/seed/jalapeno/400/300',
+    category: 'verduras', benefits: ['Picante', 'Versátil']
+  },
+  {
+    id: 'mazorca', name: 'Bandeja Mazorca (Unidad)', price: 5900,
+    description: 'Lista para asar o cocinar.', image: 'https://picsum.photos/seed/mazorca/400/300',
+    category: 'verduras', benefits: ['Tradicional', 'Versátil']
+  },
+  {
+    id: 'berenjena', name: 'Berenjena (Libra)', price: 7900,
+    description: 'Versátil para múltiples preparaciones.', image: 'https://picsum.photos/seed/berenjena/400/300',
+    category: 'verduras', benefits: ['Versátil', 'Baja en calorías']
+  },
+  {
+    id: 'col-bruselas', name: 'Col de Bruselas (Libra)', price: 14900,
+    description: 'Perfectas para hornear o saltear.', image: 'https://picsum.photos/seed/col-bruselas/400/300',
+    category: 'verduras', benefits: ['Premium', 'Nutritiva']
+  },
+  {
+    id: 'esparragos', name: 'Espárragos (Atado)', price: 12900,
+    description: 'Frescos y listos para preparar.', image: 'https://picsum.photos/seed/esparragos/400/300',
+    category: 'verduras', benefits: ['Gourmet', 'Saludable']
+  },
+  {
+    id: 'kale', name: 'Kale (250g)', price: 8900,
+    description: 'Superalimento de moda.', image: 'https://picsum.photos/seed/kale/400/300',
+    category: 'verduras', benefits: ['Superalimento', 'Antioxidante']
+  },
+  {
+    id: 'espinaca', name: 'Espinaca (250g)', price: 5900,
+    description: 'Hojas frescas y nutritivas.', image: 'https://picsum.photos/seed/espinaca/400/300',
+    category: 'verduras', benefits: ['Hierro', 'Nutritiva']
+  },
+  {
+    id: 'acelga', name: 'Acelga (Atado)', price: 4900,
+    description: 'Hojas verdes nutritivas.', image: 'https://picsum.photos/seed/acelga/400/300',
+    category: 'verduras', benefits: ['Nutritiva', 'Versátil']
+  },
+  {
+    id: 'col-china', name: 'Col China (Unidad)', price: 6900,
+    description: 'Ideal para salteados asiáticos.', image: 'https://picsum.photos/seed/col-china/400/300',
+    category: 'verduras', benefits: ['Asiática', 'Ligera']
+  },
+  {
+    id: 'hinojo', name: 'Hinojo (Unidad)', price: 8900,
+    description: 'Sabor anisado único.', image: 'https://picsum.photos/seed/hinojo/400/300',
+    category: 'verduras', benefits: ['Aromático', 'Digestivo']
+  },
+  {
+    id: 'eneldo', name: 'Eneldo (Atado)', price: 3900,
+    description: 'Hierba aromática fresca.', image: 'https://picsum.photos/seed/eneldo/400/300',
+    category: 'verduras', benefits: ['Aromático', 'Gourmet']
+  },
+  {
+    id: 'menta', name: 'Menta (Atado)', price: 3900,
+    description: 'Fresca y aromática.', image: 'https://picsum.photos/seed/menta/400/300',
+    category: 'verduras', benefits: ['Refrescante', 'Aromática']
+  },
+  {
+    id: 'yerbabuena', name: 'Yerbabuena (Atado)', price: 3900,
+    description: 'Para infusiones y cocina.', image: 'https://picsum.photos/seed/yerbabuena/400/300',
+    category: 'verduras', benefits: ['Aromática', 'Digestiva']
+  },
+  {
+    id: 'albahaca', name: 'Albahaca (Atado)', price: 3900,
+    description: 'La reina de las hierbas aromáticas.', image: 'https://picsum.photos/seed/albahaca/400/300',
+    category: 'verduras', benefits: ['Aromática', 'Italiana']
+  },
+  {
+    id: 'tomillo', name: 'Tomillo (Atado)', price: 3900,
+    description: 'Hierba esencial de cocina.', image: 'https://picsum.photos/seed/tomillo/400/300',
+    category: 'verduras', benefits: ['Aromático', 'Esencial']
+  },
+  {
+    id: 'romero', name: 'Romero (Atado)', price: 3900,
+    description: 'Perfecto para carnes y asados.', image: 'https://picsum.photos/seed/romero/400/300',
+    category: 'verduras', benefits: ['Aromático', 'Asados']
+  },
+
   // Frutas sin procesar por libra
   {
     id: 'manzana-libra', name: 'Manzana (Libra)', price: 8900,
