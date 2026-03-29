@@ -66,14 +66,14 @@ export default function WellnessQuiz() {
       <div className="max-w-4xl mx-auto relative z-10">
         <div className="text-center mb-8">
           <span className="inline-block text-serana-ochre font-bold tracking-[0.2em] uppercase text-[10px] mb-3 border border-serana-ochre/20 px-3 py-1.5 rounded-full">
-            Diagnóstico Personalizado
+            Guía Personalizada
           </span>
           <h2 className="text-3xl md:text-4xl font-serif mb-4 leading-tight">
             Descubre tu <span className="italic text-serana-ochre">Ritual Ideal</span>
           </h2>
           {!isCompleted && (
             <p className="text-serana-cream/70 max-w-lg mx-auto font-light text-sm">
-              Responde 3 preguntas rápidas y te recomendaremos el plan perfecto para tu cuerpo y estilo de vida.
+              En menos de un minuto te guiamos hacia la experiencia Serana que mejor conecta con cómo quieres sentirte hoy.
             </p>
           )}
         </div>
