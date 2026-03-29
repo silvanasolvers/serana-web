@@ -20,18 +20,18 @@ export default function VideoSection() {
   const valueProps = [
     {
       icon: Leaf,
-      title: "Ingredientes 100% Locales",
-      description: "Apoyamos a agricultores de la región, garantizando frescura y reduciendo nuestra huella de carbono."
+      title: "Ingredientes de origen cercano",
+      description: "Elegimos ingredientes frescos y de productores locales para llevar más calidad y sentido a tu mesa."
     },
     {
       icon: ShieldCheck,
       title: "Cero Conservantes",
-      description: "Nuestros platos son preparados diariamente sin químicos añadidos. Comida real para cuerpos reales."
+      description: "Nuestros platos son preparados diariamente sin químicos añadidos. Para una experiencia más orgánica."
     },
     {
       icon: Heart,
-      title: "Nutrición Balanceada",
-      description: "Cada receta está diseñada por nutricionistas para ofrecerte el equilibrio perfecto de macros."
+      title: "Equilibrio que se disfruta",
+      description: "Nuestras recetas buscan unir nutrición, sabor y saciedad en una experiencia que se siente tan bien como sabe."
     }
   ];
 
@@ -58,10 +58,10 @@ export default function VideoSection() {
               La Experiencia Serana
             </span>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif mb-4 leading-tight">
-              Siente la <span className="italic text-serana-ochre">Diferencia</span>
+              La diferencia está en <span className="italic text-serana-ochre">cómo te nutres</span>
             </h2>
             <p className="text-serana-cream/80 font-light text-sm md:text-base leading-relaxed mb-8">
-              Detrás de cada plato hay una historia de ingredientes reales, pasión por la nutrición y un profundo respeto por la naturaleza. Descubre cómo transformamos lo simple en extraordinario.
+              Cada plato nace de ingredientes reales, selección consciente y una forma de preparar que prioriza frescura, sabor y equilibrio en cada bocado.
             </p>
 
             <div className="space-y-4">
