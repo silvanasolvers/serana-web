@@ -38,8 +38,8 @@ export default function ShopPage() {
   const suggestions = [
     { icon: Leaf, label: 'Si buscas algo ligero', filter: 'ensaladas' as Category, color: 'text-serana-olive' },
     { icon: Zap, label: 'Si quieres más energía', filter: 'bebidas' as Category, color: 'text-serana-terracotta' },
-    { icon: Heart, label: 'Favoritos de la casa', filter: 'all' as Category, color: 'text-serana-ochre' },
     { icon: Sparkles, label: 'Si quieres algo práctico', filter: 'combos' as Category, color: 'text-serana-forest' },
+    { icon: Heart, label: 'Favoritos de la casa', filter: 'all' as Category, color: 'text-serana-ochre' },
   ];
 
   return (
@@ -163,11 +163,11 @@ export default function ShopPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               {
-                title: "Agrega una bebida funcional",
-                desc: "Un shot o jugo que potencia tu energía, tu digestión o tu enfoque.",
+                title: "Agrégale una bebida",
+                desc: "Un shot funcional o jugo que potencia tu energía, digestión o enfoque.",
                 action: "bebidas" as Category,
                 emoji: "🍹"
               },
@@ -178,10 +178,28 @@ export default function ShopPage() {
                 emoji: "🫒"
               },
               {
-                title: "Arma tu combo semanal",
-                desc: "Ensalada + bebida + salsa. Descubre combos pensados para tu rutina.",
+                title: "Prueba un shot funcional",
+                desc: "Metabólico, serenidad, concentración, muscular o piel perfecta. Tu cuerpo te lo agradece.",
+                action: "bebidas" as Category,
+                emoji: "⚡"
+              },
+              {
+                title: "Completa tu elección",
+                desc: "Acompaña tu ensalada con una crema o sopa para una comida completa.",
+                action: "sopas" as Category,
+                emoji: "🍲"
+              },
+              {
+                title: "Arma tu ritual",
+                desc: "Ensalada + bebida + salsa + shot. Crea tu combinación perfecta de bienestar.",
                 action: "combos" as Category,
-                emoji: "📦"
+                emoji: "✨"
+              },
+              {
+                title: "Acompáñalo con frutas frescas",
+                desc: "Completa tu pedido con frutas de temporada seleccionadas para ti.",
+                action: "frutas" as Category,
+                emoji: "🍓"
               }
             ].map((item, idx) => (
               <motion.div
@@ -222,6 +240,22 @@ export default function ShopPage() {
               <p className="text-base text-serana-cream/70 font-light max-w-lg mx-auto mb-8 leading-relaxed">
                 Arma tu pedido semanal, activa tu suscripción o simplemente elige lo que te provoca hoy. Tú decides el ritmo.
               </p>
+
+              {/* Opciones de rutina */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto mb-10">
+                {[
+                  { emoji: "📦", title: "Pedido semanal", desc: "Recibe tu selección cada semana" },
+                  { emoji: "🔄", title: "Compra recurrente", desc: "Automatiza tus favoritos" },
+                  { emoji: "⭐", title: "Club Serana", desc: "Acumula semillas y gana premios" },
+                ].map((opt, idx) => (
+                  <div key={idx} className="bg-white/10 backdrop-blur-sm border border-white/10 rounded-xl p-4 text-center">
+                    <span className="text-2xl block mb-2">{opt.emoji}</span>
+                    <h4 className="font-serif text-sm text-serana-cream mb-1">{opt.title}</h4>
+                    <p className="text-[10px] text-serana-cream/60 font-light">{opt.desc}</p>
+                  </div>
+                ))}
+              </div>
+
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <button
                   onClick={() => {
