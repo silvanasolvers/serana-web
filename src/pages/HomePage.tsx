@@ -36,11 +36,16 @@ export default function HomePage() {
                 Comunidad Activa
               </span>
               <h2 className="text-3xl md:text-4xl font-serif text-serana-forest mb-4">
-                Co-creamos <span className="italic text-serana-ochre">Juntos</span>
+                Serana también se <span className="italic text-serana-ochre">construye contigo</span>
               </h2>
               <p className="text-sm md:text-base text-serana-forest/70 max-w-lg mx-auto font-light">
-                Tu opinión moldea nuestro menú. Participa en las decisiones semanales y sé parte de la evolución de Serana.
+                Tu opinión sí transforma el menú. Participa en las decisiones semanales y sé parte de la evolución de Serana.
               </p>
+            </div>
+            <div className="flex justify-center mb-6">
+              <button className="inline-flex items-center gap-2 px-6 py-3 bg-serana-forest text-serana-cream rounded-full font-sans font-medium tracking-widest text-[10px] uppercase hover:bg-serana-olive transition-all hover:shadow-lg hover:-translate-y-0.5">
+                Participar ahora
+              </button>
             </div>
             <CommunityPoll />
           </div>
