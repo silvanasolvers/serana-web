@@ -29,17 +29,17 @@ export default function LoyaltySection() {
             </span>
             
             <h3 className="text-2xl md:text-3xl font-serif text-serana-forest mb-3 leading-tight">
-              Comparte bienestar, <br />
-              <span className="italic text-serana-olive">gana recompensas</span>.
+              Comparte Serana, <br />
+              <span className="italic text-serana-olive">multiplica el bienestar</span>.
             </h3>
             
             <p className="text-serana-forest/70 mb-6 leading-relaxed font-light text-xs">
-              Invita a un amigo a probar Serana y ambos recibirán un <strong>20% de descuento</strong> en su próxima caja. ¡Sin límites!
+              Invita a un amigo a descubrir Serana y reciban un beneficio especial en su compra. Porque lo que te hace bien también merece compartirse.
             </p>
 
             <div className="bg-serana-forest/5 p-4 rounded-xl border border-serana-forest/10 flex flex-col sm:flex-row items-center justify-between gap-3 group-hover:border-serana-olive/30 transition-colors">
               <div className="text-center sm:text-left">
-                <span className="text-[9px] uppercase tracking-widest text-serana-forest/60 block mb-0.5">Tu código único</span>
+                <span className="text-[9px] uppercase tracking-widest text-serana-forest/60 block mb-0.5">Tu código para compartir</span>
                 <code className="text-sm font-mono font-bold text-serana-forest tracking-wider">{referralCode}</code>
               </div>
               
@@ -64,15 +64,15 @@ export default function LoyaltySection() {
               Tus hábitos saludables <br /> tienen <span className="italic text-serana-ochre">premio</span>.
             </h3>
             <p className="text-serana-forest/70 leading-relaxed font-light text-xs">
-              Acumula semillas (puntos) con cada compra y canjéalas por productos exclusivos, descuentos y experiencias de bienestar.
+              Tu bienestar también merece recompensa. Con cada compra acumula semillas que puedes convertir en beneficios, productos y experiencias pensadas para seguir acompañando tu bienestar.
             </p>
           </div>
 
           <div className="space-y-2.5 mb-6">
             {[
-              { level: "Semilla", points: "0 - 500 pts", benefit: "Envíos gratis + Regalo de cumpleaños", color: "bg-serana-cream border-serana-forest/10" },
-              { level: "Brote", points: "500 - 1500 pts", benefit: "5% Cashback + Acceso anticipado a menús", color: "bg-white border-serana-olive/20 shadow-sm" },
-              { level: "Cosecha", points: "1500+ pts", benefit: "10% Cashback + Eventos exclusivos + Sorpresas mensuales", color: "bg-serana-forest text-serana-cream border-serana-forest shadow-lg scale-[1.02]" }
+              { level: "Semilla", points: "0 - 500 pts", benefit: "Envíos gratis + Regalo de cumpleaños — Empieza a sumar beneficios desde tu primera compra", color: "bg-serana-cream border-serana-forest/10" },
+              { level: "Brote", points: "500 - 1500 pts", benefit: "5% Cashback + Acceso anticipado a menús — Más puntos, más acceso y más razones para volver", color: "bg-white border-serana-olive/20 shadow-sm" },
+              { level: "Cosecha", points: "1500+ pts", benefit: "10% Cashback + Eventos exclusivos + Sorpresas mensuales — Una experiencia premium para quienes hacen de Serana parte de su rutina", color: "bg-serana-forest text-serana-cream border-serana-forest shadow-lg scale-[1.02]" }
             ].map((tier, idx) => (
               <motion.div 
                 key={idx}
@@ -98,7 +98,7 @@ export default function LoyaltySection() {
 
           {/* Reward Examples */}
           <div>
-            <h4 className="text-[9px] font-bold uppercase tracking-widest text-serana-forest/60 mb-2.5">Ejemplos de canje</h4>
+            <h4 className="text-[9px] font-bold uppercase tracking-widest text-serana-forest/60 mb-2.5">Canjea por tus favoritos</h4>
             <div className="grid grid-cols-3 gap-2.5">
               {rewardExamples.map((product) => (
                 <div key={product.id} className="bg-white p-2 rounded-lg border border-serana-forest/10 text-center shadow-sm hover:shadow-md transition-shadow">
