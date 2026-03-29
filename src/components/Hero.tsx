@@ -142,8 +142,8 @@ export default function Hero() {
               >
                 <div className="w-full h-full rounded-full border border-[#273617]/10 flex items-center justify-center relative">
                    <svg className="absolute inset-0 w-full h-full animate-spin-slow" viewBox="0 0 100 100">
-                      <path id="circlePath" d="M 50, 50 m -35, 0 a 35,35 0 1,1 70,0 a 35,35 0 1,1 -70,0" fill="none" />
-                      <text className="text-[11px] uppercase font-bold tracking-[0.15em] fill-[#273617]">
+                      <path id="circlePath" d="M 50, 50 m -42, 0 a 42,42 0 1,1 84,0 a 42,42 0 1,1 -84,0" fill="none" />
+                      <text className="text-[10px] uppercase font-bold tracking-[0.08em] fill-[#273617]">
                         <textPath href="#circlePath" startOffset="0%">
                           100% Orgánico • Natural • Fresco •
                         </textPath>
