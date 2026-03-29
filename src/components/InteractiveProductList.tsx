@@ -136,9 +136,7 @@ export default function InteractiveProductList({ products }: InteractiveProductL
                       <ShoppingBag size={18} />
                       Agregar al Carrito
                     </button>
-                    <button className="px-5 py-3 rounded-xl border border-white/30 text-white hover:bg-white/10 transition-colors backdrop-blur-sm">
-                      <ArrowRight size={18} />
-                    </button>
+
                   </div>
                 </motion.div>
               </div>
