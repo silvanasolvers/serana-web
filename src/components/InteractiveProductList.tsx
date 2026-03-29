@@ -39,7 +39,7 @@ export default function InteractiveProductList({ products }: InteractiveProductL
           >
             <div className="flex justify-between items-center relative z-10">
               <div className="flex items-center gap-3">
-                <img 
+                <img loading="lazy" 
                   src={product.image} 
                   alt={product.name}
                   className="w-10 h-10 rounded-full object-cover lg:hidden border border-serana-forest/10"
@@ -96,7 +96,7 @@ export default function InteractiveProductList({ products }: InteractiveProductL
               transition={{ duration: 0.4 }}
               className="relative w-full h-full"
             >
-              <img 
+              <img loading="lazy" 
                 src={hoveredProduct.image} 
                 alt={hoveredProduct.name}
                 className="w-full h-full object-cover"

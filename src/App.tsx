@@ -11,7 +11,7 @@ import CommunityPage from './pages/CommunityPage';
 import CheckoutPage from './pages/CheckoutPage';
 import DashboardPage from './pages/DashboardPage';
 import { useEffect } from 'react';
-import CustomCursor from './components/CustomCursor';
+// import CustomCursor from './components/CustomCursor'; // Disabled for performance
 import LivingBackground from './components/LivingBackground';
 import ChatBot from './components/ChatBot';
 
@@ -28,7 +28,7 @@ function ScrollToTop() {
 export default function App() {
   return (
     <Router>
-      <CustomCursor />
+      {/* <CustomCursor /> Disabled for performance */}
       <LivingBackground />
       <ScrollToTop />
       <ChatBot />

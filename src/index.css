@@ -38,13 +38,21 @@ body {
   color: var(--color-serana-forest);
   font-family: var(--font-sans);
   overflow-x: hidden;
-  cursor: none; /* Hide default cursor */
 }
 
 a, button, [role="button"], input, select, textarea, label {
-  cursor: none; /* Hide default cursor on interactive elements */
+  cursor: pointer;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-serif);
+}
+
+/* Hide scrollbar for horizontal scroll on mobile */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }

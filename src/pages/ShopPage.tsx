@@ -77,7 +77,7 @@ export default function ShopPage() {
         </div>
 
         {/* Categorías */}
-        <div className="flex flex-wrap justify-center gap-3 mb-16 sticky top-20 z-40 bg-serana-cream/80 backdrop-blur-md py-3 px-4 rounded-full shadow-sm border border-white/20">
+        <div className="flex flex-nowrap md:flex-wrap justify-start md:justify-center gap-3 mb-16 sticky top-20 z-40 bg-serana-cream/80 backdrop-blur-md py-3 px-4 rounded-full shadow-sm border border-white/20 overflow-x-auto scrollbar-hide">
           {categories.map((cat, i) => (
             <motion.button
               key={cat.id}

@@ -103,7 +103,7 @@ export default function LoyaltySection() {
               {rewardExamples.map((product) => (
                 <div key={product.id} className="bg-white p-2 rounded-lg border border-serana-forest/10 text-center shadow-sm hover:shadow-md transition-shadow">
                   <div className="w-8 h-8 mx-auto rounded-full overflow-hidden mb-1.5">
-                    <img src={product.image} alt={product.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                    <img loading="lazy" src={product.image} alt={product.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                   </div>
                   <p className="text-[9px] font-bold text-serana-forest line-clamp-1">{product.name}</p>
                   <p className="text-[8px] text-serana-olive font-mono mt-0.5">500 pts</p>

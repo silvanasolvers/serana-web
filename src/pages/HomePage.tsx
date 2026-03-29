@@ -61,7 +61,7 @@ export default function HomePage() {
           <div className="max-w-6xl mx-auto flex flex-col md:flex-row rounded-[2rem] overflow-hidden shadow-2xl bg-serana-forest text-serana-cream">
             <div className="w-full md:w-1/2 h-[40vh] md:h-auto relative order-2 md:order-1">
               <div className="absolute inset-0 bg-serana-forest/20 mix-blend-multiply z-10" />
-              <img 
+              <img loading="lazy" 
                 src="https://qlgjqvgjuscquhspjqdp.supabase.co/storage/v1/object/public/AETHERA-DOCS/serana%20campo.png" 
                 alt="Campo colombiano" 
                 className="absolute inset-0 w-full h-full object-cover"

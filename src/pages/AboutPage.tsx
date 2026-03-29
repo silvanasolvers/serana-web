@@ -129,7 +129,7 @@ export default function AboutPage() {
               className="relative"
             >
               <div className="absolute inset-0 bg-serana-forest/10 rounded-[2rem] blur-2xl transform -translate-x-4 translate-y-4"></div>
-              <img 
+              <img loading="lazy" 
                 src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&q=80&w=800" 
                 alt="Manos preparando alimentos frescos" 
                 className="rounded-[2rem] shadow-2xl relative z-10 w-full aspect-[4/5] object-cover"

@@ -100,6 +100,7 @@ export default function VideoSection() {
               loop 
               muted 
               playsInline
+              preload="none"
               className="w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-1000 ease-out opacity-90 group-hover:opacity-100"
               poster="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=800"
             >
