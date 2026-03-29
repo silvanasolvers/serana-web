@@ -66,17 +66,14 @@ export default function HomePage() {
             <div className="w-full md:w-1/2 flex flex-col justify-center p-8 md:p-12 lg:p-16 order-1 md:order-2">
               <div className="max-w-md mx-auto md:mx-0">
                 <span className="inline-block text-serana-ochre font-bold tracking-[0.2em] uppercase text-xs mb-6 border border-serana-ochre/20 px-4 py-2 rounded-full">
-                  Nuestra Promesa
+                  Desde el origen
                 </span>
                 <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif mb-6 leading-tight">
                   Cada bocado cuenta una <br className="hidden lg:block" />
                   <span className="italic text-serana-ochre">historia de impacto</span>.
                 </h2>
-                <p className="text-base md:text-lg text-serana-cream/80 leading-relaxed font-light mb-4">
-                  Serana trasciende la alimentación premium; es un compromiso profundo con nuestro origen. Cultivamos bienestar para ti mientras sembramos sostenibilidad en el campo colombiano.
-                </p>
                 <p className="text-base md:text-lg text-serana-cream/80 leading-relaxed font-light">
-                  Al elegirnos, te unes a una comunidad que fortalece una cadena de valor honesta, directa y en armonía con la tierra. <strong className="font-medium text-serana-cream">Crecemos juntos.</strong>
+                  En Serana creemos que nutrir bien también implica elegir con más consciencia lo que hay detrás de cada ingrediente, su origen, sus manos y la forma en que llega hasta tu mesa.
                 </p>
               </div>
             </div>
