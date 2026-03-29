@@ -38,10 +38,21 @@ body {
   color: var(--color-serana-forest);
   font-family: var(--font-sans);
   overflow-x: hidden;
+  cursor: none;
+}
+
+@media (pointer: coarse) {
+  body { cursor: auto; }
 }
 
 a, button, [role="button"], input, select, textarea, label {
-  cursor: pointer;
+  cursor: none;
+}
+
+@media (pointer: coarse) {
+  a, button, [role="button"], input, select, textarea, label {
+    cursor: pointer;
+  }
 }
 
 h1, h2, h3, h4, h5, h6 {
