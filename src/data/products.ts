@@ -6,7 +6,7 @@ export const products: Product[] = [
     id: 'pico-de-gallo',
     name: 'Pico de Gallo (Libra)',
     price: 14900,
-    description: 'Fresco y delicioso pico de gallo tradicional.',
+    description: 'Una ensalada que se adapta a tus gustos, con limón y salva muy bien pero también la puedes convertir en un hogao.',
     image: 'https://qlgjqvgjuscquhspjqdp.supabase.co/storage/v1/object/public/AETHERA-DOCS/pico%20de%20gallo.jpeg',
     category: 'ensaladas',
     benefits: ['Fresco', 'Natural', 'Sin conservantes']
@@ -15,7 +15,7 @@ export const products: Product[] = [
     id: 'ceviche-mango',
     name: 'Ceviche de Mango (Libra)',
     price: 14900,
-    description: 'Exótico ceviche de mango con un toque cítrico.',
+    description: 'Una joya hecha ensalada: fresca, dulce y su sabor inconfundible acevichado.',
     image: 'https://qlgjqvgjuscquhspjqdp.supabase.co/storage/v1/object/public/AETHERA-DOCS/cerviche%20de%20mango.jpeg',
     category: 'ensaladas',
     benefits: ['Rico en vitamina C', 'Bajo en calorías']
@@ -24,7 +24,7 @@ export const products: Product[] = [
     id: 'verduras-saltear',
     name: 'Verduras para Saltear (Libra)',
     price: 14900,
-    description: 'Mix de verduras listas para preparar al wok.',
+    description: 'Para hacer con arroces, con cualquier proteína, salteados o al vapor. Totalmente versátil.',
     image: 'https://qlgjqvgjuscquhspjqdp.supabase.co/storage/v1/object/public/AETHERA-DOCS/verduras%20para%20saltear.jpeg',
     category: 'ensaladas',
     benefits: ['Listo para cocinar', 'Variedad de nutrientes']
@@ -33,7 +33,7 @@ export const products: Product[] = [
     id: 'ensalada-cesar',
     name: 'Ensalada César (Libra)',
     price: 26900,
-    description: 'Clásica ensalada César con ingredientes frescos.',
+    description: 'Una ensalada con su propio toque Serana pero con el sabor inconfundible de la césar tradicional.',
     image: 'https://qlgjqvgjuscquhspjqdp.supabase.co/storage/v1/object/public/AETHERA-DOCS/ensalada%20cesar.jpeg',
     category: 'ensaladas',
     benefits: ['Clásica', 'Deliciosa']
@@ -42,7 +42,7 @@ export const products: Product[] = [
     id: 'ensalada-primavera',
     name: 'Ensalada Primavera (Libra)',
     price: 20900,
-    description: 'Fresca combinación de vegetales de temporada.',
+    description: 'Una combinación que es frescura total, simple pero deliciosa.',
     image: 'https://qlgjqvgjuscquhspjqdp.supabase.co/storage/v1/object/public/AETHERA-DOCS/Ensalada_primavera_en_bol_54288481e0.jpeg',
     category: 'ensaladas',
     benefits: ['Ligera', 'Refrescante']
@@ -53,7 +53,7 @@ export const products: Product[] = [
     id: 'ensalada-almendras',
     name: 'Ensalada de Almendras Caramelizadas (450g)',
     price: 34900,
-    description: 'Gourmet con almendras crujientes y aderezo especial.',
+    description: 'Ensalada con trazos de almendras, crujiente, dulce y de sabor elevado.',
     image: 'https://picsum.photos/seed/ensalada-almendras/400/300',
     category: 'ensaladas',
     benefits: ['Gourmet', 'Texturas únicas']
@@ -62,7 +62,7 @@ export const products: Product[] = [
     id: 'ensalada-quinoa',
     name: 'Ensalada de Quinoa (450g)',
     price: 37900,
-    description: 'Nutritiva base de quinoa con vegetales selectos.',
+    description: 'Una ensalada proteica sin dejar de ser veggie, de sabor espectacular.',
     image: 'https://picsum.photos/seed/ensalada-quinoa/400/300',
     category: 'ensaladas',
     benefits: ['Superalimento', 'Alta proteína']
@@ -71,7 +71,7 @@ export const products: Product[] = [
     id: 'ensalada-italiana',
     name: 'Ensalada Italiana (450g)',
     price: 36900,
-    description: 'Sabores mediterráneos en tu mesa.',
+    description: 'Una ensalada que te transporta a un viaje por Italia.',
     image: 'https://picsum.photos/seed/ensalada-italiana/400/300',
     category: 'ensaladas',
     benefits: ['Mediterránea', 'Sabrosa']
@@ -80,7 +80,7 @@ export const products: Product[] = [
     id: 'ensalada-sandia-feta',
     name: 'Ensalada Sandía y Feta (450g)',
     price: 29900,
-    description: 'Refrescante combinación dulce y salada.',
+    description: 'Ensalada al mejor estilo del verano griego.',
     image: 'https://picsum.photos/seed/ensalada-sandia-feta/400/300',
     category: 'ensaladas',
     benefits: ['Hidratante', 'Contraste de sabores']
@@ -89,7 +89,7 @@ export const products: Product[] = [
     id: 'ensalada-baby',
     name: 'Ensalada Baby (450g)',
     price: 31900,
-    description: 'Selección de hojas tiernas y vegetales baby.',
+    description: 'Una mezcla de vegetales babys que le dan un sabor único a la ensalada.',
     image: 'https://picsum.photos/seed/ensalada-baby/400/300',
     category: 'ensaladas',
     benefits: ['Tierna', 'Delicada']
@@ -98,7 +98,7 @@ export const products: Product[] = [
     id: 'ensalada-serana',
     name: 'Ensalada Serana (450g)',
     price: 29900,
-    description: 'Nuestra especialidad de la casa.',
+    description: 'Ensalada frutal con sabores que elevan el alma, dulce y fresca.',
     image: 'https://picsum.photos/seed/ensalada-serana/400/300',
     category: 'ensaladas',
     benefits: ['Especialidad', 'Equilibrada']
