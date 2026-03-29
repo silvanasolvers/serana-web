@@ -672,6 +672,148 @@ export const products: Product[] = [
     benefits: ['Aromático', 'Fresco']
   },
 
+  // Frutas sin procesar por libra
+  {
+    id: 'manzana-libra', name: 'Manzana (Libra)', price: 8900,
+    description: 'Pídela verdes o rojas.', image: 'https://picsum.photos/seed/manzana-libra/400/300',
+    category: 'frutas', benefits: ['Fresca', 'Versátil']
+  },
+  {
+    id: 'pera-libra', name: 'Pera (Libra)', price: 9900,
+    description: 'Seleccionadas cuidadosamente.', image: 'https://picsum.photos/seed/pera-libra/400/300',
+    category: 'frutas', benefits: ['Dulce', 'Jugosa']
+  },
+  {
+    id: 'banano-libra', name: 'Banano (Racimo)', price: 5900,
+    description: 'Por racimos.', image: 'https://picsum.photos/seed/banano-libra/400/300',
+    category: 'frutas', benefits: ['Energía', 'Potasio']
+  },
+  {
+    id: 'limon-libra', name: 'Limón (Libra)', price: 4900,
+    description: 'Los más jugosos y frescos.', image: 'https://picsum.photos/seed/limon-libra/400/300',
+    category: 'frutas', benefits: ['Vitamina C', 'Fresco']
+  },
+  {
+    id: 'granadilla', name: 'Granadilla (Libra)', price: 12900,
+    description: 'Una fruta exótica colombiana.', image: 'https://picsum.photos/seed/granadilla/400/300',
+    category: 'frutas', benefits: ['Exótica', 'Digestiva']
+  },
+  {
+    id: 'mango-libra', name: 'Mango (Libra)', price: 7900,
+    description: 'Un infaltable en tu nevera.', image: 'https://picsum.photos/seed/mango-libra/400/300',
+    category: 'frutas', benefits: ['Tropical', 'Dulce']
+  },
+  {
+    id: 'coco-libra', name: 'Coco (Unidad)', price: 8900,
+    description: 'El sabor dulce inconfundible del coco.', image: 'https://picsum.photos/seed/coco-libra/400/300',
+    category: 'frutas', benefits: ['Tropical', 'Energía']
+  },
+  {
+    id: 'lulo', name: 'Lulo (Libra)', price: 8900,
+    description: 'Acidito y especial para hacer jugo.', image: 'https://picsum.photos/seed/lulo/400/300',
+    category: 'frutas', benefits: ['Cítrico', 'Jugos']
+  },
+  {
+    id: 'kiwi-libra', name: 'Kiwi (Libra)', price: 19900,
+    description: 'Importados de calidad.', image: 'https://picsum.photos/seed/kiwi-libra/400/300',
+    category: 'frutas', benefits: ['Importado', 'Vitamina C']
+  },
+  {
+    id: 'durazno', name: 'Durazno (Libra)', price: 12900,
+    description: 'Una fruta deliciosa con sabor delicado.', image: 'https://picsum.photos/seed/durazno/400/300',
+    category: 'frutas', benefits: ['Dulce', 'Delicado']
+  },
+  {
+    id: 'pitahaya', name: 'Pitahaya (Unidad)', price: 14900,
+    description: 'Para mejorar tu salud digestiva.', image: 'https://picsum.photos/seed/pitahaya/400/300',
+    category: 'frutas', benefits: ['Digestiva', 'Exótica']
+  },
+  {
+    id: 'mandarina', name: 'Mandarina (Libra)', price: 6900,
+    description: 'Un cítrico que acompaña loncheras.', image: 'https://picsum.photos/seed/mandarina/400/300',
+    category: 'frutas', benefits: ['Cítrica', 'Snack']
+  },
+  {
+    id: 'fresa-libra', name: 'Fresa (Libra)', price: 12900,
+    description: 'Dulces y grandes perfectamente seleccionadas.', image: 'https://picsum.photos/seed/fresa-libra/400/300',
+    category: 'frutas', benefits: ['Dulce', 'Seleccionada']
+  },
+  {
+    id: 'guayaba-pera', name: 'Guayaba Pera (Libra)', price: 7900,
+    description: 'La guayaba rosadita y dulce.', image: 'https://picsum.photos/seed/guayaba-pera/400/300',
+    category: 'frutas', benefits: ['Dulce', 'Jugos']
+  },
+  {
+    id: 'guayaba-manzana-libra', name: 'Guayaba Manzana (Libra)', price: 7900,
+    description: 'La guayaba verde y acidita.', image: 'https://picsum.photos/seed/guayaba-manzana-libra/400/300',
+    category: 'frutas', benefits: ['Acidita', 'Fresca']
+  },
+  {
+    id: 'aguacate-hass', name: 'Aguacate Hass (Unidad)', price: 5900,
+    description: 'Perfecto para hacer guacamole.', image: 'https://picsum.photos/seed/aguacate-hass/400/300',
+    category: 'frutas', benefits: ['Grasas saludables', 'Versátil']
+  },
+  {
+    id: 'sandia-baby-libra', name: 'Sandía Baby (Unidad)', price: 12900,
+    description: 'Las sandías más dulces.', image: 'https://picsum.photos/seed/sandia-baby-libra/400/300',
+    category: 'frutas', benefits: ['Hidratante', 'Dulce']
+  },
+  {
+    id: 'tomate-arbol', name: 'Tomate de Árbol (Libra)', price: 6900,
+    description: 'Perfecto para hacer jugo.', image: 'https://picsum.photos/seed/tomate-arbol/400/300',
+    category: 'frutas', benefits: ['Jugos', 'Vitaminas']
+  },
+  {
+    id: 'papaya-maradol', name: 'Papaya Maradol (Libra)', price: 8900,
+    description: 'Seleccionada perfectamente.', image: 'https://picsum.photos/seed/papaya-maradol/400/300',
+    category: 'frutas', benefits: ['Digestiva', 'Dulce']
+  },
+  {
+    id: 'melon-libra', name: 'Melón (Unidad)', price: 9900,
+    description: 'Dulce y exquisito.', image: 'https://picsum.photos/seed/melon-libra/400/300',
+    category: 'frutas', benefits: ['Dulce', 'Refrescante']
+  },
+  {
+    id: 'guanabana', name: 'Guanábana (Libra)', price: 14900,
+    description: 'Perfectamente seleccionada.', image: 'https://picsum.photos/seed/guanabana/400/300',
+    category: 'frutas', benefits: ['Exótica', 'Jugos']
+  },
+  {
+    id: 'mangostino', name: 'Mangostino (Libra)', price: 19900,
+    description: 'Un sabor único y exótico.', image: 'https://picsum.photos/seed/mangostino/400/300',
+    category: 'frutas', benefits: ['Exótico', 'Premium']
+  },
+  {
+    id: 'rambutan', name: 'Rambután (Libra)', price: 24900,
+    description: 'Un producto exclusivo.', image: 'https://picsum.photos/seed/rambutan/400/300',
+    category: 'frutas', benefits: ['Exclusivo', 'Exótico']
+  },
+  {
+    id: 'arandanos', name: 'Arándanos (125g)', price: 14900,
+    description: 'Fruta cargada de antioxidantes.', image: 'https://picsum.photos/seed/arandanos/400/300',
+    category: 'frutas', benefits: ['Antioxidantes', 'Premium']
+  },
+  {
+    id: 'frambuesa', name: 'Frambuesa (125g)', price: 17900,
+    description: 'Exclusivo y exótico.', image: 'https://picsum.photos/seed/frambuesa/400/300',
+    category: 'frutas', benefits: ['Exclusivo', 'Antioxidante']
+  },
+  {
+    id: 'maracuya', name: 'Maracuyá (Libra)', price: 7900,
+    description: 'La fruta de la pasión.', image: 'https://picsum.photos/seed/maracuya/400/300',
+    category: 'frutas', benefits: ['Tropical', 'Jugos']
+  },
+  {
+    id: 'naranja-libra', name: 'Naranja (Libra)', price: 4900,
+    description: 'Dulces y perfectamente seleccionadas.', image: 'https://picsum.photos/seed/naranja-libra/400/300',
+    category: 'frutas', benefits: ['Vitamina C', 'Jugos']
+  },
+  {
+    id: 'aguacate-papelillo', name: 'Aguacate Papelillo (Unidad)', price: 4900,
+    description: 'Especial para acompañar almuerzos y ensaladas.', image: 'https://picsum.photos/seed/aguacate-papelillo/400/300',
+    category: 'frutas', benefits: ['Tradicional', 'Versátil']
+  },
+
   // Combos
   {
     id: 'combo-1-2',
