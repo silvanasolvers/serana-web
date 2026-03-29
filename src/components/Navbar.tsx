@@ -35,8 +35,8 @@ export default function Navbar() {
       className={clsx(
         "fixed top-0 left-0 right-0 z-50 px-6 transition-all duration-500 border-b",
         isScrolled 
-          ? "border-serana-forest/5 py-3 shadow-sm" 
-          : "border-transparent py-5"
+          ? "border-serana-forest/5 py-1 shadow-sm" 
+          : "border-transparent py-2"
       )}
       style={{ backgroundColor: '#FEFADF' }}
     >
