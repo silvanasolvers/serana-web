@@ -1042,15 +1042,7 @@ export const products: Product[] = [
     category: 'combos',
     benefits: ['Productividad', 'Práctico']
   },
-  {
-    id: 'combo-mascotas',
-    name: 'Combo Mascotas',
-    price: 110000,
-    description: 'Lo mejor para tus peludos.',
-    image: 'https://picsum.photos/seed/combo-mascotas/400/300',
-    category: 'combos',
-    benefits: ['Mascotas', 'Cuidado']
-  },
+
   {
     id: 'kit-jugos',
     name: 'Kit Jugos de Fruta (18 und)',
