@@ -44,7 +44,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-serana-cream/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 opacity-50 text-[9px] uppercase tracking-widest">
-          <p>© 2024 Serana Wellness. Todos los derechos reservados.</p>
+          <p>© 2026 Serana Wellness. Todos los derechos reservados.</p>
           <div className="flex gap-6">
             <a href="#" className="hover:text-white">Política de Privacidad</a>
             <a href="#" className="hover:text-white">Términos de Servicio</a>

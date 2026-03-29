@@ -5,7 +5,7 @@ import { products } from '../data/products';
 
 export default function LoyaltySection() {
   const [copied, setCopied] = useState(false);
-  const referralCode = "SERANA-AMIGOS-2024";
+  const referralCode = "SERANA-AMIGOS";
 
   const handleCopy = () => {
     navigator.clipboard.writeText(referralCode);
