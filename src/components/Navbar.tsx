@@ -46,7 +46,7 @@ export default function Navbar() {
             alt="Serana Logo" 
             className={clsx(
               "w-auto object-contain transition-all duration-500",
-              isScrolled ? "h-16 md:h-20" : "h-24 md:h-28"
+              isScrolled ? "h-18 md:h-22" : "h-28 md:h-32"
             )} 
           />
         </Link>
