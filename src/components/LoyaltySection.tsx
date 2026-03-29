@@ -61,10 +61,10 @@ export default function LoyaltySection() {
               <Gift size={10} /> Club Serana
             </span>
             <h3 className="text-2xl md:text-3xl font-serif text-serana-forest mb-3 leading-tight">
-              Tus hábitos saludables <br /> tienen <span className="italic text-serana-ochre">premio</span>.
+              Tu bienestar también <br /> merece <span className="italic text-serana-ochre">recompensa</span>.
             </h3>
             <p className="text-serana-forest/70 leading-relaxed font-light text-xs">
-              Tu bienestar también merece recompensa. Con cada compra acumula semillas que puedes convertir en beneficios, productos y experiencias pensadas para seguir acompañando tu bienestar.
+              Con cada compra acumula semillas que puedes convertir en beneficios, productos y experiencias pensadas para seguir acompañando tu bienestar.
             </p>
           </div>
 
