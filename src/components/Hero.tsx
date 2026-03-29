@@ -54,10 +54,11 @@ export default function Hero() {
                 </span>
               </div>
 
-              <h1 className="font-serif text-3xl md:text-5xl lg:text-[4rem] text-[#273617] leading-[0.95] mb-3 tracking-tight">
-                Nutrición <br />
-                <span className="relative inline-block text-[#5F6C37] italic pr-4">
-                  Qué se siente
+              <h1 className="text-3xl md:text-5xl lg:text-[4rem] text-[#273617] leading-[0.95] mb-3 tracking-tight">
+                <span className="font-serif">Nutrición</span> <br />
+                <span className="relative inline-block pr-4 mt-1">
+                  <span className="font-sans font-light tracking-wide text-[#5F6C37] text-[1.1em]">Qué </span>
+                  <span className="font-serif italic text-[#5F6C37]">se siente</span>
                   <motion.svg 
                     initial={{ pathLength: 0 }}
                     animate={{ pathLength: 1 }}
