@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 export default function Hero() {
   return (
-    <section className="relative min-h-[60vh] flex items-center bg-[#F9F7F2] overflow-hidden pt-20 pb-10 px-4 md:px-8">
+    <section className="relative min-h-[60vh] flex items-center bg-[#F9F7F2] overflow-hidden pt-36 md:pt-40 pb-10 px-4 md:px-8">
       
       {/* Dynamic Background - More Visible & Organic */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
