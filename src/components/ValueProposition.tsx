@@ -5,23 +5,23 @@ import clsx from 'clsx';
 const features = [
   {
     icon: Leaf,
-    title: "Nutrición Real",
-    description: "Combos frescos, sin procesados. Comida de verdad para gente real.",
+    title: "Comida de verdad",
+    description: "Ingredientes reales, preparaciones honestas y sabor que se siente fresco y delicioso.",
     variant: "dark",
     colSpan: "md:col-span-2",
     delay: 0.1
   },
   {
     icon: Clock,
-    title: "Tiempo para Ti",
-    description: "Olvídate de cocinar. Recupera horas de tu semana mientras disfrutas.",
+    title: "Más tiempo para ti",
+    description: "Nosotros nos encargamos de nutrirte bien, para que tú recuperes tiempo, energía y agilidad en tu día a día.",
     variant: "accent",
     colSpan: "md:col-span-2",
     delay: 0.2
   },
   {
     icon: Heart,
-    title: "Bienestar 360",
+    title: "Bienestar que se nota",
     description: "Cuerpo sano, mente clara. El equilibrio que buscas.",
     variant: "minimal",
     colSpan: "md:col-span-1",
@@ -29,16 +29,16 @@ const features = [
   },
   {
     icon: Sparkles,
-    title: "Detalles Únicos",
-    description: "Cada entrega es un regalo para ti mismo.",
+    title: "Cada detalle importa",
+    description: "Cada ingrediente y cada entrega es un regalo para ti mismo.",
     variant: "minimal",
     colSpan: "md:col-span-1",
     delay: 0.4
   },
   {
     icon: Sprout,
-    title: "Innovación",
-    description: "Recetas modernas que rompen la rutina.",
+    title: "Sabores que sorprenden",
+    description: "Recetas pensadas para disfrutar y salir de lo típico.",
     variant: "minimal",
     colSpan: "md:col-span-1",
     delay: 0.5
@@ -46,7 +46,7 @@ const features = [
   {
     icon: Recycle,
     title: "Eco-Friendly",
-    description: "Cuidamos de ti y del planeta en cada paso.",
+    description: "Cuidamos de ti y el planeta en cada decisión.",
     variant: "minimal",
     colSpan: "md:col-span-1",
     delay: 0.6
@@ -80,8 +80,8 @@ export default function ValueProposition() {
               transition={{ delay: 0.1 }}
               className="text-3xl md:text-4xl font-serif text-serana-forest leading-[1.1]"
             >
-              Más que comida, <br/>
-              <span className="italic text-serana-olive">un estilo de vida.</span>
+              Alimentarte bien <br/>
+              <span className="italic text-serana-olive">es una forma de vivir mejor.</span>
             </motion.h2>
           </div>
           <motion.p 
@@ -91,7 +91,7 @@ export default function ValueProposition() {
             transition={{ delay: 0.2 }}
             className="text-sm text-serana-forest/60 leading-relaxed font-light max-w-xs"
           >
-            Redefinimos tu relación con la alimentación. Sin complicaciones, sin culpas, solo disfrute y bienestar real.
+            En Serana creemos que comer bien puede ser fácil, delicioso y estar profundamente alineado con cómo quieres sentirte.
           </motion.p>
         </div>
 
