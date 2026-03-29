@@ -340,7 +340,7 @@ export const products: Product[] = [
     id: 'mango-picado',
     name: 'Mango Picado (Libra)',
     price: 13900,
-    description: 'Mango dulce y fresco, listo para comer.',
+    description: 'Delicioso mango tommy picadito: pídelo maduro, pintón o verde.',
     image: 'https://picsum.photos/seed/mango-picado/400/300',
     category: 'frutas',
     benefits: ['Listo para comer', 'Dulce']
@@ -349,7 +349,7 @@ export const products: Product[] = [
     id: 'pina-picada',
     name: 'Piña Picada (Libra)',
     price: 15900,
-    description: 'Piña oro miel picada en cubos.',
+    description: 'Piña en cubitos sin corazón, cuidadosamente seleccionada.',
     image: 'https://picsum.photos/seed/pina-picada/400/300',
     category: 'frutas',
     benefits: ['Diurética', 'Dulce']
@@ -358,7 +358,7 @@ export const products: Product[] = [
     id: 'fresa-picada',
     name: 'Fresa Picada (Libra)',
     price: 16900,
-    description: 'Fresas seleccionadas y limpias.',
+    description: 'Fresas grandes siempre rojas y de la mejor calidad.',
     image: 'https://picsum.photos/seed/fresa-picada/400/300',
     category: 'frutas',
     benefits: ['Antioxidantes', 'Fresca']
@@ -367,7 +367,7 @@ export const products: Product[] = [
     id: 'sandia-baby-picada',
     name: 'Sandía Baby Picada (Libra)',
     price: 15500,
-    description: 'Sandía sin semillas, dulce y jugosa.',
+    description: 'Las sandías más rojitas y maduras.',
     image: 'https://picsum.photos/seed/sandia-baby-picada/400/300',
     category: 'frutas',
     benefits: ['Hidratante', 'Baja en calorías']
@@ -376,7 +376,7 @@ export const products: Product[] = [
     id: 'coco-picado',
     name: 'Coco Picado (Libra)',
     price: 26000,
-    description: 'Trozos de coco fresco.',
+    description: 'Sin cáscara, sin dificultades, sólo la carne del coco como te gusta.',
     image: 'https://picsum.photos/seed/coco-picado/400/300',
     category: 'frutas',
     benefits: ['Energía', 'Grasas saludables']
@@ -385,7 +385,7 @@ export const products: Product[] = [
     id: 'melon-picado',
     name: 'Melón Picado (Libra)',
     price: 17900, // Assuming price from context
-    description: 'Melón dulce y aromático.',
+    description: 'Melón siempre maduro, rosado y dulcecito.',
     image: 'https://picsum.photos/seed/melon-picado/400/300',
     category: 'frutas',
     benefits: ['Refrescante', 'Vitaminas']
@@ -394,7 +394,7 @@ export const products: Product[] = [
     id: 'guayaba-manzana-picada',
     name: 'Guayaba Manzana Picada (Libra)',
     price: 16900,
-    description: 'Crujiente y dulce.',
+    description: 'Seleccionamos siempre cuidadosamente para que su textura sea impecable.',
     image: 'https://picsum.photos/seed/guayaba-manzana-picada/400/300',
     category: 'frutas',
     benefits: ['Vitamina C', 'Fibra']
@@ -403,7 +403,7 @@ export const products: Product[] = [
     id: 'uchuva',
     name: 'Uchuva (Libra)',
     price: 17900,
-    description: 'Uchuvas frescas seleccionadas.',
+    description: 'Sin capacho, lavada y desinfectada.',
     image: 'https://picsum.photos/seed/uchuva/400/300',
     category: 'frutas',
     benefits: ['Exótica', 'Antioxidante']
@@ -412,7 +412,7 @@ export const products: Product[] = [
     id: 'papaya-picada',
     name: 'Papaya Picada (Libra)',
     price: 13500,
-    description: 'Papaya dulce en cubos.',
+    description: 'Seleccionamos las papayas más dulces y deliciosas.',
     image: 'https://picsum.photos/seed/papaya-picada/400/300',
     category: 'frutas',
     benefits: ['Digestiva', 'Suave']
@@ -421,7 +421,7 @@ export const products: Product[] = [
     id: 'baby-bowl-berry',
     name: 'Baby Bowl Berry Mix (250g)',
     price: 21000,
-    description: 'Mix de frutos rojos.',
+    description: 'Una combinación de frutos del bosque: frambuesa, fresa y arándanos, simplemente exquisito.',
     image: 'https://picsum.photos/seed/baby-bowl-berry/400/300',
     category: 'frutas',
     benefits: ['Antioxidantes', 'Snack perfecto']
@@ -430,7 +430,7 @@ export const products: Product[] = [
     id: 'baby-bowl-amarillos',
     name: 'Baby Bowl Frutos Amarillos (250g)',
     price: 9000,
-    description: 'Mix de frutas amarillas.',
+    description: 'Una combinación de mango con piña deliciosa.',
     image: 'https://picsum.photos/seed/baby-bowl-amarillos/400/300',
     category: 'frutas',
     benefits: ['Vitamina C', 'Tropical']
@@ -441,7 +441,7 @@ export const products: Product[] = [
     id: 'zucchini-picado',
     name: 'Zucchini Verde/Amarillo Picado (Libra)',
     price: 12000,
-    description: 'Listo para saltear.',
+    description: 'Un vegetal infaltable en tus preparaciones.',
     image: 'https://picsum.photos/seed/zucchini-picado/400/300',
     category: 'verduras',
     benefits: ['Bajo en calorías', 'Versátil']
@@ -450,7 +450,7 @@ export const products: Product[] = [
     id: 'pimenton-picado',
     name: 'Pimentón Rojo Picado (Libra)',
     price: 16500,
-    description: 'Pimentón rojo fresco en julianas o cubos.',
+    description: 'Un ingrediente que le da sabor a tus comidas.',
     image: 'https://picsum.photos/seed/pimenton-picado/400/300',
     category: 'verduras',
     benefits: ['Vitamina C', 'Sabor']
@@ -459,7 +459,7 @@ export const products: Product[] = [
     id: 'cebolla-blanca-picada',
     name: 'Cebolla Blanca Picada (Libra)',
     price: 12900,
-    description: 'Lista para tus aderezos.',
+    description: 'Qué es de una comida sin la sazón de las cebollas.',
     image: 'https://picsum.photos/seed/cebolla-blanca-picada/400/300',
     category: 'verduras',
     benefits: ['Básica', 'Sabor']
@@ -468,7 +468,7 @@ export const products: Product[] = [
     id: 'tomate-cherry',
     name: 'Tomate Cherry (Libra)',
     price: 20500,
-    description: 'Pequeños y dulces.',
+    description: 'Un tomate redondo y acidito, delicioso para ensaladas.',
     image: 'https://picsum.photos/seed/tomate-cherry/400/300',
     category: 'verduras',
     benefits: ['Snack', 'Ensaladas']
@@ -477,7 +477,7 @@ export const products: Product[] = [
     id: 'lechuga-hidroponica',
     name: 'Lechuga Hidropónica (250g)',
     price: 8900,
-    description: 'Limpia y lista para consumir.',
+    description: 'Una lechuga crespa de consistencia firme, lavada y desinfectada.',
     image: 'https://picsum.photos/seed/lechuga-hidroponica/400/300',
     category: 'verduras',
     benefits: ['Fresca', 'Crujiente']
@@ -486,7 +486,7 @@ export const products: Product[] = [
     id: 'mezclum',
     name: 'Mezclum Orgánico Lavado (250g)',
     price: 24500,
-    description: 'Mix de hojas verdes orgánicas.',
+    description: 'Una variedad de 11 hojas orgánicas e hidropónicas, lavado y desinfectado.',
     image: 'https://picsum.photos/seed/mezclum/400/300',
     category: 'verduras',
     benefits: ['Orgánico', 'Premium']
