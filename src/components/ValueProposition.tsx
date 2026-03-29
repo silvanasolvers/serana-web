@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { Leaf, Clock, Heart, Sparkles, Sprout, Recycle, ArrowUpRight } from 'lucide-react';
+import { Leaf, Clock, Heart, Sparkles, Sprout, Recycle } from 'lucide-react';
 import clsx from 'clsx';
 
 const features = [
@@ -130,12 +130,7 @@ export default function ValueProposition() {
                     <feature.icon size={18} strokeWidth={1.5} />
                   </div>
                   
-                  <div className={clsx(
-                    "opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0",
-                    feature.variant === 'minimal' ? "text-serana-forest/40" : "text-white/60"
-                  )}>
-                    <ArrowUpRight size={16} />
-                  </div>
+
                 </div>
                 
                 <div>
