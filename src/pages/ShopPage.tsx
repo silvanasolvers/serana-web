@@ -1,110 +1,194 @@
-import React, { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useProducts } from '../lib/useProducts';
 import InteractiveProductList from '../components/InteractiveProductList';
 import Navbar from '../components/Navbar';
 import CartDrawer from '../components/CartDrawer';
 import Footer from '../components/Footer';
+import SectionDivider from '../components/SectionDivider';
 import clsx from 'clsx';
 import { motion } from 'motion/react';
-import { ArrowRight, Sparkles, Zap, Leaf, Heart } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useCartStore } from '../store/useCartStore';
+import { SerenaIcons, SerenaMark, type SerenaIconName } from '../components/SeranaIcons';
 
 type Category = 'all' | 'ensaladas' | 'salsas' | 'sopas' | 'bebidas' | 'frutas' | 'verduras' | 'combos';
+
+const CATEGORIES: Array<{ id: Category; label: string; icon: SerenaIconName }> = [
+  { id: 'all', label: 'Todos', icon: 'SerenaMark' },
+  { id: 'combos', label: 'Combos', icon: 'Spark' },
+  { id: 'ensaladas', label: 'Ensaladas', icon: 'Bowl' },
+  { id: 'sopas', label: 'Sopas y cremas', icon: 'Pot' },
+  { id: 'bebidas', label: 'Bebidas y shots', icon: 'Drop' },
+  { id: 'salsas', label: 'Salsas', icon: 'Citrus' },
+  { id: 'frutas', label: 'Mercado fresco', icon: 'Seed' },
+  { id: 'verduras', label: 'Verduras', icon: 'Sprout' },
+];
+
+type SuggestionId = 'lighter' | 'energy' | 'quick' | 'house';
+
+const SUGGESTIONS: Array<{
+  id: SuggestionId;
+  number: string;
+  kicker: string;
+  title: string;
+  italic: string;
+  filter: Category;
+  icon: SerenaIconName;
+}> = [
+  { id: 'lighter', number: '01', kicker: 'Si buscas algo ligero', title: 'Frescas y', italic: 'crujientes', filter: 'ensaladas', icon: 'Leaf' },
+  { id: 'energy', number: '02', kicker: 'Si quieres más energía', title: 'Shots con', italic: 'propósito', filter: 'bebidas', icon: 'Spark' },
+  { id: 'quick', number: '03', kicker: 'Si quieres algo práctico', title: 'Combos para', italic: 'la semana', filter: 'combos', icon: 'Hourglass' },
+  { id: 'house', number: '04', kicker: 'Favoritos de la casa', title: 'Lo que más', italic: 'pedimos', filter: 'all', icon: 'SerenaMark' },
+];
+
+const COMPLEMENTS: Array<{
+  title: string;
+  italic: string;
+  desc: string;
+  action: Category;
+  icon: SerenaIconName;
+}> = [
+  { title: 'Agrégale una', italic: 'bebida', desc: 'Un shot funcional o jugo que potencia tu energía, digestión o enfoque.', action: 'bebidas', icon: 'Drop' },
+  { title: 'Combínalo con una', italic: 'salsa', desc: 'Pesto, hummus, chimichurri o cualquier vinagreta para elevar tu plato.', action: 'salsas', icon: 'Citrus' },
+  { title: 'Prueba un', italic: 'shot funcional', desc: 'Metabólico, serenidad, concentración, muscular o piel perfecta. Tu cuerpo te lo agradece.', action: 'bebidas', icon: 'Spark' },
+  { title: 'Completa con una', italic: 'crema', desc: 'Acompaña tu ensalada con una crema o sopa para una comida completa.', action: 'sopas', icon: 'Pot' },
+  { title: 'Arma tu', italic: 'ritual', desc: 'Ensalada + bebida + salsa + shot. Crea tu combinación perfecta de bienestar.', action: 'combos', icon: 'SerenaMark' },
+  { title: 'Suma frutas', italic: 'frescas', desc: 'Completa tu pedido con frutas de temporada seleccionadas para ti.', action: 'frutas', icon: 'Seed' },
+];
+
+const RITUAL_OPTIONS: Array<{
+  title: string;
+  desc: string;
+  icon: SerenaIconName;
+}> = [
+  { title: 'Pedido semanal', desc: 'Recibe tu selección cada semana, sin pensarlo dos veces.', icon: 'Calendar' },
+  { title: 'Compra recurrente', desc: 'Automatiza tus favoritos y nunca te quedes sin lo bueno.', icon: 'Hourglass' },
+  { title: 'Club Serana', desc: 'Acumula semillas en cada compra y conviértelas en premios.', icon: 'Seed' },
+];
+
+function CategoryIcon({ name, className }: { name: SerenaIconName; className?: string }) {
+  const Cmp = SerenaIcons[name];
+  return <Cmp className={className} />;
+}
 
 export default function ShopPage() {
   const [activeCategory, setActiveCategory] = useState<Category>('all');
   const { products } = useProducts();
 
-  const filteredProducts = activeCategory === 'all'
-    ? [...products].sort((a, b) => {
-        // Combos first when showing "Todos"
+  const filteredProducts = useMemo(() => {
+    if (activeCategory === 'all') {
+      return [...products].sort((a, b) => {
         if (a.category === 'combos' && b.category !== 'combos') return -1;
         if (a.category !== 'combos' && b.category === 'combos') return 1;
         return 0;
-      })
-    : products.filter(p => p.category === activeCategory);
+      });
+    }
+    return products.filter((p) => p.category === activeCategory);
+  }, [products, activeCategory]);
 
-  const categories = [
-    { id: 'all', label: 'Todos' },
-    { id: 'ensaladas', label: 'Ensaladas' },
-    { id: 'sopas', label: 'Sopas y cremas' },
-    { id: 'bebidas', label: 'Bebidas y shots' },
-    { id: 'salsas', label: 'Salsas y complementos' },
-    { id: 'combos', label: 'Combos' },
-    { id: 'frutas', label: 'Mercado fresco' },
-    { id: 'verduras', label: 'Verduras' },
-  ];
-
-  const suggestions = [
-    { icon: Leaf, label: 'Si buscas algo ligero', filter: 'ensaladas' as Category, color: 'text-serana-olive' },
-    { icon: Zap, label: 'Si quieres más energía', filter: 'bebidas' as Category, color: 'text-serana-terracotta' },
-    { icon: Sparkles, label: 'Si quieres algo práctico', filter: 'combos' as Category, color: 'text-serana-forest' },
-    { icon: Heart, label: 'Favoritos de la casa', filter: 'all' as Category, color: 'text-serana-ochre' },
-  ];
+  const productCount = filteredProducts.length;
+  const activeMeta = CATEGORIES.find((c) => c.id === activeCategory) ?? CATEGORIES[0];
 
   return (
-    <div className="min-h-screen pt-24 bg-serana-cream/30">
+    <div className="min-h-screen pt-24 bg-serana-cream/40">
       <Navbar />
       <CartDrawer />
-      
+
       <div className="max-w-6xl mx-auto px-6 relative z-10">
-
-        {/* ═══ PANEL 1 — Encabezado + Categorías (Entiendo cómo navegar) ═══ */}
-        <div className="py-14 text-center">
-          <motion.span 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-serana-terracotta font-bold tracking-[0.3em] uppercase text-[10px] mb-4 block"
-          >
-            El Mercado Serana
-          </motion.span>
-          <motion.h1 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-4xl md:text-6xl font-serif text-serana-forest mb-5"
-          >
-            Elige tu forma de <span className="italic text-serana-olive">nutrirte</span>
-          </motion.h1>
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-base text-serana-forest/70 max-w-lg mx-auto font-light leading-relaxed"
-          >
-            Explora por categorías y encuentra opciones frescas, conscientes y deliciosas para tu alimentación diaria.
-          </motion.p>
-        </div>
-
-        {/* Categorías */}
-        <div className="flex flex-nowrap md:flex-wrap justify-start md:justify-center gap-3 mb-16 sticky top-20 z-40 bg-serana-cream/80 backdrop-blur-md py-3 px-4 rounded-full shadow-sm border border-white/20 overflow-x-auto scrollbar-hide">
-          {categories.map((cat, i) => (
-            <motion.button
-              key={cat.id}
-              initial={{ opacity: 0, y: 20 }}
+        {/* ── Editorial header ───────────────────────────────────────────── */}
+        <header className="pt-10 md:pt-16 pb-12">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
+            <div className="lg:col-span-8">
+              <motion.span
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="inline-flex items-center gap-3 text-serana-terracotta font-bold tracking-[0.4em] uppercase text-[10px] mb-5"
+              >
+                <span className="w-10 h-px bg-serana-terracotta/60" />
+                El Mercado Serana · Edición {String(new Date().getMonth() + 1).padStart(2, '0')}
+              </motion.span>
+              <motion.h1
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="font-serif text-serana-forest text-5xl md:text-6xl lg:text-[5.5rem] leading-[0.92] tracking-tight"
+              >
+                Elige tu forma
+                <br />
+                de <span className="italic text-serana-olive">nutrirte</span>.
+              </motion.h1>
+            </div>
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 + (i * 0.05) }}
-              onClick={() => setActiveCategory(cat.id as Category)}
-              className={clsx(
-                'px-5 py-1.5 rounded-full text-[10px] font-bold tracking-[0.15em] uppercase transition-all duration-500 border whitespace-nowrap',
-                activeCategory === cat.id
-                  ? 'bg-serana-forest text-serana-cream border-serana-forest shadow-lg scale-105'
-                  : 'bg-transparent text-serana-forest border-transparent hover:border-serana-forest/20 hover:bg-serana-forest/5'
-              )}
+              transition={{ delay: 0.18 }}
+              className="lg:col-span-4 lg:pt-12"
             >
-              {cat.label}
-            </motion.button>
-          ))}
+              <p className="text-base text-serana-forest/70 font-light leading-relaxed max-w-sm border-l border-serana-forest/15 pl-5">
+                Una colección curada de comida real: ensaladas frescas, sopas con cuerpo, jugos vivos y combos que se adaptan a tu semana.
+              </p>
+              <div className="mt-5 flex items-center gap-4 text-[10px] uppercase tracking-[0.3em] text-serana-forest/50 font-bold">
+                <span>{products.length} referencias</span>
+                <span className="w-1 h-1 rounded-full bg-serana-forest/30" />
+                <span>{CATEGORIES.length - 1} categorías</span>
+              </div>
+            </motion.div>
+          </div>
+        </header>
+
+        {/* ── Sticky category nav with icons ─────────────────────────────── */}
+        <div className="sticky top-20 z-40 -mx-6 px-6 mb-12">
+          <div className="bg-serana-cream/90 backdrop-blur-md border border-serana-forest/10 rounded-2xl shadow-[0_8px_30px_-15px_rgba(39,54,23,0.2)] py-3 px-3 overflow-x-auto scrollbar-hide">
+            <div className="flex gap-2 min-w-max md:justify-center">
+              {CATEGORIES.map((cat, i) => (
+                <motion.button
+                  key={cat.id}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.18 + i * 0.04 }}
+                  onClick={() => setActiveCategory(cat.id)}
+                  className={clsx(
+                    'group flex items-center gap-2.5 px-4 py-2 rounded-xl text-[10px] font-bold tracking-[0.18em] uppercase transition-colors duration-300 border',
+                    activeCategory === cat.id
+                      ? 'bg-serana-forest text-serana-cream border-serana-forest shadow-md'
+                      : 'bg-white/40 text-serana-forest border-transparent hover:border-serana-forest/15 hover:bg-white',
+                  )}
+                >
+                  <CategoryIcon
+                    name={cat.icon}
+                    className={clsx(
+                      'w-4 h-4 transition-colors',
+                      activeCategory === cat.id ? 'text-serana-ochre' : 'text-serana-olive',
+                    )}
+                  />
+                  <span>{cat.label}</span>
+                </motion.button>
+              ))}
+            </div>
+          </div>
         </div>
 
-        {/* ═══ PANEL 2 — Exploración de productos (Se me antoja algo) ═══ */}
-        <motion.div 
-          layout
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
+        {/* ── Active category context strip ──────────────────────────────── */}
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl border border-serana-forest/15 bg-white/60 flex items-center justify-center text-serana-olive">
+              <CategoryIcon name={activeMeta.icon} className="w-6 h-6" />
+            </div>
+            <div>
+              <p className="text-[10px] uppercase tracking-[0.4em] text-serana-forest/50 font-bold mb-1">Mostrando</p>
+              <h2 className="font-serif text-2xl md:text-3xl text-serana-forest leading-none">
+                <span className="italic text-serana-olive">{activeMeta.label}</span>
+              </h2>
+            </div>
+          </div>
+          <div className="flex items-baseline gap-2 text-serana-forest/55">
+            <span className="font-serif italic text-3xl text-serana-forest">{String(productCount).padStart(2, '0')}</span>
+            <span className="text-[10px] uppercase tracking-[0.3em] font-bold">referencias</span>
+          </div>
+        </div>
+
+        {/* ── Product list ───────────────────────────────────────────────── */}
+        <motion.div layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
           <InteractiveProductList products={filteredProducts} />
         </motion.div>
 
@@ -114,150 +198,160 @@ export default function ShopPage() {
           </div>
         )}
 
-        {/* ═══ PANEL 3 — Ayuda para elegir (Sé qué me conviene) ═══ */}
-        <section className="py-16 md:py-20">
-          <div className="text-center mb-10">
-            <span className="inline-block text-serana-olive font-bold tracking-[0.2em] uppercase text-[10px] mb-3 border border-serana-olive/20 px-4 py-1.5 rounded-full">
-              ¿No sabes por dónde empezar?
-            </span>
-            <h2 className="text-3xl md:text-4xl font-serif text-serana-forest">
-              Te ayudamos a <span className="italic text-serana-ochre">elegir</span>
-            </h2>
+        <SectionDivider label="Cómo elegir" />
+
+        {/* ── Suggestions: editorial cards with numbers ──────────────────── */}
+        <section className="py-12 md:py-16">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-10 items-end">
+            <div className="lg:col-span-7">
+              <span className="text-[10px] uppercase tracking-[0.4em] text-serana-olive font-bold mb-4 block">
+                ¿No sabes por dónde empezar?
+              </span>
+              <h2 className="font-serif text-serana-forest text-3xl md:text-5xl leading-tight tracking-tight">
+                Cuatro caminos para
+                <br />
+                <span className="italic text-serana-ochre">empezar tu menú</span>.
+              </h2>
+            </div>
+            <p className="lg:col-span-5 text-sm text-serana-forest/65 font-light leading-relaxed border-l border-serana-forest/15 pl-5 max-w-md">
+              Cada perfil corresponde a una intención. Toca el que más se parezca a ti hoy y filtramos el menú al instante.
+            </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {suggestions.map((sug, idx) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {SUGGESTIONS.map((sug, idx) => (
               <motion.button
-                key={idx}
-                initial={{ opacity: 0, y: 20 }}
+                key={sug.id}
+                initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ delay: idx * 0.06, ease: [0.16, 1, 0.3, 1] }}
                 onClick={() => {
                   setActiveCategory(sug.filter);
-                  window.scrollTo({ top: 400, behavior: 'smooth' });
+                  window.scrollTo({ top: 200, behavior: 'smooth' });
                 }}
-                className="group bg-white p-6 rounded-2xl border border-serana-forest/5 hover:border-serana-forest/20 hover:shadow-lg transition-all text-center"
+                className="group relative bg-white border border-serana-forest/10 rounded-2xl p-6 text-left overflow-hidden transition-all duration-300 hover:border-serana-forest/30 hover:shadow-lg"
               >
-                <div className={clsx("mx-auto mb-3 p-3 rounded-xl bg-serana-cream w-fit", sug.color)}>
-                  <sug.icon size={24} strokeWidth={1.5} />
+                <span
+                  aria-hidden
+                  className="absolute -top-2 right-4 font-serif italic text-[5rem] leading-none text-serana-forest/5 group-hover:text-serana-forest/15 transition-colors select-none"
+                >
+                  {sug.number}
+                </span>
+                <div className="w-11 h-11 rounded-xl border border-serana-forest/15 flex items-center justify-center text-serana-olive mb-5">
+                  <CategoryIcon name={sug.icon} className="w-5 h-5" />
                 </div>
-                <p className="font-serif text-sm text-serana-forest group-hover:text-serana-olive transition-colors">
-                  {sug.label}
-                </p>
+                <p className="text-[10px] uppercase tracking-[0.3em] text-serana-terracotta font-bold mb-2">{sug.kicker}</p>
+                <h3 className="font-serif text-xl text-serana-forest leading-tight tracking-tight">
+                  {sug.title} <span className="italic text-serana-olive">{sug.italic}</span>.
+                </h3>
+                <span className="mt-5 inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] text-serana-forest/55 font-bold group-hover:text-serana-forest transition-colors">
+                  Ver categoría <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
+                </span>
               </motion.button>
             ))}
           </div>
         </section>
 
-        {/* ═══ PANEL 4 — Complementos / Combos / Upsell (Quiero completar mi compra) ═══ */}
-        <section className="py-16 md:py-20 border-t border-serana-forest/5">
-          <div className="text-center mb-10">
-            <span className="inline-block text-serana-terracotta font-bold tracking-[0.2em] uppercase text-[10px] mb-3 border border-serana-terracotta/20 px-4 py-1.5 rounded-full">
+        <SectionDivider variant="brush" />
+
+        {/* ── Complements / upsell ──────────────────────────────────────── */}
+        <section className="py-12 md:py-16">
+          <div className="text-center mb-12">
+            <span className="inline-block text-serana-terracotta font-bold tracking-[0.4em] uppercase text-[10px] mb-4">
               Completa tu experiencia
             </span>
-            <h2 className="text-3xl md:text-4xl font-serif text-serana-forest mb-3">
-              Acompáñalo con <span className="italic text-serana-ochre">algo más</span>
+            <h2 className="font-serif text-serana-forest text-3xl md:text-5xl tracking-tight">
+              Acompáñalo con
+              <br />
+              <span className="italic text-serana-ochre">algo más</span>.
             </h2>
-            <p className="text-sm text-serana-forest/60 font-light max-w-md mx-auto">
+            <p className="mt-4 text-sm text-serana-forest/60 font-light max-w-md mx-auto">
               Combínalo con una salsa, agrégale una bebida funcional o arma tu ritual de bienestar completo.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              {
-                title: "Agrégale una bebida",
-                desc: "Un shot funcional o jugo que potencia tu energía, digestión o enfoque.",
-                action: "bebidas" as Category,
-                emoji: "🍹"
-              },
-              {
-                title: "Combínalo con una salsa",
-                desc: "Pesto, hummus, chimichurri o cualquier vinagreta para elevar tu plato.",
-                action: "salsas" as Category,
-                emoji: "🫒"
-              },
-              {
-                title: "Prueba un shot funcional",
-                desc: "Metabólico, serenidad, concentración, muscular o piel perfecta. Tu cuerpo te lo agradece.",
-                action: "bebidas" as Category,
-                emoji: "⚡"
-              },
-              {
-                title: "Completa tu elección",
-                desc: "Acompaña tu ensalada con una crema o sopa para una comida completa.",
-                action: "sopas" as Category,
-                emoji: "🍲"
-              },
-              {
-                title: "Arma tu ritual",
-                desc: "Ensalada + bebida + salsa + shot. Crea tu combinación perfecta de bienestar.",
-                action: "combos" as Category,
-                emoji: "✨"
-              },
-              {
-                title: "Acompáñalo con frutas frescas",
-                desc: "Completa tu pedido con frutas de temporada seleccionadas para ti.",
-                action: "frutas" as Category,
-                emoji: "🍓"
-              }
-            ].map((item, idx) => (
-              <motion.div
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {COMPLEMENTS.map((item, idx) => (
+              <motion.button
                 key={idx}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
+                transition={{ delay: idx * 0.05 }}
                 onClick={() => {
                   setActiveCategory(item.action);
-                  window.scrollTo({ top: 400, behavior: 'smooth' });
+                  window.scrollTo({ top: 200, behavior: 'smooth' });
                 }}
-                className="group bg-white p-6 rounded-2xl border border-serana-forest/5 hover:border-serana-olive/30 hover:shadow-lg transition-all cursor-pointer"
+                className="group relative bg-white border border-serana-forest/10 hover:border-serana-olive/30 hover:shadow-lg rounded-[1.5rem] p-6 text-left transition-all overflow-hidden"
               >
-                <span className="text-3xl mb-3 block">{item.emoji}</span>
-                <h3 className="font-serif text-lg text-serana-forest mb-2 group-hover:text-serana-olive transition-colors">{item.title}</h3>
-                <p className="text-xs text-serana-forest/60 font-light leading-relaxed">{item.desc}</p>
-              </motion.div>
+                <span
+                  aria-hidden
+                  className="absolute top-3 right-4 font-serif italic text-[3.5rem] leading-none text-serana-forest/5 select-none"
+                >
+                  {String(idx + 1).padStart(2, '0')}
+                </span>
+                <div className="w-12 h-12 rounded-xl bg-serana-cream border border-serana-forest/10 flex items-center justify-center text-serana-olive mb-5">
+                  <CategoryIcon name={item.icon} className="w-6 h-6" />
+                </div>
+                <h3 className="font-serif text-xl text-serana-forest leading-snug tracking-tight">
+                  {item.title} <span className="italic text-serana-olive">{item.italic}</span>.
+                </h3>
+                <p className="mt-3 text-[13px] text-serana-forest/65 font-light leading-relaxed">{item.desc}</p>
+              </motion.button>
             ))}
           </div>
         </section>
 
-        {/* ═══ PANEL 5 — Cierre / Rutina / Recurrencia (Actúo) ═══ */}
-        <section className="py-16 md:py-20 mb-10">
-          <div className="bg-serana-forest rounded-[2rem] p-8 md:p-14 text-center relative overflow-hidden">
-            <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-15">
-              <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-serana-olive rounded-full blur-[100px]" />
-              <div className="absolute bottom-[-20%] right-[-10%] w-[40%] h-[40%] bg-serana-ochre rounded-full blur-[80px]" />
+        <SectionDivider />
+
+        {/* ── Routine / closing ──────────────────────────────────────────── */}
+        <section className="py-12 md:py-20 mb-12">
+          <div className="relative overflow-hidden rounded-[2.5rem] bg-serana-forest text-serana-cream">
+            <div className="absolute inset-0 pointer-events-none opacity-[0.07]">
+              <svg viewBox="0 0 600 400" preserveAspectRatio="none" className="w-full h-full text-serana-cream" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round">
+                <path d="M-20 320 C 120 250, 240 360, 380 290 C 480 240, 560 320, 620 270" />
+                <path d="M-20 360 C 100 320, 240 380, 380 340 C 500 310, 560 360, 620 330" opacity="0.65" />
+                <path d="M-20 280 C 130 200, 260 320, 380 240 C 500 180, 560 280, 620 220" opacity="0.4" />
+              </svg>
             </div>
 
-            <div className="relative z-10">
-              <span className="inline-block text-serana-ochre font-bold tracking-[0.2em] uppercase text-[10px] mb-4 border border-serana-ochre/20 px-4 py-1.5 rounded-full">
-                Haz de Serana tu rutina
-              </span>
-              <h2 className="text-3xl md:text-4xl font-serif text-serana-cream mb-4">
-                Nutrirse bien no tiene que ser <span className="italic text-serana-ochre">complicado</span>
-              </h2>
-              <p className="text-base text-serana-cream/70 font-light max-w-lg mx-auto mb-8 leading-relaxed">
-                Arma tu pedido semanal, activa tu suscripción o simplemente elige lo que te provoca hoy. Tú decides el ritmo.
-              </p>
+            <div className="relative z-10 p-10 md:p-14 lg:p-20">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-end mb-12">
+                <div className="lg:col-span-7">
+                  <span className="inline-flex items-center gap-3 text-serana-ochre font-bold tracking-[0.4em] uppercase text-[10px] mb-5">
+                    <span className="w-10 h-px bg-serana-ochre/60" />
+                    Haz de Serana tu rutina
+                  </span>
+                  <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl tracking-tight leading-[0.95]">
+                    Nutrirte bien no
+                    <br />
+                    tiene que ser <span className="italic text-serana-ochre">complicado</span>.
+                  </h2>
+                </div>
+                <p className="lg:col-span-5 text-base text-serana-cream/70 font-light leading-relaxed border-l border-serana-cream/20 pl-5 max-w-md">
+                  Arma tu pedido semanal, activa tu suscripción o simplemente elige lo que te provoca hoy. Tú decides el ritmo.
+                </p>
+              </div>
 
-              {/* Opciones de rutina */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto mb-10">
-                {[
-                  { emoji: "📦", title: "Pedido semanal", desc: "Recibe tu selección cada semana" },
-                  { emoji: "🔄", title: "Compra recurrente", desc: "Automatiza tus favoritos" },
-                  { emoji: "⭐", title: "Club Serana", desc: "Acumula semillas y gana premios" },
-                ].map((opt, idx) => (
-                  <div key={idx} className="bg-white/10 backdrop-blur-sm border border-white/10 rounded-xl p-4 text-center">
-                    <span className="text-2xl block mb-2">{opt.emoji}</span>
-                    <h4 className="font-serif text-sm text-serana-cream mb-1">{opt.title}</h4>
-                    <p className="text-[10px] text-serana-cream/60 font-light">{opt.desc}</p>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-12">
+                {RITUAL_OPTIONS.map((opt, idx) => (
+                  <div
+                    key={idx}
+                    className="bg-white/5 border border-white/10 rounded-2xl p-5 backdrop-blur-sm"
+                  >
+                    <div className="w-11 h-11 rounded-xl border border-serana-cream/20 flex items-center justify-center text-serana-ochre mb-4">
+                      <CategoryIcon name={opt.icon} className="w-5 h-5" />
+                    </div>
+                    <h4 className="font-serif text-xl text-serana-cream leading-tight tracking-tight">
+                      {opt.title}
+                    </h4>
+                    <p className="mt-2 text-[12px] text-serana-cream/60 font-light leading-relaxed">{opt.desc}</p>
                   </div>
                 ))}
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="flex flex-col sm:flex-row gap-4">
                 <button
                   onClick={() => {
                     setActiveCategory('all');
@@ -275,11 +369,18 @@ export default function ShopPage() {
                   Volver al inicio
                 </Link>
               </div>
+
+              <div className="mt-10 flex items-center gap-3 text-serana-cream/50">
+                <SerenaMark className="w-6 h-6 text-serana-ochre" />
+                <span className="text-[10px] uppercase tracking-[0.4em] font-bold">
+                  Serana · Mercado consciente
+                </span>
+              </div>
             </div>
           </div>
         </section>
       </div>
-      
+
       <Footer />
     </div>
   );
