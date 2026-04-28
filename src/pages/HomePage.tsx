@@ -8,6 +8,7 @@ import CommunityPoll from '../components/CommunityPoll';
 import CartDrawer from '../components/CartDrawer';
 import Footer from '../components/Footer';
 import VideoSection from '../components/VideoSection';
+import SectionDivider from '../components/SectionDivider';
 import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -21,14 +22,20 @@ export default function HomePage() {
         {/* Panel 1 — Hero (Me atrae) */}
         <Hero />
 
+        <SectionDivider label="Filosofía" />
+
         {/* Panel 2 — Filosofía (Me identifico) */}
         <ValueProposition />
+
+        <SectionDivider variant="brush" />
 
         {/* Panel 3 — Experiencia / Calidad real (Confío) */}
         <VideoSection />
 
         {/* Panel 4 — Diagnóstico personalizado (Siento que puede ser para mí) */}
         <WellnessQuiz />
+
+        <SectionDivider label="Club Serana" />
 
         {/* Panel 5 — Club Serana (Veo razones para quedarme) */}
         <LoyaltySection />

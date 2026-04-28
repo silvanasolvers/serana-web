@@ -1,38 +1,58 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ComponentType, type SVGProps } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowRight, Check, Sparkles, ChevronRight, Loader2 } from 'lucide-react';
+import { ArrowRight, Check, ChevronRight, Loader2 } from 'lucide-react';
 import { captureLead } from '../lib/api/leads';
+import {
+  Spark,
+  Leaf,
+  Drop,
+  Compass,
+  Hourglass,
+  Pot,
+  Calendar,
+  Bowl,
+  Sprout,
+  Citrus,
+  Wheat,
+  SerenaMark,
+} from './SeranaIcons';
 
-const QUESTIONS = [
+type IconCmp = ComponentType<SVGProps<SVGSVGElement>>;
+
+const QUESTIONS: Array<{
+  id: string;
+  question: string;
+  options: Array<{ id: string; label: string; Icon: IconCmp }>;
+}> = [
   {
     id: 'goal',
-    question: "¿Cuál es tu principal objetivo de bienestar hoy?",
+    question: '¿Cuál es tu principal objetivo de bienestar hoy?',
     options: [
-      { id: 'energy', label: "Aumentar mi energía", icon: "⚡" },
-      { id: 'calm', label: "Reducir el estrés", icon: "🌿" },
-      { id: 'balance', label: "Mejorar mi digestión", icon: "🍎" },
-      { id: 'focus', label: "Mayor enfoque mental", icon: "🧠" }
-    ]
+      { id: 'energy', label: 'Aumentar mi energía', Icon: Spark },
+      { id: 'calm', label: 'Reducir el estrés', Icon: Leaf },
+      { id: 'balance', label: 'Mejorar mi digestión', Icon: Drop },
+      { id: 'focus', label: 'Mayor enfoque mental', Icon: Compass },
+    ],
   },
   {
     id: 'time',
-    question: "¿Cuánto tiempo tienes para cocinar?",
+    question: '¿Cuánto tiempo tienes para cocinar?',
     options: [
-      { id: 'none', label: "Cero tiempo (Lo quiero listo)", icon: "⏱️" },
-      { id: 'little', label: "15-20 minutos", icon: "🍳" },
-      { id: 'weekend', label: "Solo los fines de semana", icon: "📅" }
-    ]
+      { id: 'none', label: 'Cero tiempo (lo quiero listo)', Icon: Hourglass },
+      { id: 'little', label: '15-20 minutos', Icon: Pot },
+      { id: 'weekend', label: 'Solo los fines de semana', Icon: Calendar },
+    ],
   },
   {
     id: 'diet',
-    question: "¿Sigues alguna preferencia alimentaria?",
+    question: '¿Sigues alguna preferencia alimentaria?',
     options: [
-      { id: 'omni', label: "Como de todo", icon: "🍽️" },
-      { id: 'veggie', label: "Vegetariano/Vegano", icon: "🥦" },
-      { id: 'keto', label: "Keto / Low Carb", icon: "🥑" },
-      { id: 'gluten', label: "Sin Gluten", icon: "🌾" }
-    ]
-  }
+      { id: 'omni', label: 'Como de todo', Icon: Bowl },
+      { id: 'veggie', label: 'Vegetariano/Vegano', Icon: Sprout },
+      { id: 'keto', label: 'Keto / Low Carb', Icon: Citrus },
+      { id: 'gluten', label: 'Sin Gluten', Icon: Wheat },
+    ],
+  },
 ];
 
 export default function WellnessQuiz() {
@@ -139,17 +159,22 @@ export default function WellnessQuiz() {
                 </h3>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {QUESTIONS[currentStep].options.map((option) => (
-                    <button
-                      key={option.id}
-                      onClick={() => handleOptionSelect(option.id)}
-                      className="group flex items-center gap-3 p-4 rounded-xl bg-white/5 hover:bg-serana-ochre hover:text-serana-forest border border-white/10 hover:border-serana-ochre transition-all duration-300 text-left"
-                    >
-                      <span className="text-xl group-hover:scale-110 transition-transform duration-300">{option.icon}</span>
-                      <span className="font-medium text-sm">{option.label}</span>
-                      <ChevronRight className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity" size={16} />
-                    </button>
-                  ))}
+                  {QUESTIONS[currentStep].options.map((option) => {
+                    const Icon = option.Icon;
+                    return (
+                      <button
+                        key={option.id}
+                        onClick={() => handleOptionSelect(option.id)}
+                        className="group flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-serana-ochre hover:text-serana-forest border border-white/10 hover:border-serana-ochre transition-colors duration-300 text-left"
+                      >
+                        <span className="w-9 h-9 shrink-0 rounded-lg border border-current/30 bg-current/5 flex items-center justify-center text-serana-ochre group-hover:text-serana-forest transition-colors">
+                          <Icon className="w-5 h-5" />
+                        </span>
+                        <span className="font-medium text-sm leading-snug">{option.label}</span>
+                        <ChevronRight className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity" size={16} />
+                      </button>
+                    );
+                  })}
                 </div>
               </motion.div>
             ) : (
@@ -159,8 +184,8 @@ export default function WellnessQuiz() {
                 animate={{ opacity: 1, scale: 1 }}
                 className="text-center w-full"
               >
-                <div className="w-16 h-16 bg-serana-ochre rounded-full flex items-center justify-center mx-auto mb-6 text-serana-forest shadow-[0_0_30px_rgba(234,179,8,0.3)]">
-                  <Sparkles size={32} />
+                <div className="w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center text-serana-ochre border border-serana-ochre/30 bg-serana-ochre/10 shadow-[0_0_40px_rgba(220,161,93,0.2)]">
+                  <SerenaMark className="w-10 h-10" />
                 </div>
                 <h3 className="text-2xl md:text-3xl font-serif mb-3">
                   ¡Tu plan ideal es <span className="text-serana-ochre italic">Energía Matutina</span>!
