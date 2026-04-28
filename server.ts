@@ -23,6 +23,7 @@ import dotenv from 'dotenv';
 import helmet from 'helmet';
 import compression from 'compression';
 import rateLimit from 'express-rate-limit';
+import crypto from 'crypto';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -39,6 +40,7 @@ const APP_URL = process.env.APP_URL ?? `http://localhost:${PORT}`;
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL ?? process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const MP_ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN;
+const MP_WEBHOOK_SECRET = process.env.MP_WEBHOOK_SECRET;
 
 if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
   console.warn(
@@ -332,6 +334,13 @@ async function startServer() {
 
   // Mercado Pago notification endpoint. MP retries on non-2xx, so we always
   // return 200 unless we explicitly want a retry.
+  //
+  // Signature validation (MP docs):
+  //   Header `x-signature`  → "ts=<timestamp>,v1=<hmac>"
+  //   Header `x-request-id` → request UUID
+  //   manifest = "id:<data.id>;request-id:<x-request-id>;ts:<ts>;"
+  //   v1 = HMAC-SHA256(manifest, MP_WEBHOOK_SECRET) hex
+  // We only enforce when MP_WEBHOOK_SECRET is set so dev keeps working.
   app.post('/api/webhooks/mercadopago', async (req, res) => {
     try {
       if (!MP_ACCESS_TOKEN || !supabaseAdmin) {
@@ -351,6 +360,39 @@ async function startServer() {
       }
       if (!paymentIdRaw) {
         return res.status(200).send('ignored: no payment id');
+      }
+
+      if (MP_WEBHOOK_SECRET) {
+        const sigHeader = String(req.headers['x-signature'] ?? '');
+        const requestId = String(req.headers['x-request-id'] ?? '');
+        const parts = Object.fromEntries(
+          sigHeader.split(',').map((kv) => {
+            const [k, v] = kv.split('=').map((s) => s.trim());
+            return [k, v];
+          }),
+        ) as { ts?: string; v1?: string };
+
+        if (!parts.ts || !parts.v1 || !requestId) {
+          console.warn('[mp/webhook] rejected: missing signature headers');
+          return res.status(401).send('missing signature');
+        }
+
+        const manifest = `id:${paymentIdRaw};request-id:${requestId};ts:${parts.ts};`;
+        const expected = crypto
+          .createHmac('sha256', MP_WEBHOOK_SECRET)
+          .update(manifest)
+          .digest('hex');
+
+        // Constant-time compare; both must be Buffers of equal length.
+        const expectedBuf = Buffer.from(expected, 'hex');
+        const givenBuf = Buffer.from(parts.v1, 'hex');
+        const ok =
+          expectedBuf.length === givenBuf.length &&
+          crypto.timingSafeEqual(expectedBuf, givenBuf);
+        if (!ok) {
+          console.warn('[mp/webhook] rejected: bad signature for payment', paymentIdRaw);
+          return res.status(401).send('bad signature');
+        }
       }
 
       const paymentResp = await fetch(`https://api.mercadopago.com/v1/payments/${paymentIdRaw}`, {
