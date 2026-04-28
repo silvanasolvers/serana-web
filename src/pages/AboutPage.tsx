@@ -78,7 +78,7 @@ export default function AboutPage() {
                 className="inline-flex items-center gap-3 text-serana-terracotta font-bold tracking-[0.4em] uppercase text-[10px] mb-5"
               >
                 <span className="w-10 h-px bg-serana-terracotta/60" />
-                Atelier Serana · Manifiesto · Edición {editionNumber}
+                Mercado Serana · Manifiesto · Edición {editionNumber}
               </motion.span>
               <motion.h1
                 initial={{ opacity: 0, y: 24 }}
@@ -266,7 +266,7 @@ export default function AboutPage() {
             >
               <span className="inline-flex items-center gap-3 text-serana-olive font-bold tracking-[0.4em] uppercase text-[10px] mb-4">
                 <span className="w-10 h-px bg-serana-olive/60" />
-                Cultura del atelier
+                Cultura de la casa
               </span>
               <h2 className="font-serif text-serana-forest text-4xl md:text-5xl leading-[0.95] tracking-tight">
                 Cuidado de oficio,
@@ -324,7 +324,7 @@ export default function AboutPage() {
             <div className="relative z-10 p-10 md:p-14 lg:p-20 text-center">
               <SerenaMark className="w-10 h-10 text-serana-ochre mx-auto mb-6" />
               <span className="inline-flex items-center gap-3 text-serana-ochre font-bold tracking-[0.4em] uppercase text-[10px] mb-5">
-                Visita el atelier
+                Visítanos en Bogotá
               </span>
               <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl tracking-tight leading-[0.95] max-w-3xl mx-auto">
                 Te invitamos a sentir

@@ -28,7 +28,7 @@ export default function Hero() {
               <div className="flex items-center gap-3 mb-3">
                 <span className="w-10 h-px bg-[#BC6C25]"></span>
                 <span className="text-[#BC6C25] font-sans text-[9px] font-bold tracking-[0.4em] uppercase">
-                  Atelier Serana · Bogotá · Edición {editionNumber}
+                  Mercado Serana · Bogotá · Edición {editionNumber}
                 </span>
               </div>
 
@@ -74,7 +74,7 @@ export default function Hero() {
                 </Link>
               </div>
 
-              {/* Atelier hours strip — Olive-style restraint, in Spanish */}
+              {/* Hours strip — restraint, in Spanish */}
               <div className="mt-10 flex items-center gap-4 text-[#273617]/55 text-[9px] font-bold tracking-[0.4em] uppercase">
                 <span>Mar — Sáb</span>
                 <span className="w-1 h-1 rounded-full bg-[#273617]/30" />

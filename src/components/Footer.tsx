@@ -63,10 +63,10 @@ export default function Footer() {
               Hacer de Colombia un país que come mejor, con consciencia y satisfacción.
             </p>
 
-            {/* Atelier block — boutique signal */}
+            {/* Visit block — boutique signal */}
             <div className="mt-6 inline-block border-l-2 border-serana-ochre/60 pl-4 py-1">
               <p className="text-serana-ochre font-bold tracking-[0.4em] uppercase text-[9px] mb-2">
-                Visita el atelier
+                Visítanos
               </p>
               <p className="font-serif text-base leading-tight text-serana-cream">
                 Cra · Bogotá, Colombia

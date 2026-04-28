@@ -72,7 +72,7 @@ const RITUALS: Array<{ Icon: IconCmp; title: string; italic: string; body: strin
     Icon: Calendar,
     title: 'Calendario',
     italic: 'editorial',
-    body: 'Cada mes lanzamos un menú nuevo, un reto y un encuentro físico en el atelier. La agenda llega a tu correo antes que a Instagram.',
+    body: 'Cada mes lanzamos un menú nuevo, un reto y un encuentro físico en la casa. La agenda llega a tu correo antes que a Instagram.',
   },
   {
     Icon: Drop,
@@ -105,7 +105,7 @@ export default function CommunityPage() {
                 className="inline-flex items-center gap-3 text-serana-terracotta font-bold tracking-[0.4em] uppercase text-[10px] mb-5"
               >
                 <span className="w-10 h-px bg-serana-terracotta/60" />
-                Atelier Serana · Comunidad · Edición {editionNumber}
+                Mercado Serana · Comunidad · Edición {editionNumber}
               </motion.span>
               <motion.h1
                 initial={{ opacity: 0, y: 24 }}
@@ -242,7 +242,7 @@ export default function CommunityPage() {
           </div>
         </section>
 
-        <SectionDivider label="Rituales del atelier" />
+        <SectionDivider label="Rituales de la casa" />
 
         {/* ── Rituales ──────────────────────────────────────────────────── */}
         <section className="my-12 md:my-20">
@@ -299,7 +299,7 @@ export default function CommunityPage() {
               >
                 <img
                   src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&q=80&w=1000"
-                  alt="Compartir comida en el atelier"
+                  alt="Compartir comida en la casa"
                   className="w-full h-full object-cover"
                   loading="lazy"
                 />
@@ -403,7 +403,7 @@ export default function CommunityPage() {
                   to="/about"
                   className="inline-flex items-center justify-center gap-2 px-8 py-4 border border-serana-cream/30 text-serana-cream rounded-full font-sans font-medium tracking-widest text-[11px] uppercase hover:bg-serana-cream/10 transition-all"
                 >
-                  Conocer el atelier
+                  Conocer la casa
                 </Link>
               </div>
             </div>
