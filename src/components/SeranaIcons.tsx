@@ -189,6 +189,30 @@ export const Spark = (p: IconProps) => (
   </svg>
 );
 
+// Woven market basket with a rustic handle, weave detail and a sprig of
+// herbs poking out — replaces the generic shopping cart icon.
+export const MarketBasket = (p: IconProps) => (
+  <svg {...base} {...p}>
+    {/* Handle */}
+    <path d="M9 11 C 9 6, 13 4, 16 4 C 19 4, 23 6, 23 11" />
+    {/* Top rim */}
+    <path d="M5 11 H 27" />
+    {/* Body */}
+    <path d="M6 11 L 8 27 H 24 L 26 11" />
+    {/* Weave horizontals */}
+    <path d="M7 16 H 25" strokeWidth="1" opacity="0.55" />
+    <path d="M7.4 21 H 24.6" strokeWidth="1" opacity="0.5" />
+    {/* Weave verticals (subtle) */}
+    <path d="M12 12 L 12.5 26" strokeWidth="0.9" opacity="0.4" strokeDasharray="2 2" />
+    <path d="M16 12 L 16 26" strokeWidth="0.9" opacity="0.4" strokeDasharray="2 2" />
+    <path d="M20 12 L 19.5 26" strokeWidth="0.9" opacity="0.4" strokeDasharray="2 2" />
+    {/* Sprig poking out the top-right */}
+    <path d="M19 8 C 22 6, 26 5, 28 4" strokeWidth="1" opacity="0.75" />
+    <path d="M22 6 C 23 4, 25 4, 26 5" strokeWidth="0.9" opacity="0.6" />
+    <path d="M24 6.5 C 25 5.5, 26 5.5, 27 6" strokeWidth="0.9" opacity="0.5" />
+  </svg>
+);
+
 // The Serana brand mark — two curving leaves cradling a kernel.
 export const SerenaMark = (p: IconProps) => (
   <svg {...base} {...p} viewBox="0 0 56 56">
@@ -217,6 +241,7 @@ export const SerenaIcons = {
   Pot,
   Calendar,
   Spark,
+  MarketBasket,
   SerenaMark,
 };
 

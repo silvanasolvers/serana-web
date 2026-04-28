@@ -2,6 +2,7 @@ import { useCartStore } from '../store/useCartStore';
 import { X, Plus, Minus, Trash2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Link } from 'react-router-dom';
+import { MarketBasket } from './SeranaIcons';
 
 export default function CartDrawer() {
   const { isOpen, items, toggleCart, removeItem, updateQuantity, total } = useCartStore();
@@ -34,7 +35,7 @@ export default function CartDrawer() {
             <div className="flex-1 overflow-y-auto p-6 space-y-6">
               {items.length === 0 ? (
                 <div className="h-full flex flex-col items-center justify-center text-center space-y-4 opacity-50">
-                  <ShoppingBagIcon />
+                  <MarketBasket className="w-12 h-12 text-serana-olive" strokeWidth={1.2} />
                   <p className="text-lg font-medium">Tu carrito está vacío</p>
                   <p className="text-sm">Empieza tu ritual de bienestar añadiendo productos.</p>
                 </div>
@@ -107,12 +108,3 @@ export default function CartDrawer() {
   );
 }
 
-function ShoppingBagIcon() {
-  return (
-    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-      <line x1="3" y1="6" x2="21" y2="6"></line>
-      <path d="M16 10a4 4 0 0 1-8 0"></path>
-    </svg>
-  );
-}

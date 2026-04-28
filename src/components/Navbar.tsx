@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom';
-import { ShoppingCart, Menu, X, Check } from 'lucide-react';
+import { Menu, X, Check } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { useCartStore } from '../store/useCartStore';
 import { motion, AnimatePresence } from 'motion/react';
 import clsx from 'clsx';
+import { MarketBasket } from './SeranaIcons';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -89,9 +90,9 @@ export default function Navbar() {
               animate={pulseKey ? { rotate: [0, -10, 10, -6, 4, 0] } : {}}
               transition={{ duration: 0.55, ease: [0.25, 1, 0.4, 1] }}
               key={pulseKey ?? 'idle'}
-              aria-label={cartCount > 0 ? `Carrito (${cartCount})` : 'Abrir carrito'}
+              aria-label={cartCount > 0 ? `Cesta (${cartCount})` : 'Abrir cesta'}
             >
-              <ShoppingCart size={22} strokeWidth={1.5} />
+              <MarketBasket className="w-6 h-6" />
               <span className="absolute inset-0 bg-serana-forest/5 rounded-full scale-0 group-hover:scale-100 transition-transform duration-300" />
               <AnimatePresence>
                 {cartCount > 0 && (
