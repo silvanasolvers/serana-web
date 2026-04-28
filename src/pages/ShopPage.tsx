@@ -1,13 +1,14 @@
-import { useState, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useProducts } from '../lib/useProducts';
-import InteractiveProductList from '../components/InteractiveProductList';
+import ProductGrid, { type ProductGridViewMode } from '../components/ProductGrid';
+import FeaturedStrip from '../components/FeaturedStrip';
 import Navbar from '../components/Navbar';
 import CartDrawer from '../components/CartDrawer';
 import Footer from '../components/Footer';
 import SectionDivider from '../components/SectionDivider';
 import clsx from 'clsx';
 import { motion } from 'motion/react';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Search, LayoutGrid, List as ListIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { SerenaIcons, SerenaMark, type SerenaIconName } from '../components/SeranaIcons';
 
@@ -73,21 +74,44 @@ function CategoryIcon({ name, className }: { name: SerenaIconName; className?: s
 
 export default function ShopPage() {
   const [activeCategory, setActiveCategory] = useState<Category>('all');
+  const [search, setSearch] = useState('');
+  const [viewMode, setViewMode] = useState<ProductGridViewMode>('gallery');
   const { products } = useProducts();
 
   const filteredProducts = useMemo(() => {
-    if (activeCategory === 'all') {
-      return [...products].sort((a, b) => {
-        if (a.category === 'combos' && b.category !== 'combos') return -1;
-        if (a.category !== 'combos' && b.category === 'combos') return 1;
-        return 0;
-      });
-    }
-    return products.filter((p) => p.category === activeCategory);
-  }, [products, activeCategory]);
+    const base =
+      activeCategory === 'all'
+        ? [...products].sort((a, b) => {
+            if (a.category === 'combos' && b.category !== 'combos') return -1;
+            if (a.category !== 'combos' && b.category === 'combos') return 1;
+            return 0;
+          })
+        : products.filter((p) => p.category === activeCategory);
+
+    const term = search.trim().toLowerCase();
+    if (!term) return base;
+    return base.filter((p) => `${p.name} ${p.category}`.toLowerCase().includes(term));
+  }, [products, activeCategory, search]);
+
+  // Featured = top 6 priciest combos (or all combos when fewer than 6).
+  const featured = useMemo(() => {
+    if (activeCategory !== 'all' || search.trim().length > 0) return [];
+    const combos = products.filter((p) => p.category === 'combos');
+    return [...combos].sort((a, b) => b.price - a.price).slice(0, 6);
+  }, [products, activeCategory, search]);
 
   const productCount = filteredProducts.length;
   const activeMeta = CATEGORIES.find((c) => c.id === activeCategory) ?? CATEGORIES[0];
+
+  // Heuristic: ingredient categories default to compact list, prepared dishes
+  // to gallery — much easier to navigate the long verduras/frutas catalogues.
+  useEffect(() => {
+    if (activeCategory === 'verduras' || activeCategory === 'frutas') {
+      setViewMode('list');
+    } else {
+      setViewMode('gallery');
+    }
+  }, [activeCategory]);
 
   return (
     <div className="min-h-screen pt-24 bg-serana-cream/40">
@@ -168,35 +192,107 @@ export default function ShopPage() {
           </div>
         </div>
 
-        {/* ── Active category context strip ──────────────────────────────── */}
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl border border-serana-forest/15 bg-white/60 flex items-center justify-center text-serana-olive">
-              <CategoryIcon name={activeMeta.icon} className="w-6 h-6" />
+        {/* ── Active category context strip + search + view toggle ──────── */}
+        <div className="flex flex-col gap-4 mb-10">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl border border-serana-forest/15 bg-white/60 flex items-center justify-center text-serana-olive">
+                <CategoryIcon name={activeMeta.icon} className="w-6 h-6" />
+              </div>
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.4em] text-serana-forest/50 font-bold mb-1">Mostrando</p>
+                <h2 className="font-serif text-2xl md:text-3xl text-serana-forest leading-none">
+                  <span className="italic text-serana-olive">{activeMeta.label}</span>
+                </h2>
+              </div>
             </div>
-            <div>
-              <p className="text-[10px] uppercase tracking-[0.4em] text-serana-forest/50 font-bold mb-1">Mostrando</p>
-              <h2 className="font-serif text-2xl md:text-3xl text-serana-forest leading-none">
-                <span className="italic text-serana-olive">{activeMeta.label}</span>
-              </h2>
+            <div className="flex items-baseline gap-2 text-serana-forest/55">
+              <span className="font-serif italic text-3xl text-serana-forest">
+                {String(productCount).padStart(2, '0')}
+              </span>
+              <span className="text-[10px] uppercase tracking-[0.3em] font-bold">
+                {search ? 'coincidencias' : 'referencias'}
+              </span>
             </div>
           </div>
-          <div className="flex items-baseline gap-2 text-serana-forest/55">
-            <span className="font-serif italic text-3xl text-serana-forest">{String(productCount).padStart(2, '0')}</span>
-            <span className="text-[10px] uppercase tracking-[0.3em] font-bold">referencias</span>
+
+          <div className="flex flex-col md:flex-row md:items-center gap-3">
+            <div className="relative flex-1">
+              <Search className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-serana-forest/40 pointer-events-none" />
+              <input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Busca un plato, ingrediente o categoría…"
+                className="w-full pl-11 pr-24 py-3 rounded-full bg-white/80 border border-serana-forest/15 text-sm text-serana-forest placeholder-serana-forest/40 focus:bg-white focus:border-serana-forest/40 focus:outline-none transition shadow-sm"
+              />
+              {search && (
+                <button
+                  type="button"
+                  onClick={() => setSearch('')}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] uppercase tracking-widest font-bold text-serana-forest/50 hover:text-serana-forest"
+                >
+                  limpiar
+                </button>
+              )}
+            </div>
+            <div className="flex items-center bg-white/80 border border-serana-forest/15 rounded-full p-0.5 self-start md:self-auto">
+              <button
+                type="button"
+                onClick={() => setViewMode('gallery')}
+                className={clsx(
+                  'relative flex items-center gap-2 px-4 py-2 rounded-full text-[10px] uppercase tracking-[0.3em] font-bold transition-colors',
+                  viewMode === 'gallery'
+                    ? 'text-serana-cream'
+                    : 'text-serana-forest/55 hover:text-serana-forest',
+                )}
+              >
+                {viewMode === 'gallery' && (
+                  <motion.span
+                    layoutId="shop-view-pill"
+                    className="absolute inset-0 bg-serana-forest rounded-full -z-10"
+                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                  />
+                )}
+                <LayoutGrid className="w-3.5 h-3.5" />
+                Galería
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewMode('list')}
+                className={clsx(
+                  'relative flex items-center gap-2 px-4 py-2 rounded-full text-[10px] uppercase tracking-[0.3em] font-bold transition-colors',
+                  viewMode === 'list'
+                    ? 'text-serana-cream'
+                    : 'text-serana-forest/55 hover:text-serana-forest',
+                )}
+              >
+                {viewMode === 'list' && (
+                  <motion.span
+                    layoutId="shop-view-pill"
+                    className="absolute inset-0 bg-serana-forest rounded-full -z-10"
+                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                  />
+                )}
+                <ListIcon className="w-3.5 h-3.5" />
+                Lista
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* ── Product list ───────────────────────────────────────────────── */}
-        <motion.div layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}>
-          <InteractiveProductList products={filteredProducts} />
-        </motion.div>
+        {/* ── Featured strip (only when "Todos" + no search) ─────────────── */}
+        {featured.length > 0 && <FeaturedStrip products={featured} />}
 
-        {filteredProducts.length === 0 && (
-          <div className="text-center py-24 text-serana-forest/60 font-serif text-xl italic">
-            No se encontraron productos para esta categoría.
-          </div>
-        )}
+        {/* ── Product grid ───────────────────────────────────────────────── */}
+        <ProductGrid
+          products={filteredProducts}
+          externalSearch
+          searchTerm={search}
+          onSearchChange={setSearch}
+          viewMode={viewMode}
+          onViewModeChange={setViewMode}
+          pageSize={24}
+        />
 
         <SectionDivider label="Cómo elegir" />
 
