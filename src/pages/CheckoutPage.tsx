@@ -1,18 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useCartStore } from '../store/useCartStore';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { motion } from 'motion/react';
-import { CheckCircle, Truck, ArrowLeft, AlertCircle, Loader2 } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
+import {
+  CheckCircle, Truck, ArrowLeft, ArrowRight, AlertCircle, Loader2,
+  Tag, X, Check, MapPin, User, CreditCard,
+} from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { createOrderAnon, type PaymentMethod } from '../lib/api/orders';
+import {
+  createOrderAnon, validateCoupon,
+  type PaymentMethod, type CouponValidation,
+} from '../lib/api/orders';
 
 const COP = (n: number) =>
   new Intl.NumberFormat('es-CO', {
-    style: 'currency',
-    currency: 'COP',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
+    style: 'currency', currency: 'COP',
+    minimumFractionDigits: 0, maximumFractionDigits: 0,
   }).format(n);
 
 type FormState = {
@@ -35,27 +39,129 @@ const initialForm: FormState = {
   paymentMethod: 'mercado_pago',
 };
 
+const STORAGE_KEY = 'serana:checkout:contact';
+
+const STEPS = [
+  { id: 1, label: 'Resumen', Icon: Tag },
+  { id: 2, label: 'Entrega', Icon: MapPin },
+  { id: 3, label: 'Pago', Icon: CreditCard },
+] as const;
+
+const PAYMENT_OPTIONS: Array<{ value: PaymentMethod; label: string; hint: string }> = [
+  { value: 'mercado_pago', label: 'Mercado Pago', hint: 'Tarjeta · PSE · Nequi' },
+  { value: 'transferencia', label: 'Transferencia', hint: 'Te enviamos los datos' },
+  { value: 'efectivo', label: 'Efectivo', hint: 'Pagas al recibir' },
+];
+
+const COUPON_REASONS: Record<string, string> = {
+  not_found: 'Ese código no existe.',
+  inactive: 'Este cupón está pausado.',
+  expired: 'Este cupón expiró.',
+  not_yet_active: 'Este cupón aún no está activo.',
+  usage_limit: 'Este cupón ya alcanzó su tope de usos.',
+  min_subtotal: 'Faltan productos para alcanzar el mínimo de este cupón.',
+};
+
 export default function CheckoutPage() {
   const { items, total, clearCart } = useCartStore();
-  const [step, setStep] = useState<'form' | 'success'>('form');
-  const [form, setForm] = useState<FormState>(initialForm);
+  const subtotal = total();
+
+  const [stepIndex, setStepIndex] = useState(0); // 0..2
+  const [confirmation, setConfirmation] = useState<{
+    orderNumber: number; subtotal: number; discount: number; total: number; coupon: string | null;
+  } | null>(null);
+
+  const [form, setForm] = useState<FormState>(() => {
+    if (typeof window === 'undefined') return initialForm;
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return { ...initialForm, ...parsed };
+      }
+    } catch {/* ignore */}
+    return initialForm;
+  });
+
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [confirmation, setConfirmation] = useState<{ orderNumber: number; total: number } | null>(null);
 
-  const update = (k: keyof FormState) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
-    setForm((prev) => ({ ...prev, [k]: e.target.value }));
+  // Coupon state
+  const [couponCode, setCouponCode] = useState('');
+  const [couponBusy, setCouponBusy] = useState(false);
+  const [couponApplied, setCouponApplied] = useState<CouponValidation | null>(null);
+  const [couponError, setCouponError] = useState<string | null>(null);
+  const [couponOpen, setCouponOpen] = useState(false);
+
+  const update = (k: keyof FormState) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+      const value = e.target.value;
+      setForm((prev) => {
+        const next = { ...prev, [k]: value };
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(next)); } catch {/* ignore */}
+        return next;
+      });
+    };
 
   const phoneDigits = form.phone.replace(/\D/g, '');
-  const isFormValid =
-    form.fullName.trim().length >= 2 &&
-    phoneDigits.length >= 7 &&
-    form.address.trim().length >= 5 &&
-    items.length > 0;
+  const contactValid = form.fullName.trim().length >= 2 && phoneDigits.length >= 7;
+  const addressValid = form.address.trim().length >= 5;
+  const step2Valid = contactValid && addressValid;
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!isFormValid || submitting) return;
+  const discount = couponApplied?.valid ? couponApplied.discount_amount : 0;
+  const totalToPay = Math.max(subtotal - discount, 0);
+
+  // Re-validate the coupon if subtotal changes (cart edit) so a stale "applied"
+  // doesn't survive a min_subtotal violation or an expiration mid-flow.
+  useEffect(() => {
+    if (!couponApplied?.valid || !couponApplied.code) return;
+    if (subtotal === 0) {
+      setCouponApplied(null);
+      return;
+    }
+    let cancelled = false;
+    void validateCoupon(couponApplied.code, subtotal).then((res) => {
+      if (cancelled) return;
+      if (!res.valid) {
+        setCouponApplied(null);
+        setCouponError(COUPON_REASONS[res.reason] ?? 'El cupón ya no aplica.');
+      } else {
+        setCouponApplied(res);
+      }
+    });
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [subtotal]);
+
+  const handleApplyCoupon = async () => {
+    const code = couponCode.trim();
+    if (!code) return;
+    setCouponBusy(true);
+    setCouponError(null);
+    try {
+      const res = await validateCoupon(code, subtotal);
+      if (!res.valid) {
+        setCouponError(COUPON_REASONS[res.reason] ?? 'No pudimos aplicar ese cupón.');
+        setCouponApplied(null);
+      } else {
+        setCouponApplied(res);
+        setCouponCode(res.code ?? code);
+      }
+    } catch (err: any) {
+      setCouponError(err?.message ?? 'No pudimos validar el cupón.');
+    } finally {
+      setCouponBusy(false);
+    }
+  };
+
+  const removeCoupon = () => {
+    setCouponApplied(null);
+    setCouponCode('');
+    setCouponError(null);
+  };
+
+  const handleSubmit = async () => {
+    if (!step2Valid || submitting) return;
     setSubmitting(true);
     setError(null);
     try {
@@ -69,6 +175,7 @@ export default function CheckoutPage() {
         payment_method: form.paymentMethod,
         payment_status: 'pendiente',
         source_code: 'web',
+        coupon_code: couponApplied?.valid ? couponApplied.code ?? undefined : undefined,
         items: items.map((item) => ({
           product_slug: item.id,
           quantity: item.quantity,
@@ -77,8 +184,6 @@ export default function CheckoutPage() {
       });
 
       if (form.paymentMethod === 'mercado_pago') {
-        // Hand off to Mercado Pago for the actual payment. The cart stays
-        // untouched until we know the user committed (success page clears it).
         const mpResp = await fetch('/api/checkout/mp/preference', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -90,19 +195,19 @@ export default function CheckoutPage() {
         }
         const mpData = (await mpResp.json()) as { init_point?: string; sandbox_init_point?: string };
         const target = mpData.init_point || mpData.sandbox_init_point;
-        if (!target) {
-          throw new Error('Mercado Pago no devolvió un enlace de pago. Intenta nuevamente.');
-        }
+        if (!target) throw new Error('Mercado Pago no devolvió un enlace de pago. Intenta nuevamente.');
         window.location.href = target;
         return;
       }
 
-      // Cash / transfer / cualquier flujo no-online: confirmar inmediatamente.
+      // Cash / transfer — confirm immediately.
       setConfirmation({
         orderNumber: result.order_number,
+        subtotal: Number(result.subtotal ?? subtotal),
+        discount: Number(result.discount_amount ?? 0),
         total: Number(result.total_amount),
+        coupon: result.coupon_code ?? null,
       });
-      setStep('success');
       clearCart();
     } catch (err: any) {
       const message: string =
@@ -113,7 +218,14 @@ export default function CheckoutPage() {
     }
   };
 
-  if (items.length === 0 && step === 'form') {
+  const goNext = () => {
+    if (stepIndex === 1 && !step2Valid) return;
+    setStepIndex((i) => Math.min(i + 1, STEPS.length - 1));
+  };
+  const goBack = () => setStepIndex((i) => Math.max(i - 1, 0));
+
+  // Empty cart screen (only show before confirmation)
+  if (!confirmation && items.length === 0) {
     return (
       <div className="min-h-screen pt-32">
         <Navbar />
@@ -134,187 +246,16 @@ export default function CheckoutPage() {
     );
   }
 
-  return (
-    <div className="min-h-screen pt-32 pb-12">
-      <Navbar />
-
-      <div className="max-w-6xl mx-auto px-6 relative z-10">
-        {step === 'form' ? (
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="grid lg:grid-cols-2 gap-16">
-            {/* Form Section */}
-            <div>
-              <div className="mb-12">
-                <span className="text-serana-terracotta font-bold tracking-[0.3em] uppercase text-xs mb-4 block">Último paso</span>
-                <h1 className="text-5xl font-serif text-serana-forest mb-4">Completa tu ritual</h1>
-                <p className="text-gray-600 font-light">Te confirmamos por WhatsApp y empezamos a prepararlo.</p>
-              </div>
-
-              <form onSubmit={handleSubmit} className="space-y-12">
-                <section>
-                  <h2 className="text-2xl font-serif text-serana-forest mb-6 flex items-center gap-3">
-                    <span className="w-8 h-8 rounded-full bg-serana-forest text-serana-cream flex items-center justify-center text-sm font-sans font-bold">1</span>
-                    Datos de contacto
-                  </h2>
-                  <div className="grid grid-cols-2 gap-6">
-                    <input
-                      required
-                      placeholder="Nombre completo"
-                      value={form.fullName}
-                      onChange={update('fullName')}
-                      className="col-span-2 p-4 rounded-xl border border-serana-forest/10 bg-white/50 focus:bg-white focus:border-serana-forest/30 outline-none transition-all"
-                    />
-                    <input
-                      required
-                      type="tel"
-                      inputMode="tel"
-                      placeholder="Celular (con WhatsApp)"
-                      value={form.phone}
-                      onChange={update('phone')}
-                      className="col-span-2 sm:col-span-1 p-4 rounded-xl border border-serana-forest/10 bg-white/50 focus:bg-white focus:border-serana-forest/30 outline-none transition-all"
-                    />
-                    <input
-                      type="email"
-                      placeholder="Email (opcional)"
-                      value={form.email}
-                      onChange={update('email')}
-                      className="col-span-2 sm:col-span-1 p-4 rounded-xl border border-serana-forest/10 bg-white/50 focus:bg-white focus:border-serana-forest/30 outline-none transition-all"
-                    />
-                  </div>
-                </section>
-
-                <section>
-                  <h2 className="text-2xl font-serif text-serana-forest mb-6 flex items-center gap-3">
-                    <span className="w-8 h-8 rounded-full bg-serana-forest text-serana-cream flex items-center justify-center text-sm font-sans font-bold">2</span>
-                    Dirección de entrega
-                  </h2>
-                  <div className="grid grid-cols-2 gap-6">
-                    <input
-                      required
-                      placeholder="Dirección (Calle / carrera, número, apto, barrio)"
-                      value={form.address}
-                      onChange={update('address')}
-                      className="col-span-2 p-4 rounded-xl border border-serana-forest/10 bg-white/50 focus:bg-white focus:border-serana-forest/30 outline-none transition-all"
-                    />
-                    <input
-                      placeholder="Ciudad"
-                      value={form.city}
-                      onChange={update('city')}
-                      className="col-span-2 sm:col-span-1 p-4 rounded-xl border border-serana-forest/10 bg-white/50 focus:bg-white focus:border-serana-forest/30 outline-none transition-all"
-                    />
-                    <textarea
-                      placeholder="Notas para el repartidor (opcional)"
-                      value={form.notes}
-                      onChange={update('notes')}
-                      rows={2}
-                      className="col-span-2 p-4 rounded-xl border border-serana-forest/10 bg-white/50 focus:bg-white focus:border-serana-forest/30 outline-none transition-all resize-none"
-                    />
-                  </div>
-                </section>
-
-                <section>
-                  <h2 className="text-2xl font-serif text-serana-forest mb-6 flex items-center gap-3">
-                    <span className="w-8 h-8 rounded-full bg-serana-forest text-serana-cream flex items-center justify-center text-sm font-sans font-bold">3</span>
-                    Método de pago
-                  </h2>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    {(
-                      [
-                        { value: 'mercado_pago', label: 'Mercado Pago', hint: 'Tarjeta · PSE · Nequi' },
-                        { value: 'transferencia', label: 'Transferencia', hint: 'Te enviamos los datos' },
-                        { value: 'efectivo', label: 'Efectivo', hint: 'Pagas al recibir' },
-                      ] as const
-                    ).map((opt) => (
-                      <button
-                        key={opt.value}
-                        type="button"
-                        onClick={() => setForm((prev) => ({ ...prev, paymentMethod: opt.value as PaymentMethod }))}
-                        className={`text-left p-4 rounded-xl border-2 transition-all ${
-                          form.paymentMethod === opt.value
-                            ? 'border-serana-forest bg-white shadow'
-                            : 'border-serana-forest/10 bg-white/40 hover:border-serana-forest/30'
-                        }`}
-                      >
-                        <p className="font-bold text-serana-forest">{opt.label}</p>
-                        <p className="text-xs text-gray-500 mt-1">{opt.hint}</p>
-                      </button>
-                    ))}
-                  </div>
-                  {form.paymentMethod === 'mercado_pago' && (
-                    <p className="text-[11px] text-gray-500 mt-3 italic">
-                      Después de confirmar te llevamos a Mercado Pago para completar el pago.
-                    </p>
-                  )}
-                </section>
-
-                {error && (
-                  <div className="flex items-start gap-3 p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-700">
-                    <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
-                    <p className="text-sm font-medium">{error}</p>
-                  </div>
-                )}
-
-                <button
-                  type="submit"
-                  disabled={!isFormValid || submitting}
-                  className="w-full bg-serana-forest text-serana-cream py-5 rounded-full font-bold text-lg hover:bg-serana-olive transition-all shadow-xl hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-3"
-                >
-                  {submitting ? (
-                    <>
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                      {form.paymentMethod === 'mercado_pago' ? 'Abriendo Mercado Pago…' : 'Enviando pedido…'}
-                    </>
-                  ) : (
-                    <>
-                      {form.paymentMethod === 'mercado_pago'
-                        ? `Pagar con Mercado Pago · ${COP(total())}`
-                        : `Confirmar pedido · ${COP(total())}`}
-                    </>
-                  )}
-                </button>
-              </form>
-            </div>
-
-            {/* Order Summary */}
-            <div className="lg:pl-12">
-              <div className="bg-white/60 backdrop-blur-md p-10 rounded-[2rem] shadow-sm border border-serana-forest/5 sticky top-32">
-                <h2 className="text-2xl font-serif text-serana-forest mb-8">Tu pedido</h2>
-                <div className="space-y-6 mb-8 max-h-96 overflow-y-auto pr-2 custom-scrollbar">
-                  {items.map((item) => (
-                    <div key={item.id} className="flex gap-6 items-center group">
-                      <div className="w-20 h-20 rounded-xl overflow-hidden shadow-sm shrink-0">
-                        <img src={item.image} alt={item.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="font-serif text-lg text-serana-forest leading-tight mb-1 truncate">{item.name}</h4>
-                        <p className="text-xs text-gray-500 uppercase tracking-wider">Cantidad: {item.quantity}</p>
-                      </div>
-                      <span className="font-bold text-serana-forest shrink-0">{COP(item.price * item.quantity)}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="border-t border-serana-forest/10 pt-6 space-y-3">
-                  <div className="flex justify-between text-gray-600 font-light">
-                    <span>Subtotal</span>
-                    <span>{COP(total())}</span>
-                  </div>
-                  <div className="flex justify-between text-gray-600 font-light">
-                    <span>Domicilio</span>
-                    <span className="text-serana-olive font-medium">Por confirmar</span>
-                  </div>
-                  <div className="flex justify-between text-2xl font-serif text-serana-forest pt-4 border-t border-serana-forest/10 mt-4">
-                    <span>Total</span>
-                    <span>{COP(total())}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        ) : (
-          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="max-w-xl mx-auto text-center py-24">
+  // Success screen
+  if (confirmation) {
+    return (
+      <div className="min-h-screen pt-32 pb-12">
+        <Navbar />
+        <div className="max-w-xl mx-auto text-center px-6 py-12 relative z-10">
+          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}>
             <div className="w-32 h-32 bg-serana-olive/10 rounded-full flex items-center justify-center mx-auto mb-8 relative">
               <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
+                initial={{ scale: 0 }} animate={{ scale: 1 }}
                 transition={{ delay: 0.2, type: 'spring' }}
                 className="bg-serana-olive text-white p-6 rounded-full shadow-xl"
               >
@@ -326,11 +267,14 @@ export default function CheckoutPage() {
                 className="absolute inset-0 bg-serana-olive/20 rounded-full"
               />
             </div>
-
             <h1 className="text-5xl md:text-6xl font-serif text-serana-forest mb-4">¡Pedido confirmado!</h1>
-            {confirmation && (
-              <p className="text-serana-terracotta font-bold tracking-widest uppercase text-sm mb-6">
-                Pedido #{confirmation.orderNumber} · {COP(confirmation.total)}
+            <p className="text-serana-terracotta font-bold tracking-widest uppercase text-sm mb-6">
+              Pedido #{confirmation.orderNumber} · {COP(confirmation.total)}
+            </p>
+            {confirmation.discount > 0 && (
+              <p className="text-sm text-serana-olive font-medium mb-6">
+                Aplicaste el cupón <span className="font-mono font-bold">{confirmation.coupon}</span>
+                {' '}— ahorraste {COP(confirmation.discount)}
               </p>
             )}
             <p className="text-xl text-gray-600 mb-12 font-light leading-relaxed">
@@ -345,10 +289,398 @@ export default function CheckoutPage() {
               </Link>
             </div>
           </motion.div>
-        )}
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  // Wizard
+  return (
+    <div className="min-h-screen pt-32 pb-12">
+      <Navbar />
+
+      <div className="max-w-6xl mx-auto px-6 relative z-10">
+        {/* Stepper */}
+        <div className="mb-10">
+          <div className="flex items-center gap-3 text-serana-terracotta font-bold tracking-[0.3em] uppercase text-[10px] mb-4">
+            <span className="w-8 h-px bg-serana-terracotta/60" />
+            Checkout · Paso {stepIndex + 1} de {STEPS.length}
+          </div>
+          <h1 className="font-serif text-4xl md:text-5xl text-serana-forest mb-6 leading-tight">
+            {stepIndex === 0 && (<>Revisa tu <span className="italic text-serana-olive">canasta</span>.</>)}
+            {stepIndex === 1 && (<>¿Adónde te lo <span className="italic text-serana-olive">enviamos</span>?</>)}
+            {stepIndex === 2 && (<>Elige cómo <span className="italic text-serana-olive">pagas</span>.</>)}
+          </h1>
+
+          <div className="flex items-center gap-3">
+            {STEPS.map((s, i) => {
+              const Icon = s.Icon;
+              const done = i < stepIndex;
+              const active = i === stepIndex;
+              return (
+                <button
+                  key={s.id}
+                  type="button"
+                  onClick={() => i < stepIndex && setStepIndex(i)}
+                  disabled={i > stepIndex}
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-[10px] font-bold uppercase tracking-widest transition ${
+                    active ? 'bg-serana-forest text-serana-cream border-serana-forest'
+                    : done ? 'bg-serana-olive/10 text-serana-olive border-serana-olive/40 hover:border-serana-olive cursor-pointer'
+                    : 'bg-white text-serana-forest/40 border-serana-forest/10'
+                  }`}
+                >
+                  {done ? <Check className="w-3 h-3" /> : <Icon className="w-3 h-3" />}
+                  {s.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="grid lg:grid-cols-[1fr_380px] gap-12">
+          {/* Step content */}
+          <motion.div
+            key={stepIndex}
+            initial={{ opacity: 0, x: 16 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="order-2 lg:order-1"
+          >
+            {stepIndex === 0 && (
+              <Step1Cart items={items} subtotal={subtotal} />
+            )}
+
+            {stepIndex === 1 && (
+              <Step2Delivery
+                form={form}
+                update={update}
+                contactValid={contactValid}
+                addressValid={addressValid}
+              />
+            )}
+
+            {stepIndex === 2 && (
+              <Step3Payment
+                method={form.paymentMethod}
+                onChange={(m) => setForm((prev) => {
+                  const next = { ...prev, paymentMethod: m };
+                  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(next)); } catch {/* ignore */}
+                  return next;
+                })}
+              />
+            )}
+
+            {error && (
+              <div className="flex items-start gap-3 p-4 mt-6 rounded-xl bg-rose-50 border border-rose-200 text-rose-700">
+                <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
+                <p className="text-sm font-medium">{error}</p>
+              </div>
+            )}
+
+            {/* Wizard nav buttons */}
+            <div className="flex items-center justify-between gap-4 mt-10">
+              <button
+                type="button"
+                onClick={stepIndex === 0 ? undefined : goBack}
+                disabled={stepIndex === 0}
+                className="inline-flex items-center gap-2 text-serana-forest font-bold tracking-widest uppercase text-[10px] hover:text-serana-olive transition disabled:opacity-30 disabled:cursor-not-allowed"
+              >
+                <ArrowLeft size={14} /> Atrás
+              </button>
+              {stepIndex < STEPS.length - 1 ? (
+                <button
+                  type="button"
+                  onClick={goNext}
+                  disabled={stepIndex === 1 && !step2Valid}
+                  className="inline-flex items-center gap-2 bg-serana-forest text-serana-cream px-8 py-3.5 rounded-full font-bold tracking-widest uppercase text-xs hover:bg-serana-olive transition disabled:opacity-50"
+                >
+                  Continuar <ArrowRight size={14} />
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => void handleSubmit()}
+                  disabled={!step2Valid || submitting || items.length === 0}
+                  className="inline-flex items-center gap-2 bg-serana-forest text-serana-cream px-8 py-4 rounded-full font-bold tracking-widest uppercase text-xs hover:bg-serana-olive transition disabled:opacity-60"
+                >
+                  {submitting ? (
+                    <><Loader2 className="w-4 h-4 animate-spin" />
+                      {form.paymentMethod === 'mercado_pago' ? 'Abriendo Mercado Pago…' : 'Enviando…'}
+                    </>
+                  ) : form.paymentMethod === 'mercado_pago' ? (
+                    <>Pagar {COP(totalToPay)} <ArrowRight size={14} /></>
+                  ) : (
+                    <>Confirmar pedido <ArrowRight size={14} /></>
+                  )}
+                </button>
+              )}
+            </div>
+          </motion.div>
+
+          {/* Sticky summary */}
+          <aside className="order-1 lg:order-2">
+            <div className="bg-white/70 backdrop-blur-md p-7 rounded-[1.75rem] shadow-sm border border-serana-forest/5 lg:sticky lg:top-32">
+              <h2 className="font-serif text-xl text-serana-forest mb-5">Tu pedido</h2>
+
+              <div className="space-y-3 mb-5 max-h-72 overflow-y-auto pr-1">
+                {items.map((item) => (
+                  <div key={item.id} className="flex gap-3 items-center">
+                    <div className="w-12 h-12 rounded-lg overflow-hidden shadow-sm shrink-0 bg-slate-100">
+                      <img src={item.image} alt={item.name} className="w-full h-full object-cover" loading="lazy" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-sm text-serana-forest leading-tight truncate">{item.name}</p>
+                      <p className="text-[11px] text-gray-500 uppercase tracking-wider">x{item.quantity}</p>
+                    </div>
+                    <span className="text-sm font-bold text-serana-forest shrink-0">{COP(item.price * item.quantity)}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Coupon */}
+              <div className="border-t border-serana-forest/10 pt-4 mb-4">
+                {couponApplied?.valid ? (
+                  <div className="flex items-center gap-3 p-3 rounded-xl bg-serana-olive/10 border border-serana-olive/30">
+                    <Tag className="w-4 h-4 text-serana-olive shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[11px] uppercase tracking-widest text-serana-olive font-bold">Cupón aplicado</p>
+                      <p className="font-mono font-bold text-serana-forest text-sm">{couponApplied.code}</p>
+                    </div>
+                    <button onClick={removeCoupon} aria-label="Quitar cupón" className="text-serana-forest/50 hover:text-serana-forest p-1">
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                ) : couponOpen ? (
+                  <div className="space-y-2">
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        placeholder="CODIGO"
+                        value={couponCode}
+                        onChange={(e) => { setCouponCode(e.target.value.toUpperCase()); setCouponError(null); }}
+                        onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); void handleApplyCoupon(); } }}
+                        className="flex-1 px-3 py-2 rounded-lg border border-serana-forest/15 bg-white font-mono uppercase tracking-widest text-sm focus:outline-none focus:border-serana-olive"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => void handleApplyCoupon()}
+                        disabled={couponBusy || !couponCode.trim()}
+                        className="px-4 py-2 rounded-lg bg-serana-forest text-serana-cream text-[10px] font-bold uppercase tracking-widest hover:bg-serana-olive transition disabled:opacity-50"
+                      >
+                        {couponBusy ? <Loader2 className="w-3 h-3 animate-spin" /> : 'Aplicar'}
+                      </button>
+                    </div>
+                    {couponError && (
+                      <p className="text-[11px] text-rose-600 leading-snug">{couponError}</p>
+                    )}
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setCouponOpen(true)}
+                    className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-serana-forest/65 hover:text-serana-olive transition"
+                  >
+                    <Tag className="w-3 h-3" />
+                    ¿Tienes un cupón?
+                  </button>
+                )}
+              </div>
+
+              {/* Totals */}
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between text-gray-600 font-light">
+                  <span>Subtotal</span>
+                  <span>{COP(subtotal)}</span>
+                </div>
+                {discount > 0 && (
+                  <div className="flex justify-between text-serana-olive font-medium">
+                    <span>Descuento</span>
+                    <span>− {COP(discount)}</span>
+                  </div>
+                )}
+                <div className="flex justify-between text-gray-600 font-light">
+                  <span>Domicilio</span>
+                  <span className="text-serana-olive">Por confirmar</span>
+                </div>
+                <div className="flex justify-between text-xl font-serif text-serana-forest pt-3 border-t border-serana-forest/10">
+                  <span>Total</span>
+                  <span>{COP(totalToPay)}</span>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
       </div>
 
       <Footer />
+    </div>
+  );
+}
+
+/* ── Step components ────────────────────────────────────────────────── */
+
+type CartLine = {
+  id: string;
+  name: string;
+  price: number;
+  image: string;
+  quantity: number;
+};
+
+function Step1Cart({ items, subtotal }: { items: CartLine[]; subtotal: number }) {
+  return (
+    <div className="space-y-6">
+      <p className="text-gray-600 leading-relaxed">
+        {items.length === 1 ? '1 producto' : `${items.length} productos`} en tu canasta.
+        Te confirmamos cada paso por WhatsApp.
+      </p>
+      <div className="bg-white/70 rounded-2xl border border-serana-forest/5 divide-y divide-serana-forest/5">
+        {items.map((it) => (
+          <div key={it.id} className="flex items-center gap-4 p-4">
+            <div className="w-16 h-16 rounded-xl overflow-hidden shadow-sm shrink-0 bg-slate-100">
+              <img src={it.image} alt={it.name} className="w-full h-full object-cover" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="font-serif text-lg text-serana-forest leading-tight truncate">{it.name}</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wider mt-1">Cantidad: {it.quantity}</p>
+            </div>
+            <span className="font-bold text-serana-forest shrink-0">{COP(it.price * it.quantity)}</span>
+          </div>
+        ))}
+      </div>
+      <p className="text-[12px] text-serana-forest/55 italic">
+        Subtotal calculado · {COP(subtotal)}. Si quieres cambiar cantidades, ábrelo desde la cesta.
+      </p>
+    </div>
+  );
+}
+
+function Step2Delivery({
+  form, update, contactValid, addressValid,
+}: {
+  form: FormState;
+  update: (k: keyof FormState) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+  contactValid: boolean;
+  addressValid: boolean;
+}) {
+  return (
+    <div className="space-y-8">
+      <section>
+        <h2 className="text-xl font-serif text-serana-forest mb-4 flex items-center gap-3">
+          <span className="w-7 h-7 rounded-full bg-serana-forest text-serana-cream flex items-center justify-center">
+            <User className="w-3.5 h-3.5" />
+          </span>
+          Contacto
+        </h2>
+        <div className="grid grid-cols-2 gap-4">
+          <input
+            required
+            placeholder="Nombre completo"
+            value={form.fullName}
+            onChange={update('fullName')}
+            className="col-span-2 p-4 rounded-xl border border-serana-forest/10 bg-white/60 focus:bg-white focus:border-serana-forest/30 outline-none transition"
+          />
+          <input
+            required type="tel" inputMode="tel"
+            placeholder="Celular (con WhatsApp)"
+            value={form.phone}
+            onChange={update('phone')}
+            className="col-span-2 sm:col-span-1 p-4 rounded-xl border border-serana-forest/10 bg-white/60 focus:bg-white focus:border-serana-forest/30 outline-none transition"
+          />
+          <input
+            type="email"
+            placeholder="Email (opcional)"
+            value={form.email}
+            onChange={update('email')}
+            className="col-span-2 sm:col-span-1 p-4 rounded-xl border border-serana-forest/10 bg-white/60 focus:bg-white focus:border-serana-forest/30 outline-none transition"
+          />
+        </div>
+        {!contactValid && (form.fullName.length > 0 || form.phone.length > 0) && (
+          <p className="text-[11px] text-rose-600 mt-2">Necesitamos al menos nombre (2+ chars) y celular (7+ dígitos).</p>
+        )}
+      </section>
+
+      <section>
+        <h2 className="text-xl font-serif text-serana-forest mb-4 flex items-center gap-3">
+          <span className="w-7 h-7 rounded-full bg-serana-forest text-serana-cream flex items-center justify-center">
+            <MapPin className="w-3.5 h-3.5" />
+          </span>
+          Dirección de entrega
+        </h2>
+        <div className="grid grid-cols-2 gap-4">
+          <input
+            required
+            placeholder="Dirección (calle, número, apto, barrio)"
+            value={form.address}
+            onChange={update('address')}
+            className="col-span-2 p-4 rounded-xl border border-serana-forest/10 bg-white/60 focus:bg-white focus:border-serana-forest/30 outline-none transition"
+          />
+          <input
+            placeholder="Ciudad"
+            value={form.city}
+            onChange={update('city')}
+            className="col-span-2 sm:col-span-1 p-4 rounded-xl border border-serana-forest/10 bg-white/60 focus:bg-white focus:border-serana-forest/30 outline-none transition"
+          />
+          <textarea
+            placeholder="Notas para el repartidor (opcional)"
+            value={form.notes}
+            onChange={update('notes')}
+            rows={2}
+            className="col-span-2 sm:col-span-1 p-4 rounded-xl border border-serana-forest/10 bg-white/60 focus:bg-white focus:border-serana-forest/30 outline-none transition resize-none"
+          />
+        </div>
+        {!addressValid && form.address.length > 0 && (
+          <p className="text-[11px] text-rose-600 mt-2">La dirección debe tener al menos 5 caracteres.</p>
+        )}
+      </section>
+    </div>
+  );
+}
+
+function Step3Payment({
+  method, onChange,
+}: { method: PaymentMethod; onChange: (m: PaymentMethod) => void }) {
+  return (
+    <div className="space-y-5">
+      <p className="text-gray-600 leading-relaxed">
+        Elige cómo te queda más cómodo. Si pagas con tarjeta o débito, te llevamos a Mercado Pago.
+      </p>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        {PAYMENT_OPTIONS.map((opt) => (
+          <button
+            key={opt.value}
+            type="button"
+            onClick={() => onChange(opt.value)}
+            className={`text-left p-4 rounded-xl border-2 transition-all ${
+              method === opt.value
+                ? 'border-serana-forest bg-white shadow'
+                : 'border-serana-forest/10 bg-white/40 hover:border-serana-forest/30'
+            }`}
+          >
+            <p className="font-bold text-serana-forest">{opt.label}</p>
+            <p className="text-xs text-gray-500 mt-1">{opt.hint}</p>
+          </button>
+        ))}
+      </div>
+      {method === 'mercado_pago' && (
+        <div className="flex items-start gap-3 p-4 rounded-xl bg-serana-cream/60 border border-serana-forest/10 text-serana-forest/75 text-[13px] leading-relaxed">
+          <CreditCard className="w-4 h-4 shrink-0 mt-0.5 text-serana-olive" />
+          Después de confirmar te llevamos a Mercado Pago para completar el pago. Puedes pagar con tarjeta, PSE, Nequi o transferencia.
+        </div>
+      )}
+      {method === 'transferencia' && (
+        <div className="flex items-start gap-3 p-4 rounded-xl bg-serana-cream/60 border border-serana-forest/10 text-serana-forest/75 text-[13px] leading-relaxed">
+          <CreditCard className="w-4 h-4 shrink-0 mt-0.5 text-serana-olive" />
+          Recibirás los datos bancarios por WhatsApp. Tu pedido entra a cocina cuando confirmemos el pago.
+        </div>
+      )}
+      {method === 'efectivo' && (
+        <div className="flex items-start gap-3 p-4 rounded-xl bg-serana-cream/60 border border-serana-forest/10 text-serana-forest/75 text-[13px] leading-relaxed">
+          <CreditCard className="w-4 h-4 shrink-0 mt-0.5 text-serana-olive" />
+          Pagas en efectivo cuando recibas tu pedido. Confirmamos por WhatsApp el horario de entrega.
+        </div>
+      )}
     </div>
   );
 }

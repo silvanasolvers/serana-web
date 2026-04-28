@@ -25,6 +25,7 @@ export type CreateOrderPayload = {
   payment_status?: 'pendiente' | 'parcial' | 'pagado';
   source_code?: 'web' | 'whatsapp_bot' | 'presencial' | 'telefono';
   station_code?: string;
+  coupon_code?: string;
   items: CreateOrderItem[];
 };
 
@@ -32,8 +33,38 @@ export type CreateOrderResult = {
   order_id: string;
   order_number: number;
   total_amount: number;
+  subtotal?: number;
+  discount_amount?: number;
+  coupon_code?: string | null;
   customer_id: string;
 };
+
+export type CouponValidation = {
+  valid: boolean;
+  reason: 'ok' | 'empty' | 'not_found' | 'inactive' | 'expired' | 'not_yet_active' | 'usage_limit' | 'min_subtotal' | string;
+  code: string | null;
+  discount_kind: 'percent' | 'fixed' | null;
+  discount_amount: number;
+};
+
+export async function validateCoupon(code: string, subtotal: number): Promise<CouponValidation> {
+  if (!isSupabaseConfigured) {
+    return { valid: false, reason: 'not_found', code, discount_kind: null, discount_amount: 0 };
+  }
+  const { data, error } = await supabase.rpc('validate_coupon', {
+    p_code: code,
+    p_subtotal: subtotal,
+  });
+  if (error) throw error;
+  const row = data as any;
+  return {
+    valid: !!row.valid,
+    reason: row.reason,
+    code: row.code,
+    discount_kind: row.discount_kind,
+    discount_amount: Number(row.discount_amount ?? 0),
+  };
+}
 
 export async function createOrderAnon(payload: CreateOrderPayload): Promise<CreateOrderResult> {
   if (!isSupabaseConfigured) {
