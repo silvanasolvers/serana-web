@@ -6,6 +6,8 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { Suspense, lazy, useEffect } from 'react';
 import CustomCursor from './components/CustomCursor';
+import SerenaSplash from './components/SerenaSplash';
+import ScrollVine from './components/ScrollVine';
 
 // Eager: tiny pages that the user lands on most often.
 import HomePage from './pages/HomePage';
@@ -41,10 +43,12 @@ function RouteFallback() {
 export default function App() {
   return (
     <Router>
+      <SerenaSplash />
       <CustomCursor />
       <Suspense fallback={null}>
         <LivingBackground />
       </Suspense>
+      <ScrollVine />
       <ScrollToTop />
       <Suspense fallback={null}>
         <ChatBot />
