@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Plus, Search, LayoutGrid, List as ListIcon } from 'lucide-react';
-import { useCartStore, type Product } from '../store/useCartStore';
+import { Search, LayoutGrid, List as ListIcon } from 'lucide-react';
+import { type Product } from '../store/useCartStore';
 import { Spark } from './SeranaIcons';
+import QuantityControl from './QuantityControl';
 
 const COP = (n: number) =>
   new Intl.NumberFormat('es-CO', {
@@ -227,9 +228,6 @@ function ToolbarToggle({
 }
 
 function GalleryCard({ product, index }: { product: Product; index: number }) {
-  const addItem = useCartStore((s) => s.addItem);
-  const ref = useRef<HTMLButtonElement>(null);
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 24 }}
@@ -269,18 +267,7 @@ function GalleryCard({ product, index }: { product: Product; index: number }) {
             </h3>
             <p className="mt-1 font-bold text-serana-terracotta text-sm">{COP(product.price)}</p>
           </div>
-          <button
-            ref={ref}
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              addItem(product);
-            }}
-            className="shrink-0 w-9 h-9 rounded-full bg-serana-forest text-serana-cream flex items-center justify-center hover:bg-serana-olive transition-colors active:scale-90"
-            aria-label={`Agregar ${product.name}`}
-          >
-            <Plus className="w-4 h-4" />
-          </button>
+          <QuantityControl product={product} variant="dark" />
         </div>
       </div>
     </motion.div>
@@ -288,7 +275,6 @@ function GalleryCard({ product, index }: { product: Product; index: number }) {
 }
 
 function ListRow({ product, index }: { product: Product; index: number }) {
-  const addItem = useCartStore((s) => s.addItem);
   return (
     <motion.li
       initial={{ opacity: 0, x: -10 }}
@@ -308,17 +294,8 @@ function ListRow({ product, index }: { product: Product; index: number }) {
         <p className="font-serif text-base text-serana-forest leading-tight truncate">{product.name}</p>
         <p className="text-[10px] uppercase tracking-widest font-bold text-serana-forest/50">{product.category}</p>
       </div>
-      <span className="font-bold text-serana-terracotta tabular-nums whitespace-nowrap">
-        {COP(product.price)}
-      </span>
-      <button
-        type="button"
-        onClick={() => addItem(product)}
-        className="shrink-0 w-9 h-9 rounded-full bg-serana-forest/10 text-serana-forest flex items-center justify-center hover:bg-serana-forest hover:text-serana-cream transition-colors active:scale-90"
-        aria-label={`Agregar ${product.name}`}
-      >
-        <Plus className="w-4 h-4" />
-      </button>
+      <span className="font-bold text-serana-terracotta tabular-nums whitespace-nowrap">{COP(product.price)}</span>
+      <QuantityControl product={product} variant="soft" />
     </motion.li>
   );
 }

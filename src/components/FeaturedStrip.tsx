@@ -1,8 +1,9 @@
 import { useRef } from 'react';
 import { motion } from 'motion/react';
-import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
-import { useCartStore, type Product } from '../store/useCartStore';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { type Product } from '../store/useCartStore';
 import { Spark } from './SeranaIcons';
+import QuantityControl from './QuantityControl';
 
 const COP = (n: number) =>
   new Intl.NumberFormat('es-CO', {
@@ -19,7 +20,6 @@ const COP = (n: number) =>
  */
 export default function FeaturedStrip({ products }: { products: Product[] }) {
   const scroller = useRef<HTMLDivElement>(null);
-  const addItem = useCartStore((s) => s.addItem);
 
   if (products.length === 0) return null;
 
@@ -97,14 +97,7 @@ export default function FeaturedStrip({ products }: { products: Product[] }) {
                 </h4>
                 <p className="mt-1 font-bold text-serana-terracotta">{COP(product.price)}</p>
               </div>
-              <button
-                type="button"
-                onClick={() => addItem(product)}
-                className="shrink-0 w-9 h-9 rounded-full bg-serana-forest text-serana-cream flex items-center justify-center hover:bg-serana-olive transition-colors active:scale-90"
-                aria-label={`Agregar ${product.name}`}
-              >
-                <Plus className="w-4 h-4" />
-              </button>
+              <QuantityControl product={product} variant="dark" />
             </div>
           </motion.article>
         ))}
