@@ -62,9 +62,22 @@ export default function Footer() {
             <p className="max-w-sm opacity-70 font-light text-sm leading-relaxed">
               Hacer de Colombia un país que come mejor, con consciencia y satisfacción.
             </p>
-            <p className="max-w-sm opacity-50 text-[10px] uppercase tracking-widest mt-4 leading-relaxed">
+
+            {/* Atelier block — boutique signal */}
+            <div className="mt-6 inline-block border-l-2 border-serana-ochre/60 pl-4 py-1">
+              <p className="text-serana-ochre font-bold tracking-[0.4em] uppercase text-[9px] mb-2">
+                Visita el atelier
+              </p>
+              <p className="font-serif text-base leading-tight text-serana-cream">
+                Cra · Bogotá, Colombia
+              </p>
+              <p className="text-[11px] mt-1 opacity-70 leading-snug">
+                Martes a sábado <span className="opacity-60">·</span> 10 am — 6 pm
+              </p>
+            </div>
+
+            <p className="max-w-sm opacity-50 text-[10px] uppercase tracking-widest mt-6 leading-relaxed">
               Serana Wellness S.A.S.
-              <br />Bogotá, Colombia
               <br />contacto@serana.co
             </p>
           </div>
