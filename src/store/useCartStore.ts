@@ -15,13 +15,27 @@ interface CartItem extends Product {
   quantity: number;
 }
 
+/**
+ * `lastAdded` is bumped on every addItem call so subscribers can react to
+ * "an item was added" without polling. We don't auto-open the drawer
+ * anymore — that interrupted users adding several items in a row. Instead
+ * the navbar pulses + a tiny toast shows the product name.
+ */
+export interface LastAdded {
+  ping: number;
+  productName: string;
+}
+
 interface CartState {
   items: CartItem[];
   isOpen: boolean;
+  lastAdded: LastAdded | null;
   addItem: (product: Product) => void;
   removeItem: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   toggleCart: () => void;
+  openCart: () => void;
+  closeCart: () => void;
   clearCart: () => void;
   total: () => number;
 }
@@ -29,20 +43,19 @@ interface CartState {
 export const useCartStore = create<CartState>((set, get) => ({
   items: [],
   isOpen: false,
+  lastAdded: null,
   addItem: (product) => {
     set((state) => {
       const existingItem = state.items.find((item) => item.id === product.id);
-      if (existingItem) {
-        return {
-          items: state.items.map((item) =>
-            item.id === product.id
-              ? { ...item, quantity: item.quantity + 1 }
-              : item
-          ),
-          isOpen: true,
-        };
-      }
-      return { items: [...state.items, { ...product, quantity: 1 }], isOpen: true };
+      const items = existingItem
+        ? state.items.map((item) =>
+            item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item,
+          )
+        : [...state.items, { ...product, quantity: 1 }];
+      return {
+        items,
+        lastAdded: { ping: (state.lastAdded?.ping ?? 0) + 1, productName: product.name },
+      };
     });
   },
   removeItem: (productId) => {
@@ -52,14 +65,17 @@ export const useCartStore = create<CartState>((set, get) => ({
   },
   updateQuantity: (productId, quantity) => {
     set((state) => ({
-      items: quantity === 0
-        ? state.items.filter((item) => item.id !== productId)
-        : state.items.map((item) =>
-            item.id === productId ? { ...item, quantity } : item
-          ),
+      items:
+        quantity === 0
+          ? state.items.filter((item) => item.id !== productId)
+          : state.items.map((item) =>
+              item.id === productId ? { ...item, quantity } : item,
+            ),
     }));
   },
   toggleCart: () => set((state) => ({ isOpen: !state.isOpen })),
+  openCart: () => set({ isOpen: true }),
+  closeCart: () => set({ isOpen: false }),
   clearCart: () => set({ items: [] }),
   total: () => {
     return get().items.reduce((acc, item) => acc + item.price * item.quantity, 0);

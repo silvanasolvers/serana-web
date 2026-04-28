@@ -1,8 +1,8 @@
-import { Link, useLocation } from 'react-router-dom';
-import { ShoppingCart, Menu, X } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { ShoppingCart, Menu, X, Check } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
 import { useCartStore } from '../store/useCartStore';
-import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import clsx from 'clsx';
 
 export default function Navbar() {
@@ -10,8 +10,23 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const toggleCart = useCartStore((state) => state.toggleCart);
   const cartItems = useCartStore((state) => state.items);
+  const lastAdded = useCartStore((state) => state.lastAdded);
   const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
-  const { scrollY } = useScroll();
+
+  // Pulse + toast whenever the cart store fires a new "added" ping.
+  const [pulseKey, setPulseKey] = useState<number | null>(null);
+  const [toast, setToast] = useState<{ id: number; name: string } | null>(null);
+  const pingRef = useRef<number>(0);
+
+  useEffect(() => {
+    if (!lastAdded) return;
+    if (lastAdded.ping === pingRef.current) return; // ignore initial mount
+    pingRef.current = lastAdded.ping;
+    setPulseKey(lastAdded.ping);
+    setToast({ id: lastAdded.ping, name: lastAdded.productName });
+    const t = setTimeout(() => setToast(null), 2200);
+    return () => clearTimeout(t);
+  }, [lastAdded]);
   
   // Simplified professional navbar state
 
@@ -67,24 +82,71 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center space-x-6">
+          <div className="relative">
+            <motion.button
+              onClick={toggleCart}
+              className="relative p-2 text-serana-forest hover:text-serana-olive transition-colors group"
+              animate={pulseKey ? { rotate: [0, -10, 10, -6, 4, 0] } : {}}
+              transition={{ duration: 0.55, ease: [0.25, 1, 0.4, 1] }}
+              key={pulseKey ?? 'idle'}
+              aria-label={cartCount > 0 ? `Carrito (${cartCount})` : 'Abrir carrito'}
+            >
+              <ShoppingCart size={22} strokeWidth={1.5} />
+              <span className="absolute inset-0 bg-serana-forest/5 rounded-full scale-0 group-hover:scale-100 transition-transform duration-300" />
+              <AnimatePresence>
+                {cartCount > 0 && (
+                  <motion.span
+                    key={cartCount}
+                    initial={{ scale: 0.4, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0, opacity: 0 }}
+                    transition={{ type: 'spring', stiffness: 500, damping: 22 }}
+                    className="absolute -top-1 -right-1 bg-serana-terracotta text-white text-[10px] font-bold min-w-[18px] h-[18px] rounded-full flex items-center justify-center px-1"
+                  >
+                    {cartCount}
+                  </motion.span>
+                )}
+              </AnimatePresence>
+
+              {/* Outward ripple on add */}
+              <AnimatePresence>
+                {pulseKey && (
+                  <motion.span
+                    key={`ripple-${pulseKey}`}
+                    initial={{ scale: 0.6, opacity: 0.55 }}
+                    animate={{ scale: 2.2, opacity: 0 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.55, ease: 'easeOut' }}
+                    className="absolute inset-0 rounded-full bg-serana-terracotta/30 pointer-events-none"
+                  />
+                )}
+              </AnimatePresence>
+            </motion.button>
+
+            {/* Floating "added" toast anchored to the cart icon */}
+            <AnimatePresence>
+              {toast && (
+                <motion.div
+                  key={toast.id}
+                  initial={{ opacity: 0, y: -6, scale: 0.9 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -6, scale: 0.95, transition: { duration: 0.18 } }}
+                  transition={{ type: 'spring', stiffness: 380, damping: 26 }}
+                  role="status"
+                  className="absolute right-0 top-full mt-2 z-50 flex items-center gap-2 pl-2 pr-3 py-2 rounded-full bg-serana-forest text-serana-cream shadow-lg shadow-serana-forest/20 whitespace-nowrap pointer-events-none"
+                >
+                  <span className="w-5 h-5 rounded-full bg-serana-ochre text-serana-forest flex items-center justify-center">
+                    <Check className="w-3 h-3" strokeWidth={3} />
+                  </span>
+                  <span className="text-[11px] font-bold tracking-wide">
+                    Agregaste <span className="text-serana-ochre">{toast.name}</span>
+                  </span>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
           <button
-            onClick={toggleCart}
-            className="relative p-2 text-serana-forest hover:text-serana-olive transition-colors group"
-          >
-            <ShoppingCart size={22} strokeWidth={1.5} />
-            <span className="absolute inset-0 bg-serana-forest/5 rounded-full scale-0 group-hover:scale-100 transition-transform duration-300"></span>
-            {cartCount > 0 && (
-              <motion.span 
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                className="absolute -top-1 -right-1 bg-serana-terracotta text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center"
-              >
-                {cartCount}
-              </motion.span>
-            )}
-          </button>
-          
-          <button 
             className="md:hidden p-2 text-serana-forest"
             onClick={() => setIsMobileMenuOpen(true)}
           >
