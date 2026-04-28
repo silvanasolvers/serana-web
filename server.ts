@@ -165,9 +165,7 @@ async function startServer() {
             "'self'",
             'data:',
             'blob:',
-            'https://*.supabase.co',
-            'https://qlgjqvgjuscquhspjqdp.supabase.co',
-            'https://www.google-analytics.com',
+            'https:',
           ],
           connectSrc: [
             "'self'",
