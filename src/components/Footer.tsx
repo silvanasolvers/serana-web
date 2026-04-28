@@ -1,7 +1,29 @@
 import { Link } from 'react-router-dom';
-import { CreditCard, Lock, ShieldCheck, Phone } from 'lucide-react';
+import { useState } from 'react';
+import { CreditCard, Lock, ShieldCheck, Phone, Send, Check, Loader2 } from 'lucide-react';
+import { captureLead } from '../lib/api/leads';
 
 export default function Footer() {
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (status === 'sending' || status === 'sent') return;
+    const trimmed = email.trim();
+    if (!/^.+@.+\..+$/.test(trimmed)) {
+      setStatus('error');
+      return;
+    }
+    setStatus('sending');
+    const id = await captureLead({
+      channel: 'newsletter',
+      email: trimmed,
+      metadata: { source: 'footer' },
+    });
+    setStatus(id ? 'sent' : 'error');
+  };
+
   return (
     <footer className="bg-serana-forest text-serana-cream pt-16 pb-8 px-6 overflow-hidden relative">
       {/* Decorative large text */}
@@ -66,6 +88,44 @@ export default function Footer() {
               <li><Link to="/community" className="hover:text-serana-ochre transition-colors">FAQ</Link></li>
             </ul>
           </div>
+        </div>
+
+        {/* Newsletter */}
+        <div className="mb-12 bg-white/5 border border-white/10 rounded-2xl p-5 md:p-6">
+          <div className="flex flex-col md:flex-row md:items-center gap-4">
+            <div className="md:flex-1">
+              <h4 className="font-serif text-lg mb-1">Recibe recetas + descuentos en tu correo</h4>
+              <p className="text-[11px] text-serana-cream/60 leading-snug">
+                Sin spam. Cancelas con un clic. Datos tratados según la Ley 1581/2012.
+              </p>
+            </div>
+            <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
+              <input
+                type="email"
+                placeholder="tu@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={status === 'sending' || status === 'sent'}
+                className="bg-serana-cream/10 border border-white/10 rounded-full px-4 py-2.5 text-sm text-serana-cream placeholder-serana-cream/40 focus:outline-none focus:border-serana-ochre transition w-full sm:w-64"
+              />
+              <button
+                type="submit"
+                disabled={status === 'sending' || status === 'sent'}
+                className="bg-serana-ochre text-serana-forest px-5 py-2.5 rounded-full font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-white transition-colors disabled:opacity-60"
+              >
+                {status === 'sending' ? (
+                  <><Loader2 className="w-4 h-4 animate-spin" /> Enviando…</>
+                ) : status === 'sent' ? (
+                  <><Check className="w-4 h-4" /> ¡Listo!</>
+                ) : (
+                  <><Send className="w-4 h-4" /> Suscribir</>
+                )}
+              </button>
+            </form>
+          </div>
+          {status === 'error' && (
+            <p className="text-[11px] text-rose-300 mt-3">Revisa tu correo e intenta de nuevo.</p>
+          )}
         </div>
 
         <div className="border-t border-serana-cream/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-[9px] uppercase tracking-widest opacity-50">

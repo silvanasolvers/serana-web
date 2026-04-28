@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { MessageCircle, X, Send, ShoppingBag, Loader2 } from 'lucide-react';
 import { useOrderStore } from '../store/useOrderStore';
+import { captureLead } from '../lib/api/leads';
 
 interface Message {
   id: string;
@@ -32,7 +33,13 @@ export default function ChatBot() {
   const [isTyping, setIsTyping] = useState(false);
   const [hasUnread, setHasUnread] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const sessionIdRef = useRef<string>('');
+  const leadCapturedRef = useRef(false);
   const { addOrder } = useOrderStore();
+
+  if (!sessionIdRef.current) {
+    sessionIdRef.current = `chat-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  }
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -59,6 +66,18 @@ export default function ChatBot() {
     setMessages(prev => [...prev, userMessage]);
     setInputText('');
     setIsTyping(true);
+
+    // Lead capture: la primera vez que un visitante escribe en el bot creamos
+    // un registro en crm.leads con el primer mensaje. Las réplicas siguientes
+    // no generan más leads para no spamear.
+    if (!leadCapturedRef.current) {
+      leadCapturedRef.current = true;
+      void captureLead({
+        channel: 'chatbot',
+        message: text.trim(),
+        metadata: { session_id: sessionIdRef.current },
+      });
+    }
 
     // Simulate bot response
     setTimeout(() => {

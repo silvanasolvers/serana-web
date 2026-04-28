@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { motion } from 'motion/react';
-import { Building2, Users, Check, Send } from 'lucide-react';
+import { Building2, Check, Send, Loader2, AlertCircle } from 'lucide-react';
+import { captureLead } from '../lib/api/leads';
 
 export default function B2BSection() {
   const [formState, setFormState] = useState({
@@ -8,15 +8,39 @@ export default function B2BSection() {
     email: '',
     company: '',
     employees: '',
-    message: ''
+    message: '',
   });
+  const [submitting, setSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitted(true);
-    // Mock submission
-    setTimeout(() => setIsSubmitted(false), 3000);
+    if (submitting || isSubmitted) return;
+    setSubmitting(true);
+    setError(null);
+    try {
+      const id = await captureLead({
+        channel: 'b2b',
+        full_name: formState.name.trim(),
+        email: formState.email.trim() || undefined,
+        message: formState.message.trim() || undefined,
+        metadata: {
+          company: formState.company.trim() || null,
+          employees: formState.employees || null,
+        },
+      });
+      if (!id) {
+        setError('No pudimos enviar tu solicitud. Intenta nuevamente o escríbenos al WhatsApp.');
+        return;
+      }
+      setIsSubmitted(true);
+      setFormState({ name: '', email: '', company: '', employees: '', message: '' });
+    } catch (err: any) {
+      setError(err?.message || 'Error inesperado al enviar.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -135,13 +159,22 @@ export default function B2BSection() {
               />
             </div>
 
-            <button 
+            {error && (
+              <div className="flex items-start gap-2 px-3 py-2 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-200 text-[11px]">
+                <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                <span>{error}</span>
+              </div>
+            )}
+
+            <button
               type="submit"
-              disabled={isSubmitted}
+              disabled={submitting || isSubmitted}
               className="w-full bg-serana-olive text-white py-3 rounded-lg font-bold uppercase tracking-wider hover:bg-serana-ochre transition-colors flex items-center justify-center gap-2 mt-2 disabled:opacity-50 disabled:cursor-not-allowed text-xs"
             >
-              {isSubmitted ? (
-                <>Enviado <Check size={16} /></>
+              {submitting ? (
+                <><Loader2 size={16} className="animate-spin" /> Enviando…</>
+              ) : isSubmitted ? (
+                <>¡Recibido! Te contactamos pronto <Check size={16} /></>
               ) : (
                 <>Enviar Solicitud <Send size={16} /></>
               )}

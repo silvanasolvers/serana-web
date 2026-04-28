@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
 import { Check, BarChart3, Users } from 'lucide-react';
+import { captureLead } from '../lib/api/leads';
 
 const POLL = {
   question: "¿Qué ingrediente te gustaría ver en el próximo menú?",
@@ -19,15 +20,26 @@ export default function CommunityPoll() {
 
   const handleVote = (optionId: string) => {
     if (hasVoted) return;
-    
+
     setPollData(prev => ({
       ...prev,
-      options: prev.options.map(opt => 
+      options: prev.options.map(opt =>
         opt.id === optionId ? { ...opt, votes: opt.votes + 1 } : opt
       )
     }));
     setSelectedOption(optionId);
     setHasVoted(true);
+
+    // Anonymous signal — useful for marketing without spamming the user with
+    // a sign-up prompt for a one-question poll.
+    void captureLead({
+      channel: 'community_poll',
+      message: `Voto: ${pollData.options.find(o => o.id === optionId)?.label ?? optionId}`,
+      metadata: {
+        poll_question: pollData.question,
+        choice: optionId,
+      },
+    });
   };
 
   const totalVotes = pollData.options.reduce((acc, curr) => acc + curr.votes, 0);

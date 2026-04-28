@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowRight, Check, Sparkles, ChevronRight } from 'lucide-react';
+import { ArrowRight, Check, Sparkles, ChevronRight, Loader2 } from 'lucide-react';
+import { captureLead } from '../lib/api/leads';
 
 const QUESTIONS = [
   {
@@ -38,10 +39,22 @@ export default function WellnessQuiz() {
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [isCompleted, setIsCompleted] = useState(false);
+  const [contact, setContact] = useState({ name: '', phone: '' });
+  const [contactStatus, setContactStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+
+  // Captura anónima del recorrido apenas el usuario termina, así no perdemos
+  // la señal aunque cierre la pestaña antes de dar contacto.
+  useEffect(() => {
+    if (!isCompleted) return;
+    void captureLead({
+      channel: 'wellness_quiz',
+      metadata: { answers, completed_at: new Date().toISOString(), contact_provided: false },
+    });
+  }, [isCompleted, answers]);
 
   const handleOptionSelect = (optionId: string) => {
     setAnswers(prev => ({ ...prev, [QUESTIONS[currentStep].id]: optionId }));
-    
+
     if (currentStep < QUESTIONS.length - 1) {
       setTimeout(() => setCurrentStep(prev => prev + 1), 300);
     } else {
@@ -49,10 +62,30 @@ export default function WellnessQuiz() {
     }
   };
 
+  const handleContactSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (contactStatus === 'sending' || contactStatus === 'sent') return;
+    const phoneDigits = contact.phone.replace(/\D/g, '');
+    if (phoneDigits.length < 7 || contact.name.trim().length < 2) {
+      setContactStatus('error');
+      return;
+    }
+    setContactStatus('sending');
+    const id = await captureLead({
+      channel: 'wellness_quiz',
+      full_name: contact.name.trim(),
+      phone: phoneDigits,
+      metadata: { answers, contact_provided: true },
+    });
+    setContactStatus(id ? 'sent' : 'error');
+  };
+
   const resetQuiz = () => {
     setCurrentStep(0);
     setAnswers({});
     setIsCompleted(false);
+    setContact({ name: '', phone: '' });
+    setContactStatus('idle');
   };
 
   return (
@@ -135,18 +168,67 @@ export default function WellnessQuiz() {
                 <p className="text-serana-cream/80 text-base mb-8 max-w-md mx-auto leading-relaxed">
                   Basado en tus respuestas, necesitas un impulso de vitalidad que se adapte a tu agenda ocupada.
                 </p>
-                
-                <div className="flex flex-col md:flex-row gap-3 justify-center">
-                  <button className="bg-serana-ochre text-serana-forest px-6 py-3 rounded-full font-bold hover:bg-white transition-colors shadow-lg hover:scale-105 flex items-center justify-center gap-2 text-sm">
-                    Ver Mi Plan Personalizado <ArrowRight size={16} />
-                  </button>
-                  <button 
-                    onClick={resetQuiz}
-                    className="px-6 py-3 rounded-full font-bold border border-white/20 hover:bg-white/10 transition-colors text-xs uppercase tracking-wide"
+
+                {contactStatus !== 'sent' ? (
+                  <form
+                    onSubmit={handleContactSubmit}
+                    className="max-w-md mx-auto bg-white/5 border border-white/10 rounded-2xl p-4 mb-6 text-left space-y-3"
                   >
-                    Volver a empezar
-                  </button>
-                </div>
+                    <p className="text-[11px] uppercase tracking-widest text-serana-ochre font-bold">
+                      Recibe tu plan completo por WhatsApp
+                    </p>
+                    <div className="grid grid-cols-2 gap-3">
+                      <input
+                        type="text"
+                        required
+                        placeholder="Nombre"
+                        value={contact.name}
+                        onChange={(e) => setContact((p) => ({ ...p, name: e.target.value }))}
+                        disabled={contactStatus === 'sending'}
+                        className="bg-white/5 border border-white/10 rounded-lg p-2.5 text-sm text-serana-cream placeholder-serana-cream/40 focus:outline-none focus:border-serana-ochre transition"
+                      />
+                      <input
+                        type="tel"
+                        required
+                        placeholder="Celular WhatsApp"
+                        value={contact.phone}
+                        onChange={(e) => setContact((p) => ({ ...p, phone: e.target.value }))}
+                        disabled={contactStatus === 'sending'}
+                        className="bg-white/5 border border-white/10 rounded-lg p-2.5 text-sm text-serana-cream placeholder-serana-cream/40 focus:outline-none focus:border-serana-ochre transition"
+                      />
+                    </div>
+                    {contactStatus === 'error' && (
+                      <p className="text-[11px] text-rose-300">Revisa tus datos: nombre y celular válidos.</p>
+                    )}
+                    <div className="flex flex-col md:flex-row gap-3">
+                      <button
+                        type="submit"
+                        disabled={contactStatus === 'sending'}
+                        className="flex-1 bg-serana-ochre text-serana-forest px-6 py-3 rounded-full font-bold hover:bg-white transition-colors shadow-lg flex items-center justify-center gap-2 text-sm disabled:opacity-60"
+                      >
+                        {contactStatus === 'sending' ? (
+                          <><Loader2 size={16} className="animate-spin" /> Enviando…</>
+                        ) : (
+                          <>Recibir mi plan <ArrowRight size={16} /></>
+                        )}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={resetQuiz}
+                        className="px-6 py-3 rounded-full font-bold border border-white/20 hover:bg-white/10 transition-colors text-xs uppercase tracking-wide"
+                      >
+                        Volver a empezar
+                      </button>
+                    </div>
+                  </form>
+                ) : (
+                  <div className="max-w-md mx-auto bg-emerald-500/10 border border-emerald-500/30 rounded-2xl p-4 mb-6 flex items-center gap-3 text-emerald-100">
+                    <Check className="w-5 h-5 shrink-0" />
+                    <p className="text-sm font-medium leading-snug text-left">
+                      ¡Listo! Te enviaremos tu plan personalizado por WhatsApp en las próximas horas.
+                    </p>
+                  </div>
+                )}
               </motion.div>
             )}
           </AnimatePresence>
