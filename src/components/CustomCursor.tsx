@@ -1,21 +1,22 @@
 import { useEffect, useRef, useState } from 'react';
 
 /**
- * Carrot-shaped cursor.
+ * Carrot cursor.
  *
- * Renders only on devices with a fine pointer (mouse / trackpad). Tracks the
- * pointer with `pointermove` (more universal than `mousemove`) and stays
- * hidden until the first event so we don't paint a stray carrot at the
- * top-left corner before the user has moved their mouse.
- *
- * The OS cursor is hidden via `cursor: none` in `index.css`, restored on
- * coarse-pointer media via the same stylesheet.
+ * Updates the position synchronously inside `pointermove`. The browser already
+ * coalesces pointer events to one per frame, so adding our own
+ * requestAnimationFrame in the middle just delays paint by a frame and feels
+ * "sticky". A `translate3d` transform keeps the element on its own compositor
+ * layer, so even when Three.js is busy on the main thread the carrot moves
+ * with the pointer.
  */
 export default function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
   const [enabled, setEnabled] = useState(false);
-  const [visible, setVisible] = useState(false);
 
+  // Decide once whether to render the carrot at all (fine pointer = mouse /
+  // trackpad). Keep listening so a user plugging in a mouse mid-session
+  // re-enables it without a refresh.
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const finePointer = window.matchMedia('(pointer: fine)');
@@ -30,36 +31,37 @@ export default function CustomCursor() {
     const cursor = cursorRef.current;
     if (!cursor) return;
 
-    let frame = 0;
-    let lastX = 0;
-    let lastY = 0;
+    // Hidden until the first real movement so we never paint a stranded carrot
+    // at (0,0) while the user mouse is still elsewhere.
+    cursor.style.opacity = '0';
+
     const offset = 4; // tip of the carrot
 
-    const apply = () => {
-      cursor.style.transform = `translate3d(${lastX - offset}px, ${lastY - offset}px, 0)`;
-      frame = 0;
-    };
-
     const onMove = (e: PointerEvent) => {
-      lastX = e.clientX;
-      lastY = e.clientY;
-      if (!visible) setVisible(true);
-      if (!frame) frame = requestAnimationFrame(apply);
+      // Direct transform write — no rAF. Browsers already deliver one
+      // pointermove per frame, batching here just adds a frame of latency.
+      cursor.style.transform = `translate3d(${e.clientX - offset}px, ${e.clientY - offset}px, 0)`;
+      if (cursor.style.opacity !== '1') cursor.style.opacity = '1';
     };
 
-    const onLeave = () => setVisible(false);
-    const onEnter = () => setVisible(true);
+    const onLeave = () => {
+      cursor.style.opacity = '0';
+    };
+
+    const onEnter = (e: PointerEvent) => {
+      cursor.style.transform = `translate3d(${e.clientX - offset}px, ${e.clientY - offset}px, 0)`;
+      cursor.style.opacity = '1';
+    };
 
     window.addEventListener('pointermove', onMove, { passive: true });
-    document.addEventListener('mouseleave', onLeave);
-    document.addEventListener('mouseenter', onEnter);
+    document.addEventListener('pointerleave', onLeave);
+    document.addEventListener('pointerenter', onEnter);
     return () => {
       window.removeEventListener('pointermove', onMove);
-      document.removeEventListener('mouseleave', onLeave);
-      document.removeEventListener('mouseenter', onEnter);
-      if (frame) cancelAnimationFrame(frame);
+      document.removeEventListener('pointerleave', onLeave);
+      document.removeEventListener('pointerenter', onEnter);
     };
-  }, [enabled, visible]);
+  }, [enabled]);
 
   if (!enabled) return null;
 
@@ -69,8 +71,10 @@ export default function CustomCursor() {
       aria-hidden
       className="fixed top-0 left-0 pointer-events-none z-[9999] will-change-transform"
       style={{
-        opacity: visible ? 1 : 0,
+        // Keep the layer composited and never animate the transform — only
+        // fade in/out the opacity.
         transition: 'opacity 120ms ease-out',
+        contain: 'layout style paint',
       }}
     >
       <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-sm">
