@@ -20,6 +20,9 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
+import helmet from 'helmet';
+import compression from 'compression';
+import rateLimit from 'express-rate-limit';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -143,7 +146,72 @@ async function fetchOrderForCheckout(orderId: string) {
 async function startServer() {
   const app = express();
   app.disable('x-powered-by');
-  app.use(express.json({ limit: '512kb' }));
+  app.set('trust proxy', 1); // Dokploy fronts the app with a reverse proxy.
+
+  // gzip/br responses where it makes sense (HTML, JS, JSON).
+  app.use(compression());
+
+  // Security headers. CSP is intentionally permissive for img/font/script
+  // because the site embeds Supabase Storage assets and Mercado Pago redirects
+  // through 3rd-party scripts on its own domain (we only redirect to MP, we
+  // don't embed it here).
+  app.use(
+    helmet({
+      contentSecurityPolicy: {
+        useDefaults: true,
+        directives: {
+          defaultSrc: ["'self'"],
+          imgSrc: [
+            "'self'",
+            'data:',
+            'blob:',
+            'https://*.supabase.co',
+            'https://qlgjqvgjuscquhspjqdp.supabase.co',
+            'https://www.google-analytics.com',
+          ],
+          connectSrc: [
+            "'self'",
+            'https://*.supabase.co',
+            'wss://*.supabase.co',
+            'https://api.mercadopago.com',
+            'https://*.mercadopago.com',
+          ],
+          scriptSrc: [
+            "'self'",
+            "'unsafe-inline'",
+            "'unsafe-eval'", // Three.js / shaders compile WebGL programs.
+            'https://*.mercadopago.com',
+          ],
+          styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
+          fontSrc: ["'self'", 'data:', 'https://fonts.gstatic.com'],
+          frameSrc: ["'self'", 'https://*.mercadopago.com'],
+          objectSrc: ["'none'"],
+          baseUri: ["'self'"],
+          formAction: ["'self'", 'https://*.mercadopago.com'],
+          frameAncestors: ["'none'"],
+          upgradeInsecureRequests: [],
+        },
+      },
+      // We do redirect to MP and back. crossOriginEmbedderPolicy=require-corp
+      // breaks 3rd-party images, so leave the default opener policy as-is.
+      crossOriginEmbedderPolicy: false,
+      // Tell the browser this isn't an HSTS-elligible site only when behind
+      // HTTPS (Dokploy terminates TLS for us).
+      strictTransportSecurity: { maxAge: 60 * 60 * 24 * 180, includeSubDomains: true, preload: false },
+    }),
+  );
+
+  app.use(express.json({ limit: '256kb' }));
+
+  // Rate-limit the publicly callable checkout endpoints. Webhook is exempt
+  // because Mercado Pago hits it with retries and we acknowledge fast.
+  const checkoutLimiter = rateLimit({
+    windowMs: 60 * 1000,
+    max: 30,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { error: 'rate_limited' },
+  });
 
   // ----- API routes ------------------------------------------------------
 
@@ -158,7 +226,7 @@ async function startServer() {
 
   // Build a Mercado Pago Preference for a Supabase order. Returns the
   // init_point we should redirect the user to.
-  app.post('/api/checkout/mp/preference', async (req, res) => {
+  app.post('/api/checkout/mp/preference', checkoutLimiter, async (req, res) => {
     try {
       if (!MP_ACCESS_TOKEN) return res.status(500).json({ error: 'mp_not_configured' });
       if (!supabaseAdmin) return res.status(500).json({ error: 'supabase_not_configured' });
