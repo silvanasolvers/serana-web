@@ -18,7 +18,10 @@ const AboutPage = lazy(() => import('./pages/AboutPage'));
 const CommunityPage = lazy(() => import('./pages/CommunityPage'));
 const CheckoutPage = lazy(() => import('./pages/CheckoutPage'));
 const CheckoutResultPage = lazy(() => import('./pages/CheckoutResultPage'));
-const DashboardPage = lazy(() => import('./pages/DashboardPage'));
+const PrivacidadPage = lazy(() => import('./pages/PrivacidadPage'));
+const TerminosPage = lazy(() => import('./pages/TerminosPage'));
+const DevolucionesPage = lazy(() => import('./pages/DevolucionesPage'));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 // Heavy non-critical UI: defer until idle so they don't block first paint.
 const LivingBackground = lazy(() => import('./components/LivingBackground'));
@@ -63,7 +66,10 @@ export default function App() {
           <Route path="/checkout/success" element={<CheckoutResultPage variant="success" />} />
           <Route path="/checkout/failure" element={<CheckoutResultPage variant="failure" />} />
           <Route path="/checkout/pending" element={<CheckoutResultPage variant="pending" />} />
-          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/privacidad" element={<PrivacidadPage />} />
+          <Route path="/terminos" element={<TerminosPage />} />
+          <Route path="/devoluciones" element={<DevolucionesPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Suspense>
     </Router>
