@@ -62,6 +62,8 @@ type OrderRow = {
   id: string;
   order_number: number;
   total_amount: number | string;
+  discount_amount: number | string | null;
+  coupon_code: string | null;
   payment_method: string | null;
   payment_status: string;
   status: string;
@@ -86,7 +88,7 @@ async function fetchOrderForCheckout(orderId: string) {
   if (!supabaseAdmin) throw new Error('supabase_admin_not_configured');
   const { data: order, error: oErr } = await supabaseAdmin
     .from('sales.orders'.replace('sales.', '')) // PostgREST exposes public schema; use views/RPC
-    .select('id, order_number, total_amount, payment_method, payment_status, status, customer_id')
+    .select('id, order_number, total_amount, discount_amount, coupon_code, payment_method, payment_status, status, customer_id')
     .eq('id', orderId)
     .maybeSingle();
   if (oErr || !order) {
@@ -94,7 +96,7 @@ async function fetchOrderForCheckout(orderId: string) {
     const { data: viewRow, error: vErr } = await supabaseAdmin
       .from('order_board_view')
       .select(
-        'order_id, order_number, total_amount, payment_method, payment_status, status, customer_id, customer_name, customer_phone, item_summary',
+        'order_id, order_number, total_amount, discount_amount, coupon_code, payment_method, payment_status, status, customer_id, customer_name, customer_phone, item_summary',
       )
       .eq('order_id', orderId)
       .maybeSingle();
@@ -106,6 +108,8 @@ async function fetchOrderForCheckout(orderId: string) {
         id: viewRow.order_id as string,
         order_number: viewRow.order_number as number,
         total_amount: viewRow.total_amount as number,
+        discount_amount: (viewRow as any).discount_amount ?? 0,
+        coupon_code: (viewRow as any).coupon_code ?? null,
         payment_method: viewRow.payment_method as string | null,
         payment_status: viewRow.payment_status as string,
         status: viewRow.status as string,
@@ -240,23 +244,32 @@ async function startServer() {
         return res.status(409).json({ error: 'order_already_paid' });
       }
 
-      const mpItems = items.length > 0
-        ? items.map((it) => ({
+      // If a coupon is applied, MP would otherwise charge the un-discounted
+      // sum of items. Collapse into a single line whose price equals the
+      // post-discount order total so the gateway charge always matches what
+      // the user saw at checkout.
+      const orderDiscount = Number(order.discount_amount ?? 0);
+      const orderTotal = Number(order.total_amount ?? 0);
+
+      const mpItems = orderDiscount > 0 || items.length === 0
+        ? [
+            {
+              id: order.id,
+              title: order.coupon_code
+                ? `Pedido Serana #${order.order_number} (cupón ${order.coupon_code})`
+                : `Pedido Serana #${order.order_number}`,
+              quantity: 1,
+              unit_price: orderTotal,
+              currency_id: 'COP',
+            },
+          ]
+        : items.map((it) => ({
             id: it.product_id,
             title: it.product_name,
             quantity: Number(it.quantity ?? 1),
             unit_price: Number(it.unit_price ?? 0),
             currency_id: 'COP',
-          }))
-        : [
-            {
-              id: order.id,
-              title: `Pedido Serana #${order.order_number}`,
-              quantity: 1,
-              unit_price: Number(order.total_amount ?? 0),
-              currency_id: 'COP',
-            },
-          ];
+          }));
 
       // Mercado Pago refuses both `auto_return` and `notification_url` on
       // non-HTTPS hosts, so we only enable them in production.
