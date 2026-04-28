@@ -2,8 +2,10 @@ import Navbar from '../components/Navbar';
 import CartDrawer from '../components/CartDrawer';
 import Footer from '../components/Footer';
 import SectionDivider from '../components/SectionDivider';
+import EventEnrollModal, { type EnrollEventInfo } from '../components/EventEnrollModal';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Calendar, Sprout, Drop, Spark, Sun, SerenaMark } from '../components/SeranaIcons';
 import type { ComponentType, SVGProps } from 'react';
@@ -89,10 +91,27 @@ const RITUALS: Array<{ Icon: IconCmp; title: string; italic: string; body: strin
 ];
 
 export default function CommunityPage() {
+  const [enrollEvent, setEnrollEvent] = useState<EnrollEventInfo | null>(null);
+
+  const openEnroll = (event: Event) => {
+    setEnrollEvent({
+      event_id: event.number,
+      event_title: `${event.title} ${event.italic}`.trim(),
+      event_kicker: event.kicker,
+      event_date: event.date,
+      event_cta: event.cta,
+    });
+  };
+
   return (
     <div className="min-h-screen pt-24 bg-[#F9F7F2]">
       <Navbar />
       <CartDrawer />
+      <EventEnrollModal
+        open={enrollEvent !== null}
+        event={enrollEvent}
+        onClose={() => setEnrollEvent(null)}
+      />
 
       <div className="max-w-6xl mx-auto px-6 relative z-10">
         {/* ── Editorial header ──────────────────────────────────────────── */}
@@ -230,6 +249,7 @@ export default function CommunityPage() {
 
                     <button
                       type="button"
+                      onClick={() => openEnroll(event)}
                       className="mt-6 inline-flex items-center gap-2 text-serana-forest font-bold text-[10px] uppercase tracking-[0.3em] hover:text-serana-terracotta transition-colors group/btn relative z-10"
                     >
                       {event.cta}

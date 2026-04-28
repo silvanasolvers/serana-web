@@ -3,12 +3,12 @@ import { supabase, isSupabaseConfigured } from '../supabase';
 export type LeadChannel =
   | 'wellness_quiz'
   | 'community_poll'
+  | 'community_event'
   | 'chatbot'
   | 'footer'
   | 'contact'
   | 'newsletter'
   | 'b2b'
-  | 'loyalty'
   | string;
 
 export type LeadPayload = {
