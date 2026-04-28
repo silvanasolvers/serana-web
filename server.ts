@@ -332,6 +332,103 @@ async function startServer() {
     }
   });
 
+  // ─────────────────────────────────────────────────────────────────────
+  // POST /api/checkout/mp/process — Bricks pay-in-place handler.
+  //
+  // The Mercado Pago Payment Brick renders the card form inside our page
+  // and tokenizes the card client-side. Its onSubmit hands us the resulting
+  // formData (token, payment_method_id, installments, payer, …). We forward
+  // that to MP's /v1/payments to capture; the gateway response tells us
+  // approved / in_process / rejected so the user gets feedback in-place.
+  //
+  // The webhook still runs on payment.created/updated so the order's
+  // payment_status becomes the source of truth even if this call times out.
+  app.post('/api/checkout/mp/process', checkoutLimiter, async (req, res) => {
+    try {
+      if (!MP_ACCESS_TOKEN) return res.status(500).json({ error: 'mp_not_configured' });
+      if (!supabaseAdmin) return res.status(500).json({ error: 'supabase_not_configured' });
+
+      const { order_id: orderId, formData, selectedPaymentMethod } = req.body ?? {};
+      if (!orderId || typeof orderId !== 'string') {
+        return res.status(400).json({ error: 'order_id is required' });
+      }
+      if (!formData || typeof formData !== 'object') {
+        return res.status(400).json({ error: 'formData is required' });
+      }
+
+      const { order } = await fetchOrderForCheckout(orderId);
+      if (order.payment_status === 'pagado') {
+        return res.status(409).json({ error: 'order_already_paid' });
+      }
+
+      const idempotencyKey = `serana-${orderId}-${Date.now()}`;
+      const paymentBody: Record<string, unknown> = {
+        ...formData,
+        // Force the amount + reference to match our order regardless of
+        // what the brick sent — the client is untrusted.
+        transaction_amount: Number(order.total_amount),
+        external_reference: orderId,
+        description: `Pedido Serana #${order.order_number}`,
+        statement_descriptor: 'SERANA',
+        notification_url: APP_URL.startsWith('https://')
+          ? `${APP_URL}/api/webhooks/mercadopago`
+          : undefined,
+      };
+
+      const mpResp = await fetch('https://api.mercadopago.com/v1/payments', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${MP_ACCESS_TOKEN}`,
+          'Content-Type': 'application/json',
+          'X-Idempotency-Key': idempotencyKey,
+        },
+        body: JSON.stringify(paymentBody),
+      });
+
+      const text = await mpResp.text();
+      let mpData: any = {};
+      try { mpData = JSON.parse(text); } catch { /* leave empty */ }
+
+      if (!mpResp.ok) {
+        console.error('[mp/process] payment rejected:', mpResp.status, text.slice(0, 400));
+        return res.status(mpResp.status).json({
+          error: 'mp_payment_failed',
+          status: mpData?.status ?? 'rejected',
+          status_detail: mpData?.status_detail ?? 'unknown',
+          message: mpData?.message ?? 'No pudimos procesar el pago',
+        });
+      }
+
+      // For approved card payments, register immediately so the dashboard
+      // doesn't wait for the webhook. Idempotency in register_payment by
+      // transaction_id ensures the webhook later is a no-op.
+      if (mpData.status === 'approved' && selectedPaymentMethod !== 'pse') {
+        const { error: rpcErr } = await supabaseAdmin.rpc('register_payment', {
+          p_order_id: orderId,
+          p_amount: Number(mpData.transaction_amount ?? order.total_amount),
+          p_method: 'mercado_pago',
+          p_reference: orderId,
+          p_transaction_id: String(mpData.id),
+        });
+        if (rpcErr) console.warn('[mp/process] register_payment failed (will rely on webhook):', rpcErr.message);
+      }
+
+      return res.json({
+        id: mpData.id,
+        status: mpData.status,
+        status_detail: mpData.status_detail,
+        // For PSE / bank transfer, MP returns a redirect URL the brick handles
+        ...(mpData.transaction_details?.external_resource_url && {
+          redirect_url: mpData.transaction_details.external_resource_url,
+        }),
+      });
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'unknown_error';
+      console.error('[mp/process] error:', msg);
+      return res.status(500).json({ error: msg });
+    }
+  });
+
   // Mercado Pago notification endpoint. MP retries on non-2xx, so we always
   // return 200 unless we explicitly want a retry.
   //

@@ -12,6 +12,9 @@ import {
   createOrderAnon, validateCoupon,
   type PaymentMethod, type CouponValidation,
 } from '../lib/api/orders';
+import MercadoPagoBrick from '../components/MercadoPagoBrick';
+
+const MP_PUBLIC_KEY = import.meta.env.VITE_MP_PUBLIC_KEY ?? '';
 
 const COP = (n: number) =>
   new Intl.NumberFormat('es-CO', {
@@ -85,6 +88,21 @@ export default function CheckoutPage() {
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // MP Bricks: when the user reaches step 3 with MercadoPago selected we
+  // eagerly create the order + a Preference so the Brick can mount inline.
+  // The Brick's submit handler talks to /api/checkout/mp/process directly.
+  const [mpReady, setMpReady] = useState<{
+    order_id: string;
+    order_number: number;
+    preference_id: string;
+    amount: number;
+    discount: number;
+    coupon: string | null;
+    subtotal: number;
+  } | null>(null);
+  const [mpPreparing, setMpPreparing] = useState(false);
+  const [mpRejection, setMpRejection] = useState<{ status_detail: string; message?: string } | null>(null);
 
   // Coupon state
   const [couponCode, setCouponCode] = useState('');
@@ -160,47 +178,72 @@ export default function CheckoutPage() {
     setCouponError(null);
   };
 
+  const buildOrderPayload = () => {
+    const fullAddress = [form.address.trim(), form.city.trim()].filter(Boolean).join(', ');
+    return {
+      customer_phone: phoneDigits,
+      customer_name: form.fullName.trim(),
+      customer_email: form.email.trim() || undefined,
+      delivery_address: fullAddress,
+      type: 'domicilio' as const,
+      payment_method: form.paymentMethod,
+      payment_status: 'pendiente' as const,
+      source_code: 'web' as const,
+      coupon_code: couponApplied?.valid ? couponApplied.code ?? undefined : undefined,
+      items: items.map((item) => ({
+        product_slug: item.id,
+        quantity: item.quantity,
+        customizations: undefined,
+      })),
+    };
+  };
+
+  // For Bricks: create the order + preference so the brick can mount.
+  // Only happens once per (step3 + MP selected + valid form). If the user
+  // edits the cart or contact, we tear it down and re-prepare.
+  const prepareMpBrick = async () => {
+    if (mpPreparing || mpReady) return;
+    setMpPreparing(true);
+    setMpRejection(null);
+    setError(null);
+    try {
+      const result = await createOrderAnon(buildOrderPayload());
+      const mpResp = await fetch('/api/checkout/mp/preference', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ order_id: result.order_id }),
+      });
+      if (!mpResp.ok) {
+        const t = await mpResp.text();
+        throw new Error(`No pudimos preparar el pago (${mpResp.status}). ${t.slice(0, 200)}`);
+      }
+      const mpData = (await mpResp.json()) as { preference_id?: string };
+      if (!mpData.preference_id) throw new Error('Mercado Pago no devolvió la preferencia.');
+
+      setMpReady({
+        order_id: result.order_id,
+        order_number: result.order_number,
+        preference_id: mpData.preference_id,
+        amount: Number(result.total_amount),
+        discount: Number(result.discount_amount ?? 0),
+        coupon: result.coupon_code ?? null,
+        subtotal: Number(result.subtotal ?? subtotal),
+      });
+    } catch (err: any) {
+      setError(err?.message ?? 'No pudimos preparar Mercado Pago. Intenta nuevamente.');
+    } finally {
+      setMpPreparing(false);
+    }
+  };
+
+  // Confirm a non-MP order (cash / transfer).
   const handleSubmit = async () => {
     if (!step2Valid || submitting) return;
+    if (form.paymentMethod === 'mercado_pago') return; // brick handles it
     setSubmitting(true);
     setError(null);
     try {
-      const fullAddress = [form.address.trim(), form.city.trim()].filter(Boolean).join(', ');
-      const result = await createOrderAnon({
-        customer_phone: phoneDigits,
-        customer_name: form.fullName.trim(),
-        customer_email: form.email.trim() || undefined,
-        delivery_address: fullAddress,
-        type: 'domicilio',
-        payment_method: form.paymentMethod,
-        payment_status: 'pendiente',
-        source_code: 'web',
-        coupon_code: couponApplied?.valid ? couponApplied.code ?? undefined : undefined,
-        items: items.map((item) => ({
-          product_slug: item.id,
-          quantity: item.quantity,
-          customizations: undefined,
-        })),
-      });
-
-      if (form.paymentMethod === 'mercado_pago') {
-        const mpResp = await fetch('/api/checkout/mp/preference', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ order_id: result.order_id }),
-        });
-        if (!mpResp.ok) {
-          const errorBody = await mpResp.text();
-          throw new Error(`No pudimos abrir Mercado Pago (${mpResp.status}). ${errorBody.slice(0, 240)}`);
-        }
-        const mpData = (await mpResp.json()) as { init_point?: string; sandbox_init_point?: string };
-        const target = mpData.init_point || mpData.sandbox_init_point;
-        if (!target) throw new Error('Mercado Pago no devolvió un enlace de pago. Intenta nuevamente.');
-        window.location.href = target;
-        return;
-      }
-
-      // Cash / transfer — confirm immediately.
+      const result = await createOrderAnon(buildOrderPayload());
       setConfirmation({
         orderNumber: result.order_number,
         subtotal: Number(result.subtotal ?? subtotal),
@@ -210,13 +253,54 @@ export default function CheckoutPage() {
       });
       clearCart();
     } catch (err: any) {
-      const message: string =
-        err?.message || err?.error_description || 'No pudimos confirmar tu pedido. Intenta nuevamente.';
-      setError(message);
+      setError(err?.message || 'No pudimos confirmar tu pedido. Intenta nuevamente.');
     } finally {
       setSubmitting(false);
     }
   };
+
+  // When the brick reports approved we wrap up locally — the webhook will
+  // also fire and update the order's payment_status to 'pagado'.
+  const handleBrickApproved = (paymentId: string) => {
+    if (!mpReady) return;
+    setConfirmation({
+      orderNumber: mpReady.order_number,
+      subtotal: mpReady.subtotal,
+      discount: mpReady.discount,
+      total: mpReady.amount,
+      coupon: mpReady.coupon,
+    });
+    clearCart();
+    void paymentId; // for future telemetry
+  };
+
+  const handleBrickRejected = (info: { status: string; status_detail: string; message?: string }) => {
+    setMpRejection({ status_detail: info.status_detail, message: info.message });
+  };
+
+  // If the cart, contact or coupon changes after prepare, tear down the
+  // prepared MP order so we don't end up paying for a stale total.
+  useEffect(() => {
+    if (mpReady) {
+      setMpReady(null);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [subtotal, discount, form.fullName, form.phone, form.address, form.city]);
+
+  // Auto-prepare when user lands on step 3 with MP selected and form is valid.
+  useEffect(() => {
+    if (
+      stepIndex === STEPS.length - 1 &&
+      form.paymentMethod === 'mercado_pago' &&
+      step2Valid &&
+      !mpReady &&
+      !mpPreparing &&
+      MP_PUBLIC_KEY
+    ) {
+      void prepareMpBrick();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stepIndex, form.paymentMethod, step2Valid]);
 
   const goNext = () => {
     if (stepIndex === 1 && !step2Valid) return;
@@ -361,14 +445,57 @@ export default function CheckoutPage() {
             )}
 
             {stepIndex === 2 && (
-              <Step3Payment
-                method={form.paymentMethod}
-                onChange={(m) => setForm((prev) => {
-                  const next = { ...prev, paymentMethod: m };
-                  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(next)); } catch {/* ignore */}
-                  return next;
-                })}
-              />
+              <>
+                <Step3Payment
+                  method={form.paymentMethod}
+                  onChange={(m) => setForm((prev) => {
+                    const next = { ...prev, paymentMethod: m };
+                    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(next)); } catch {/* ignore */}
+                    return next;
+                  })}
+                />
+
+                {form.paymentMethod === 'mercado_pago' && (
+                  <div className="mt-6">
+                    {!MP_PUBLIC_KEY ? (
+                      <div className="flex items-start gap-3 p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-800">
+                        <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
+                        <p className="text-sm">
+                          Pagos en línea no están configurados en este entorno. Selecciona transferencia o efectivo.
+                        </p>
+                      </div>
+                    ) : mpPreparing && !mpReady ? (
+                      <div className="flex items-center gap-3 text-serana-forest/70 px-4 py-8 rounded-2xl bg-white/60 border border-serana-forest/10 justify-center">
+                        <Loader2 className="w-5 h-5 animate-spin text-serana-olive" />
+                        <span className="text-sm font-medium">Preparando tu pago seguro…</span>
+                      </div>
+                    ) : mpReady ? (
+                      <>
+                        {mpRejection && (
+                          <div className="flex items-start gap-3 p-4 mb-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-700">
+                            <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
+                            <div className="text-sm">
+                              <p className="font-medium">Pago rechazado</p>
+                              <p className="text-rose-600/80 text-[13px] mt-1">
+                                {mpRejection.message ?? mpRejection.status_detail}. Intenta con otra tarjeta o método.
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                        <MercadoPagoBrick
+                          publicKey={MP_PUBLIC_KEY}
+                          preferenceId={mpReady.preference_id}
+                          amount={mpReady.amount}
+                          orderId={mpReady.order_id}
+                          payerEmail={form.email.trim() || undefined}
+                          onApproved={handleBrickApproved}
+                          onRejected={handleBrickRejected}
+                        />
+                      </>
+                    ) : null}
+                  </div>
+                )}
+              </>
             )}
 
             {error && (
@@ -397,6 +524,10 @@ export default function CheckoutPage() {
                 >
                   Continuar <ArrowRight size={14} />
                 </button>
+              ) : form.paymentMethod === 'mercado_pago' ? (
+                <span className="text-[11px] text-serana-forest/55 italic">
+                  Completa el formulario de pago aquí arriba.
+                </span>
               ) : (
                 <button
                   type="button"
@@ -405,13 +536,9 @@ export default function CheckoutPage() {
                   className="inline-flex items-center gap-2 bg-serana-forest text-serana-cream px-8 py-4 rounded-full font-bold tracking-widest uppercase text-xs hover:bg-serana-olive transition disabled:opacity-60"
                 >
                   {submitting ? (
-                    <><Loader2 className="w-4 h-4 animate-spin" />
-                      {form.paymentMethod === 'mercado_pago' ? 'Abriendo Mercado Pago…' : 'Enviando…'}
-                    </>
-                  ) : form.paymentMethod === 'mercado_pago' ? (
-                    <>Pagar {COP(totalToPay)} <ArrowRight size={14} /></>
+                    <><Loader2 className="w-4 h-4 animate-spin" /> Enviando…</>
                   ) : (
-                    <>Confirmar pedido <ArrowRight size={14} /></>
+                    <>Confirmar pedido · {COP(totalToPay)} <ArrowRight size={14} /></>
                   )}
                 </button>
               )}
