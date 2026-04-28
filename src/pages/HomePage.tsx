@@ -9,6 +9,7 @@ import CartDrawer from '../components/CartDrawer';
 import Footer from '../components/Footer';
 import VideoSection from '../components/VideoSection';
 import SectionDivider from '../components/SectionDivider';
+import ScrollStory from '../components/ScrollStory';
 import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -28,6 +29,11 @@ export default function HomePage() {
         <ValueProposition />
 
         <SectionDivider variant="brush" />
+
+        {/* Panel 2.5 — El recorrido (scroll-driven storytelling) */}
+        <ScrollStory />
+
+        <SectionDivider />
 
         {/* Panel 3 — Experiencia / Calidad real (Confío) */}
         <VideoSection />
