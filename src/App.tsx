@@ -9,6 +9,7 @@ import ShopPage from './pages/ShopPage';
 import AboutPage from './pages/AboutPage';
 import CommunityPage from './pages/CommunityPage';
 import CheckoutPage from './pages/CheckoutPage';
+import CheckoutResultPage from './pages/CheckoutResultPage';
 import DashboardPage from './pages/DashboardPage';
 import { useEffect } from 'react';
 import CustomCursor from './components/CustomCursor';
@@ -38,6 +39,9 @@ export default function App() {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/community" element={<CommunityPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/checkout/success" element={<CheckoutResultPage variant="success" />} />
+        <Route path="/checkout/failure" element={<CheckoutResultPage variant="failure" />} />
+        <Route path="/checkout/pending" element={<CheckoutResultPage variant="pending" />} />
         <Route path="/dashboard" element={<DashboardPage />} />
       </Routes>
     </Router>

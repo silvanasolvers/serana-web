@@ -75,6 +75,29 @@ export default function CheckoutPage() {
           customizations: undefined,
         })),
       });
+
+      if (form.paymentMethod === 'mercado_pago') {
+        // Hand off to Mercado Pago for the actual payment. The cart stays
+        // untouched until we know the user committed (success page clears it).
+        const mpResp = await fetch('/api/checkout/mp/preference', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ order_id: result.order_id }),
+        });
+        if (!mpResp.ok) {
+          const errorBody = await mpResp.text();
+          throw new Error(`No pudimos abrir Mercado Pago (${mpResp.status}). ${errorBody.slice(0, 240)}`);
+        }
+        const mpData = (await mpResp.json()) as { init_point?: string; sandbox_init_point?: string };
+        const target = mpData.init_point || mpData.sandbox_init_point;
+        if (!target) {
+          throw new Error('Mercado Pago no devolvió un enlace de pago. Intenta nuevamente.');
+        }
+        window.location.href = target;
+        return;
+      }
+
+      // Cash / transfer / cualquier flujo no-online: confirmar inmediatamente.
       setConfirmation({
         orderNumber: result.order_number,
         total: Number(result.total_amount),
@@ -238,10 +261,14 @@ export default function CheckoutPage() {
                   {submitting ? (
                     <>
                       <Loader2 className="w-5 h-5 animate-spin" />
-                      Enviando pedido…
+                      {form.paymentMethod === 'mercado_pago' ? 'Abriendo Mercado Pago…' : 'Enviando pedido…'}
                     </>
                   ) : (
-                    <>Confirmar pedido · {COP(total())}</>
+                    <>
+                      {form.paymentMethod === 'mercado_pago'
+                        ? `Pagar con Mercado Pago · ${COP(total())}`
+                        : `Confirmar pedido · ${COP(total())}`}
+                    </>
                   )}
                 </button>
               </form>
