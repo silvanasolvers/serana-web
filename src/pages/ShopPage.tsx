@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { products } from '../data/products';
+import { useProducts } from '../lib/useProducts';
 import InteractiveProductList from '../components/InteractiveProductList';
 import Navbar from '../components/Navbar';
 import CartDrawer from '../components/CartDrawer';
@@ -14,8 +14,9 @@ type Category = 'all' | 'ensaladas' | 'salsas' | 'sopas' | 'bebidas' | 'frutas' 
 
 export default function ShopPage() {
   const [activeCategory, setActiveCategory] = useState<Category>('all');
+  const { products } = useProducts();
 
-  const filteredProducts = activeCategory === 'all' 
+  const filteredProducts = activeCategory === 'all'
     ? [...products].sort((a, b) => {
         // Combos first when showing "Todos"
         if (a.category === 'combos' && b.category !== 'combos') return -1;

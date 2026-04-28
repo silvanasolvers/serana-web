@@ -1,9 +1,9 @@
 import { motion } from 'motion/react';
-import { products } from '../../data/products';
-
-const featuredProducts = products.slice(0, 4);
+import { useProducts } from '../../lib/useProducts';
 
 export default function EcommerceSection() {
+  const { products } = useProducts();
+  const featuredProducts = products.slice(0, 4);
   return (
     <div className="flex flex-col items-center justify-center w-full h-full px-4">
       <h2 className="mb-16 font-serif text-5xl italic text-serana-forest">La Colección</h2>

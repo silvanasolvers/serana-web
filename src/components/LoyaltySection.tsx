@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Gift, Users, Copy, Check, Sparkles } from 'lucide-react';
-import { products } from '../data/products';
+import { useProducts } from '../lib/useProducts';
 
 export default function LoyaltySection() {
   const [copied, setCopied] = useState(false);
   const referralCode = "SERANA-AMIGOS";
+  const { products } = useProducts();
 
   const handleCopy = () => {
     navigator.clipboard.writeText(referralCode);
