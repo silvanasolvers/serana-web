@@ -157,10 +157,11 @@ async function startServer() {
   // gzip/br responses where it makes sense (HTML, JS, JSON).
   app.use(compression());
 
-  // Security headers. CSP is intentionally permissive for img/font/script
-  // because the site embeds Supabase Storage assets and Mercado Pago redirects
-  // through 3rd-party scripts on its own domain (we only redirect to MP, we
-  // don't embed it here).
+  // Security headers. The Mercado Pago Bricks SDK loads sub-bundles from
+  // http2.mlstatic.com and renders anti-fraud iframes on
+  // www.mercadolibre.com — both have to be allowlisted explicitly because
+  // the SDK bootstraps inline. Without these, brick init fails silently
+  // ("Bricks component initialization failed").
   app.use(
     helmet({
       contentSecurityPolicy: {
@@ -179,19 +180,32 @@ async function startServer() {
             'wss://*.supabase.co',
             'https://api.mercadopago.com',
             'https://*.mercadopago.com',
+            'https://*.mlstatic.com',
+            'https://*.mercadolibre.com',
           ],
           scriptSrc: [
             "'self'",
             "'unsafe-inline'",
             "'unsafe-eval'", // Three.js / shaders compile WebGL programs.
             'https://*.mercadopago.com',
+            'https://*.mlstatic.com',
           ],
-          styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
-          fontSrc: ["'self'", 'data:', 'https://fonts.gstatic.com'],
-          frameSrc: ["'self'", 'https://*.mercadopago.com'],
+          styleSrc: [
+            "'self'",
+            "'unsafe-inline'",
+            'https://fonts.googleapis.com',
+            'https://*.mlstatic.com',
+          ],
+          fontSrc: ["'self'", 'data:', 'https://fonts.gstatic.com', 'https://*.mlstatic.com'],
+          frameSrc: [
+            "'self'",
+            'https://*.mercadopago.com',
+            'https://*.mercadolibre.com',
+          ],
+          workerSrc: ["'self'", 'blob:', 'https://*.mlstatic.com'],
           objectSrc: ["'none'"],
           baseUri: ["'self'"],
-          formAction: ["'self'", 'https://*.mercadopago.com'],
+          formAction: ["'self'", 'https://*.mercadopago.com', 'https://*.mercadolibre.com'],
           frameAncestors: ["'none'"],
           upgradeInsecureRequests: [],
         },
