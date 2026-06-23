@@ -47,8 +47,8 @@ export default function Footer() {
       </div>
 
       {/* ── Editorial signature band ───────────────────────────────────── */}
-      <div className="relative z-10 max-w-6xl mx-auto pt-16 pb-14 border-b border-serana-cream/10">
-        <div className="grid md:grid-cols-[1fr_auto_1fr] items-center gap-8">
+      <div className="relative z-10 max-w-6xl mx-auto pt-10 pb-9 border-b border-serana-cream/10">
+        <div className="grid md:grid-cols-[1fr_auto_1fr] items-center gap-5">
           {/* Left rule + kicker */}
           <div className="hidden md:flex items-center gap-4 justify-end">
             <span className="text-serana-ochre text-[11px] font-bold tracking-[0.5em] uppercase whitespace-nowrap">
@@ -59,7 +59,7 @@ export default function Footer() {
 
           {/* Center — logo + rotating seal */}
           <Link to="/" className="relative flex items-center justify-center group">
-            <div className="relative w-44 h-44 md:w-52 md:h-52 flex items-center justify-center">
+            <div className="relative w-36 h-36 md:w-40 md:h-40 flex items-center justify-center">
               {/* Rotating wordmark seal */}
               <svg
                 className="absolute inset-0 w-full h-full animate-spin-slow text-serana-ochre/70"
@@ -85,7 +85,7 @@ export default function Footer() {
               <img
                 src={LOGO_URL}
                 alt="Serana"
-                className="relative w-32 h-32 md:w-36 md:h-36 object-contain brightness-0 invert group-hover:scale-[1.03] transition-transform duration-500"
+                className="relative w-24 h-24 md:w-28 md:h-28 object-contain brightness-0 invert group-hover:scale-[1.03] transition-transform duration-500"
               />
             </div>
           </Link>
@@ -99,14 +99,14 @@ export default function Footer() {
           </div>
         </div>
 
-        <p className="text-center font-serif italic text-xl md:text-2xl text-serana-cream mt-10 max-w-2xl mx-auto leading-snug">
+        <p className="text-center font-serif italic text-lg md:text-xl text-serana-cream mt-6 max-w-2xl mx-auto leading-snug">
           “Hacer de Colombia un país que come mejor, con <span className="text-serana-ochre">consciencia</span> y satisfacción.”
         </p>
       </div>
 
       {/* ── Trust strip ─────────────────────────────────────────────────── */}
       <div className="relative z-10 max-w-6xl mx-auto">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-5 py-10 border-b border-serana-cream/10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-7 border-b border-serana-cream/10">
           <TrustItem icon={Lock} title="Pago seguro" detail="SSL + Mercado Pago" />
           <TrustItem icon={ShieldCheck} title="Datos protegidos" detail="Ley 1581 / 2012" />
           <TrustItem icon={CreditCard} title="Múltiples métodos" detail="Tarjeta · PSE · Nequi" />
@@ -115,8 +115,8 @@ export default function Footer() {
       </div>
 
       {/* ── Main grid ───────────────────────────────────────────────────── */}
-      <div className="relative z-10 max-w-6xl mx-auto py-12">
-        <div className="grid md:grid-cols-12 gap-10">
+      <div className="relative z-10 max-w-6xl mx-auto py-9">
+        <div className="grid md:grid-cols-12 gap-8">
           {/* Brand block */}
           <div className="md:col-span-5">
             <h4 className="font-serif text-3xl md:text-[2rem] mb-4 text-serana-cream leading-[1.05]">

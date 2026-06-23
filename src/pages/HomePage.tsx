@@ -10,6 +10,9 @@ import Footer from '../components/Footer';
 import VideoSection from '../components/VideoSection';
 import SectionDivider from '../components/SectionDivider';
 import ScrollStory from '../components/ScrollStory';
+import ProteinCountdownBanner from '../components/ProteinCountdownBanner';
+import TestimonialsSection from '../components/TestimonialsSection';
+import TrustCredentialsSection from '../components/TrustCredentialsSection';
 import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -22,6 +25,8 @@ export default function HomePage() {
       <main>
         {/* Panel 1 — Hero (Me atrae) */}
         <Hero />
+
+        <ProteinCountdownBanner />
 
         <SectionDivider label="Filosofía" />
 
@@ -45,6 +50,8 @@ export default function HomePage() {
 
         {/* Panel 5 — Club Serana (Veo razones para quedarme) */}
         <LoyaltySection />
+
+        <TestimonialsSection />
 
         {/* Panel 6 — Comunidad activa (Siento que puedo participar) */}
         <section className="py-12 md:py-16 px-6 bg-serana-cream/50 relative overflow-hidden">
@@ -166,7 +173,8 @@ export default function HomePage() {
         {/* Panel 9 — Soluciones Corporativas (Bajado al final) */}
         <B2BSection />
       </main>
-      
+
+      <TrustCredentialsSection />
       <Footer />
     </div>
   );

@@ -8,9 +8,10 @@ import Footer from '../components/Footer';
 import SectionDivider from '../components/SectionDivider';
 import clsx from 'clsx';
 import { motion } from 'motion/react';
-import { ArrowRight, Search, LayoutGrid, List as ListIcon } from 'lucide-react';
+import { AlertTriangle, ArrowRight, Clock, LayoutGrid, List as ListIcon, Scissors, Search, SlidersHorizontal } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { SerenaIcons, SerenaMark, type SerenaIconName } from '../components/SeranaIcons';
+import { normalizeSearch } from '../lib/search';
 
 type Category = 'all' | 'ensaladas' | 'salsas' | 'sopas' | 'bebidas' | 'frutas' | 'verduras' | 'combos';
 
@@ -72,6 +73,85 @@ function CategoryIcon({ name, className }: { name: SerenaIconName; className?: s
   return <Cmp className={className} />;
 }
 
+function DispatchNotice() {
+  return (
+    <section className="mb-8 rounded-2xl border border-serana-forest/10 bg-white/70 p-4 md:p-5">
+      <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-center">
+        <div className="flex items-start gap-3">
+          <span className="w-10 h-10 rounded-xl bg-serana-forest text-serana-ochre flex items-center justify-center shrink-0">
+            <Clock className="w-5 h-5" strokeWidth={1.7} />
+          </span>
+          <div>
+            <p className="text-[10px] uppercase tracking-[0.3em] text-serana-terracotta font-bold mb-1">Despachos</p>
+            <p className="text-sm text-serana-forest/70 leading-relaxed">
+              Recibimos pedidos de martes a sábado. La disponibilidad y la franja de entrega se confirman por WhatsApp antes del despacho.
+            </p>
+          </div>
+        </div>
+        <a
+          href="https://wa.me/573000000000"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-serana-forest text-serana-cream hover:bg-serana-olive transition-colors text-[10px] uppercase tracking-[0.25em] font-bold"
+        >
+          Contáctanos
+          <ArrowRight className="w-3.5 h-3.5" />
+        </a>
+      </div>
+    </section>
+  );
+}
+
+function MenuGuidance({ activeCategory }: { activeCategory: Category }) {
+  const showCombos = activeCategory === 'all' || activeCategory === 'combos';
+  const showFresh = activeCategory === 'all' || activeCategory === 'frutas' || activeCategory === 'verduras';
+
+  if (!showCombos && !showFresh) return null;
+
+  return (
+    <section className="grid gap-4 md:grid-cols-2 mb-10">
+      {showCombos && (
+        <div className="rounded-2xl border border-serana-forest/10 bg-serana-forest text-serana-cream p-5">
+          <div className="flex items-center gap-2 text-serana-ochre mb-3">
+            <SlidersHorizontal className="w-4 h-4" />
+            <span className="text-[10px] uppercase tracking-[0.28em] font-bold">Combos y kits</span>
+          </div>
+          <h3 className="font-serif text-2xl leading-tight mb-3">Productos semipersonalizables</h3>
+          <p className="text-sm text-serana-cream/72 leading-relaxed font-light">
+            Algunos elementos vienen preseleccionados y otros se eligen según disponibilidad. Las restricciones de cantidad por línea gourmet, tradicional o repetidos se confirman al armar el pedido.
+          </p>
+          <div className="mt-4 grid grid-cols-3 gap-2">
+            {['Base', 'Gourmet', 'Tradicional'].map((item) => (
+              <span key={item} className="rounded-xl bg-white/10 px-3 py-2 text-center text-[9px] uppercase tracking-[0.18em] font-bold">
+                {item}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {showFresh && (
+        <div className="rounded-2xl border border-serana-forest/10 bg-white/75 p-5">
+          <div className="flex items-center gap-2 text-serana-olive mb-3">
+            <Scissors className="w-4 h-4" />
+            <span className="text-[10px] uppercase tracking-[0.28em] font-bold">Mercado fresco</span>
+          </div>
+          <h3 className="font-serif text-2xl text-serana-forest leading-tight mb-3">Cortes según necesidad</h3>
+          <p className="text-sm text-serana-forest/68 leading-relaxed font-light">
+            Las verduras y frutas picadas muestran opciones de corte cuando aplica: zanahoria, pepino y fresa picada ya tienen alternativas visibles en sus fichas.
+          </p>
+          <div className="mt-4 flex items-start gap-2 rounded-xl bg-serana-cream/80 p-3 text-serana-forest/62">
+            <AlertTriangle className="w-4 h-4 text-serana-terracotta shrink-0 mt-0.5" />
+            <p className="text-[11px] leading-relaxed">
+              Hojas verdes como albahaca, cilantro y perejil se manejan por tandas de 150 g cuando así aparece en el producto.
+            </p>
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}
+
 export default function ShopPage() {
   const [activeCategory, setActiveCategory] = useState<Category>('all');
   const [search, setSearch] = useState('');
@@ -88,9 +168,11 @@ export default function ShopPage() {
           })
         : products.filter((p) => p.category === activeCategory);
 
-    const term = search.trim().toLowerCase();
+    const term = normalizeSearch(search);
     if (!term) return base;
-    return base.filter((p) => `${p.name} ${p.category}`.toLowerCase().includes(term));
+    return base.filter((p) =>
+      normalizeSearch(`${p.name} ${p.category} ${p.description} ${p.benefits.join(' ')}`).includes(term),
+    );
   }, [products, activeCategory, search]);
 
   // Featured = top 6 priciest combos (or all combos when fewer than 6).
@@ -159,6 +241,8 @@ export default function ShopPage() {
             </motion.div>
           </div>
         </header>
+
+        <DispatchNotice />
 
         {/* ── Sticky category nav with icons ─────────────────────────────── */}
         <div className="sticky top-20 z-40 -mx-6 px-6 mb-12">
@@ -279,6 +363,8 @@ export default function ShopPage() {
             </div>
           </div>
         </div>
+
+        <MenuGuidance activeCategory={activeCategory} />
 
         {/* ── Featured strip (only when "Todos" + no search) ─────────────── */}
         {featured.length > 0 && <FeaturedStrip products={featured} />}

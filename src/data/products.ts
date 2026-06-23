@@ -502,7 +502,7 @@ export const products: Product[] = [
   },
   {
     id: 'cebolla-puerro',
-    name: 'Cebolla Puerro (Unidad)',
+    name: 'Cebolla Puerro (Libra)',
     price: 5900,
     description: 'Para cremas, salteados y sopas.',
     image: 'https://picsum.photos/seed/cebolla-puerro/400/300',
@@ -574,7 +574,7 @@ export const products: Product[] = [
   },
   {
     id: 'repollo',
-    name: 'Repollo Blanco/Morado (Unidad)',
+    name: 'Repollo Blanco/Morado (Libra)',
     price: 5900,
     description: 'Un alimento completo que te mejora la digestión.',
     image: 'https://picsum.photos/seed/repollo/400/300',
@@ -610,7 +610,7 @@ export const products: Product[] = [
   },
   {
     id: 'penca-sabila',
-    name: 'Penca Sábila (Unidad)',
+    name: 'Penca Sábila (Libra)',
     price: 7900,
     description: 'Sirve como tópico (quemaduras, hidratar la piel y cicatrizar heridas) o para hacer licuados y mejorar tu digestión.',
     image: 'https://picsum.photos/seed/penca-sabila/400/300',
@@ -637,7 +637,7 @@ export const products: Product[] = [
   },
   {
     id: 'lechuga-batavia',
-    name: 'Lechuga Batavia (Unidad)',
+    name: 'Lechuga Batavia (Libra)',
     price: 5900,
     description: 'La inconfundible lechuga batavia para ensaladas, ya lista para consumir.',
     image: 'https://picsum.photos/seed/lechuga-batavia/400/300',
@@ -739,17 +739,17 @@ export const products: Product[] = [
     category: 'verduras', benefits: ['Gourmet', 'Dulce']
   },
   {
-    id: 'ajo', name: 'Ajo (3 unidades)', price: 3900,
+    id: 'ajo', name: 'Ajo (Libra)', price: 3900,
     description: 'Seleccionado con cuidado.', image: 'https://picsum.photos/seed/ajo/400/300',
     category: 'verduras', benefits: ['Esencial', 'Sabor']
   },
   {
-    id: 'lechuga-romana', name: 'Lechuga Romana (Unidad)', price: 5900,
+    id: 'lechuga-romana', name: 'Lechuga Romana (Libra)', price: 5900,
     description: 'Para ensaladas y emparedados.', image: 'https://picsum.photos/seed/lechuga-romana/400/300',
     category: 'verduras', benefits: ['Fresca', 'Crujiente']
   },
   {
-    id: 'cogollo-europeo', name: 'Cogollo Europeo (Unidad)', price: 7900,
+    id: 'cogollo-europeo', name: 'Cogollo Europeo (Libra)', price: 7900,
     description: 'Para ensaladas y emparedados.', image: 'https://picsum.photos/seed/cogollo-europeo/400/300',
     category: 'verduras', benefits: ['Premium', 'Ensaladas']
   },
@@ -779,7 +779,7 @@ export const products: Product[] = [
     category: 'verduras', benefits: ['Picante', 'Versátil']
   },
   {
-    id: 'mazorca', name: 'Bandeja Mazorca (Unidad)', price: 5900,
+    id: 'mazorca', name: 'Bandeja Mazorca (Libra)', price: 5900,
     description: 'Lista para asar o cocinar.', image: 'https://picsum.photos/seed/mazorca/400/300',
     category: 'verduras', benefits: ['Tradicional', 'Versátil']
   },
@@ -814,12 +814,12 @@ export const products: Product[] = [
     category: 'verduras', benefits: ['Nutritiva', 'Versátil']
   },
   {
-    id: 'col-china', name: 'Col China (Unidad)', price: 6900,
+    id: 'col-china', name: 'Col China (Libra)', price: 6900,
     description: 'Ideal para salteados asiáticos.', image: 'https://picsum.photos/seed/col-china/400/300',
     category: 'verduras', benefits: ['Asiática', 'Ligera']
   },
   {
-    id: 'hinojo', name: 'Hinojo (Unidad)', price: 8900,
+    id: 'hinojo', name: 'Hinojo (Libra)', price: 8900,
     description: 'Sabor anisado único.', image: 'https://picsum.photos/seed/hinojo/400/300',
     category: 'verduras', benefits: ['Aromático', 'Digestivo']
   },
@@ -886,7 +886,7 @@ export const products: Product[] = [
     category: 'frutas', benefits: ['Tropical', 'Dulce']
   },
   {
-    id: 'coco-libra', name: 'Coco (Unidad)', price: 8900,
+    id: 'coco-libra', name: 'Coco (Libra)', price: 8900,
     description: 'El sabor dulce inconfundible del coco.', image: 'https://picsum.photos/seed/coco-libra/400/300',
     category: 'frutas', benefits: ['Tropical', 'Energía']
   },
@@ -906,7 +906,7 @@ export const products: Product[] = [
     category: 'frutas', benefits: ['Dulce', 'Delicado']
   },
   {
-    id: 'pitahaya', name: 'Pitahaya (Unidad)', price: 14900,
+    id: 'pitahaya', name: 'Pitahaya (Libra)', price: 14900,
     description: 'Para mejorar tu salud digestiva.', image: 'https://picsum.photos/seed/pitahaya/400/300',
     category: 'frutas', benefits: ['Digestiva', 'Exótica']
   },
@@ -931,12 +931,12 @@ export const products: Product[] = [
     category: 'frutas', benefits: ['Acidita', 'Fresca']
   },
   {
-    id: 'aguacate-hass', name: 'Aguacate Hass (Unidad)', price: 5900,
+    id: 'aguacate-hass', name: 'Aguacate Hass (Libra)', price: 5900,
     description: 'Perfecto para hacer guacamole.', image: 'https://picsum.photos/seed/aguacate-hass/400/300',
     category: 'frutas', benefits: ['Grasas saludables', 'Versátil']
   },
   {
-    id: 'sandia-baby-libra', name: 'Sandía Baby (Unidad)', price: 12900,
+    id: 'sandia-baby-libra', name: 'Sandía Baby (Libra)', price: 12900,
     description: 'Las sandías más dulces.', image: 'https://picsum.photos/seed/sandia-baby-libra/400/300',
     category: 'frutas', benefits: ['Hidratante', 'Dulce']
   },
@@ -951,7 +951,7 @@ export const products: Product[] = [
     category: 'frutas', benefits: ['Digestiva', 'Dulce']
   },
   {
-    id: 'melon-libra', name: 'Melón (Unidad)', price: 9900,
+    id: 'melon-libra', name: 'Melón (Libra)', price: 9900,
     description: 'Dulce y exquisito.', image: 'https://picsum.photos/seed/melon-libra/400/300',
     category: 'frutas', benefits: ['Dulce', 'Refrescante']
   },
@@ -991,7 +991,7 @@ export const products: Product[] = [
     category: 'frutas', benefits: ['Vitamina C', 'Jugos']
   },
   {
-    id: 'aguacate-papelillo', name: 'Aguacate Papelillo (Unidad)', price: 4900,
+    id: 'aguacate-papelillo', name: 'Aguacate Papelillo (Libra)', price: 4900,
     description: 'Especial para acompañar almuerzos y ensaladas.', image: 'https://picsum.photos/seed/aguacate-papelillo/400/300',
     category: 'frutas', benefits: ['Tradicional', 'Versátil']
   },

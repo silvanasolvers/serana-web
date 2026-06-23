@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { MessageCircle, X, Send, ShoppingBag, Loader2 } from 'lucide-react';
+import { Instagram, MessageCircle, Music2, X, Send, ShoppingBag, Loader2 } from 'lucide-react';
 import { useOrderStore } from '../store/useOrderStore';
 import { captureLead } from '../lib/api/leads';
 
@@ -24,6 +24,24 @@ const MENU_ITEMS = [
   { id: '1', name: 'Bowl Mediterráneo', price: 25000 },
   { id: '2', name: 'Wrap de Pollo Pesto', price: 18000 },
   { id: '3', name: 'Jugo Verde Detox', price: 8000 },
+];
+
+const SOCIAL_LINKS = [
+  {
+    label: 'Instagram',
+    href: 'https://www.instagram.com/serana.ac?igsh=bXhwYnprcnR2M25r',
+    Icon: Instagram,
+  },
+  {
+    label: 'TikTok',
+    href: 'https://www.tiktok.com/search?q=serana',
+    Icon: Music2,
+  },
+  {
+    label: 'WhatsApp',
+    href: 'https://wa.me/573000000000',
+    Icon: MessageCircle,
+  },
 ];
 
 export default function ChatBot() {
@@ -138,6 +156,33 @@ export default function ChatBot() {
     <>
       {/* Toggle Button Container */}
       <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end pointer-events-none">
+        <AnimatePresence>
+          {!isOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              className="mb-3 flex flex-col gap-2 pointer-events-auto"
+            >
+              {SOCIAL_LINKS.map(({ label, href, Icon }, idx) => (
+                <motion.a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  title={label}
+                  initial={{ opacity: 0, x: 12 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: idx * 0.04 }}
+                  className="w-11 h-11 rounded-full bg-white text-serana-forest border border-serana-forest/10 shadow-lg flex items-center justify-center hover:bg-serana-ochre hover:text-serana-forest transition-colors"
+                >
+                  <Icon className="w-4 h-4" strokeWidth={1.7} />
+                </motion.a>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
         {/* Notification Bubble */}
         <AnimatePresence>
           {!isOpen && hasUnread && (

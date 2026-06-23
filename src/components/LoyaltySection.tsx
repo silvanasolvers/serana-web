@@ -15,6 +15,17 @@ export default function LoyaltySection() {
   };
 
   const rewardExamples = products.filter(p => ['jugo-verde', 'ensalada-cesar', 'baby-bowl-berry'].includes(p.id));
+  const membershipBenefits = [
+    'Cita nutricionista',
+    'Cita deportólogo',
+    'Cita coach-psicólogo',
+    'Limpieza facial',
+    '1 acceso a evento o taller trimestral',
+    'Charlas y talleres online',
+    'Descuentos especiales con aliados',
+    'Networking de alto nivel',
+    '1 ancheta Serana',
+  ];
 
   return (
     <section className="py-16 px-6 bg-serana-cream relative overflow-hidden">
@@ -67,6 +78,25 @@ export default function LoyaltySection() {
             <p className="text-serana-forest/70 leading-relaxed font-light text-xs">
               Con cada compra acumula semillas que puedes convertir en beneficios, productos y experiencias pensadas para seguir acompañando tu bienestar.
             </p>
+          </div>
+
+          <div className="mb-6 rounded-2xl border border-serana-olive/20 bg-white/70 p-4">
+            <div className="flex items-center justify-between gap-3 mb-3">
+              <h4 className="font-serif text-lg text-serana-forest leading-tight">
+                Membresía trimestral
+              </h4>
+              <span className="text-[8px] uppercase tracking-[0.25em] font-bold text-serana-terracotta bg-serana-terracotta/10 rounded-full px-2 py-1">
+                3 meses
+              </span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {membershipBenefits.map((benefit) => (
+                <div key={benefit} className="flex items-center gap-2 text-[10px] text-serana-forest/70 font-bold uppercase tracking-[0.12em]">
+                  <Check className="w-3 h-3 text-serana-olive shrink-0" strokeWidth={3} />
+                  <span>{benefit}</span>
+                </div>
+              ))}
+            </div>
           </div>
 
           <div className="space-y-2.5 mb-6">

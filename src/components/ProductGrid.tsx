@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Search, LayoutGrid, List as ListIcon } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, Scissors, Search, LayoutGrid, List as ListIcon } from 'lucide-react';
 import { type Product } from '../store/useCartStore';
 import { Spark } from './SeranaIcons';
 import QuantityControl from './QuantityControl';
+import { normalizeSearch } from '../lib/search';
 
 const COP = (n: number) =>
   new Intl.NumberFormat('es-CO', {
@@ -65,9 +66,11 @@ export default function ProductGrid({
   }, [products, pageSize, search]);
 
   const filtered = useMemo(() => {
-    const term = search.trim().toLowerCase();
+    const term = normalizeSearch(search);
     if (!term) return products;
-    return products.filter((p) => `${p.name} ${p.category}`.toLowerCase().includes(term));
+    return products.filter((p) =>
+      normalizeSearch(`${p.name} ${p.category} ${p.description} ${p.benefits.join(' ')}`).includes(term),
+    );
   }, [products, search]);
 
   const visible = filtered.slice(0, visibleCount);
@@ -95,7 +98,7 @@ export default function ProductGrid({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-7"
+            className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-7"
           >
             {visible.map((product, i) => (
               <GalleryCard key={product.id} product={product} index={i} />
@@ -228,6 +231,8 @@ function ToolbarToggle({
 }
 
 function GalleryCard({ product, index }: { product: Product; index: number }) {
+  const cutOptions = getCutOptions(product);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 24 }}
@@ -260,14 +265,29 @@ function GalleryCard({ product, index }: { product: Product; index: number }) {
           )}
         </div>
 
-        <div className="p-4 flex items-end justify-between gap-3">
+        <div className="p-3 md:p-4 flex flex-col gap-3">
           <div className="min-w-0">
-            <h3 className="font-serif text-lg text-serana-forest leading-tight tracking-tight line-clamp-2">
+            <h3 className="font-serif text-base md:text-lg text-serana-forest leading-tight tracking-tight line-clamp-2">
               {product.name}
             </h3>
-            <p className="mt-1 font-bold text-serana-terracotta text-sm">{COP(product.price)}</p>
+            <p className="mt-1 text-[11px] md:text-xs text-serana-forest/62 leading-snug line-clamp-2">{product.description}</p>
+            <div className="mt-2 flex flex-wrap gap-1">
+              {product.benefits.slice(0, 2).map((benefit) => (
+                <span key={benefit} className="inline-flex items-center gap-1 rounded-full bg-serana-olive/10 px-2 py-1 text-[8px] uppercase tracking-[0.15em] font-bold text-serana-forest/70">
+                  <CheckCircle2 className="w-2.5 h-2.5 text-serana-olive" />
+                  {benefit}
+                </span>
+              ))}
+            </div>
+            {cutOptions.length > 0 && (
+              <ProductCutOptions options={cutOptions} compact />
+            )}
+            <ProductNotice compact />
           </div>
-          <QuantityControl product={product} variant="dark" />
+          <div className="flex items-center justify-between gap-2">
+            <span className="font-bold text-serana-terracotta text-sm md:text-base">{COP(product.price)}</span>
+            <QuantityControl product={product} variant="dark" />
+          </div>
         </div>
       </div>
     </motion.div>
@@ -275,6 +295,8 @@ function GalleryCard({ product, index }: { product: Product; index: number }) {
 }
 
 function ListRow({ product, index }: { product: Product; index: number }) {
+  const cutOptions = getCutOptions(product);
+
   return (
     <motion.li
       initial={{ opacity: 0, x: -10 }}
@@ -292,10 +314,58 @@ function ListRow({ product, index }: { product: Product; index: number }) {
       />
       <div className="flex-1 min-w-0">
         <p className="font-serif text-base text-serana-forest leading-tight truncate">{product.name}</p>
-        <p className="text-[10px] uppercase tracking-widest font-bold text-serana-forest/50">{product.category}</p>
+        <p className="text-[11px] text-serana-forest/62 line-clamp-1">{product.description}</p>
+        <div className="mt-1 flex flex-wrap gap-1.5">
+          {product.benefits.slice(0, 2).map((benefit) => (
+            <span key={benefit} className="text-[8px] uppercase tracking-[0.16em] font-bold text-serana-forest/50">
+              {benefit}
+            </span>
+          ))}
+        </div>
+        {cutOptions.length > 0 && <ProductCutOptions options={cutOptions} />}
       </div>
       <span className="font-bold text-serana-terracotta tabular-nums whitespace-nowrap">{COP(product.price)}</span>
       <QuantityControl product={product} variant="soft" />
     </motion.li>
   );
+}
+
+function ProductNotice({ compact = false }: { compact?: boolean }) {
+  return (
+    <div className={`mt-2 flex items-start gap-1.5 text-serana-forest/48 ${compact ? 'text-[8px]' : 'text-[9px]'}`}>
+      <AlertTriangle className="w-3 h-3 text-serana-terracotta shrink-0 mt-0.5" />
+      <span className="leading-snug">Revisa alérgenos y conservación antes de ordenar.</span>
+    </div>
+  );
+}
+
+function ProductCutOptions({ options, compact = false }: { options: string[]; compact?: boolean }) {
+  return (
+    <div className="mt-2">
+      <div className="flex items-center gap-1.5 text-serana-olive mb-1">
+        <Scissors className="w-3 h-3" />
+        <span className="text-[8px] uppercase tracking-[0.18em] font-bold">Personaliza corte</span>
+      </div>
+      <div className="flex flex-wrap gap-1">
+        {options.map((option) => (
+          <span
+            key={option}
+            className={`rounded-full border border-serana-forest/10 bg-serana-cream/70 text-serana-forest/70 font-bold uppercase tracking-[0.12em] ${
+              compact ? 'px-1.5 py-0.5 text-[7px]' : 'px-2 py-0.5 text-[8px]'
+            }`}
+          >
+            {option}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function getCutOptions(product: Product) {
+  const text = normalizeSearch(product.name);
+  if (text.includes('zanahoria')) return ['Rayada', 'Julianas', 'Bastones', 'Cubos', 'Rodajas'];
+  if (text.includes('pepino')) return ['Cubos', 'Rodajas'];
+  if (text.includes('fresa') && text.includes('picada')) return ['Rodajas', 'Cubos', 'Cuartos'];
+  return [];
 }

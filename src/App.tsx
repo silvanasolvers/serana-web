@@ -60,8 +60,11 @@ export default function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/shop" element={<ShopPage />} />
+          <Route path="/menu" element={<ShopPage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/nosotros" element={<AboutPage />} />
           <Route path="/community" element={<CommunityPage />} />
+          <Route path="/comunidad" element={<CommunityPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/checkout/success" element={<CheckoutResultPage variant="success" />} />
           <Route path="/checkout/failure" element={<CheckoutResultPage variant="failure" />} />

@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom';
-import { Menu, X, Check } from 'lucide-react';
+import { Menu, X, Check, MessageCircle } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { useCartStore } from '../store/useCartStore';
 import { motion, AnimatePresence } from 'motion/react';
 import clsx from 'clsx';
 import { MarketBasket } from './SeranaIcons';
+
+const WHATSAPP_URL = 'https://wa.me/573000000000';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -83,6 +85,15 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center space-x-6">
+          <a
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden lg:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-serana-forest text-serana-cream hover:bg-serana-olive transition-colors text-[10px] font-bold tracking-[0.22em] uppercase"
+          >
+            <MessageCircle className="w-3.5 h-3.5" />
+            Contáctanos
+          </a>
           {/* Hours chip — implies curated availability without screaming */}
           <div className="hidden lg:flex items-center gap-2 text-[#273617]/55 text-[9px] font-bold tracking-[0.4em] uppercase">
             <span>Mar — Sáb</span>
@@ -201,6 +212,18 @@ export default function Navbar() {
                   </Link>
                 </motion.div>
               ))}
+              <motion.a
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.35 }}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-serana-forest text-serana-cream font-bold uppercase tracking-[0.22em] text-[11px]"
+              >
+                <MessageCircle className="w-4 h-4" />
+                Contáctanos
+              </motion.a>
             </div>
           </motion.div>
         )}
