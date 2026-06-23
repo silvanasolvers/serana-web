@@ -16,7 +16,7 @@ export const products: Product[] = [
     name: 'Ceviche de Mango (Libra)',
     price: 14900,
     description: 'Una joya hecha ensalada: fresca, dulce y su sabor inconfundible acevichado.',
-    image: 'https://qlgjqvgjuscquhspjqdp.supabase.co/storage/v1/object/public/AETHERA-DOCS/cerviche%20de%20mango.jpeg',
+    image: 'https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/ceviche_de_mango_producto.jpeg',
     category: 'ensaladas',
     benefits: ['Rico en vitamina C', 'Bajo en calorías']
   },
