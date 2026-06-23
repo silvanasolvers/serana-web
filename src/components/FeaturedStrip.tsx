@@ -14,7 +14,7 @@ const COP = (n: number) =>
   }).format(n);
 
 /**
- * Horizontal "Recomendados de la casa" strip — used at the top of the menu
+ * Horizontal "Favoritos de la casa" strip — used at the top of the menu
  * when no category filter is active so visitors land on something specific
  * instead of the full 143-product list.
  */
@@ -33,10 +33,10 @@ export default function FeaturedStrip({ products }: { products: Product[] }) {
         <div>
           <span className="inline-flex items-center gap-3 text-serana-terracotta font-bold tracking-[0.4em] uppercase text-[10px] mb-3">
             <Spark className="w-3 h-3" />
-            Recomendados de la casa
+            Favoritos de la casa
           </span>
           <h3 className="font-serif text-serana-forest text-2xl md:text-3xl leading-tight tracking-tight">
-            Lo que más <span className="italic text-serana-olive">pedimos esta semana</span>
+            Lo que más <span className="italic text-serana-olive">pedimos</span>
           </h3>
         </div>
         <div className="hidden sm:flex items-center gap-2">

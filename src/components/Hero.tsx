@@ -2,9 +2,6 @@ import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const today = new Date();
-const editionNumber = String(((today.getMonth() + 1) % 12) + 1).padStart(2, '0'); // simple monthly counter
-
 export default function Hero() {
   return (
     <section className="relative min-h-[60vh] flex items-center bg-[#F9F7F2] overflow-hidden pt-36 md:pt-40 pb-12 px-4 md:px-8">
@@ -28,7 +25,7 @@ export default function Hero() {
               <div className="flex items-center gap-3 mb-3">
                 <span className="w-10 h-px bg-[#BC6C25]"></span>
                 <span className="text-[#BC6C25] font-sans text-[9px] font-bold tracking-[0.4em] uppercase">
-                  Mercado Serana · Bogotá · Edición {editionNumber}
+                  Alimentación Consciente
                 </span>
               </div>
 
@@ -51,7 +48,7 @@ export default function Hero() {
               </h1>
 
               <p className="text-sm md:text-base text-[#273617]/80 font-light leading-relaxed max-w-md mb-7 ml-1">
-                Cocina honesta, ingredientes reales y un menú que cambia con la temporada. Hecho en Bogotá, para acompañar tu semana.
+                En Serana transformamos ingredientes reales en experiencias que nutren tu cuerpo, elevan tu energía y acompañan tu ritmo de vida.
               </p>
 
               <div className="flex flex-wrap items-center gap-4 ml-1">
@@ -76,11 +73,11 @@ export default function Hero() {
 
               {/* Hours strip — restraint, in Spanish */}
               <div className="mt-10 flex items-center gap-4 text-[#273617]/55 text-[9px] font-bold tracking-[0.4em] uppercase">
-                <span>Mar — Sáb</span>
+                <span>100% Orgánico</span>
                 <span className="w-1 h-1 rounded-full bg-[#273617]/30" />
-                <span>10am — 6pm</span>
+                <span>Natural</span>
                 <span className="w-1 h-1 rounded-full bg-[#273617]/30" />
-                <span>Cra · Bogotá</span>
+                <span>Fresco</span>
               </div>
             </motion.div>
           </div>
@@ -100,7 +97,7 @@ export default function Hero() {
               >
                 <img
                   src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=1760&auto=format&fit=crop"
-                  alt="Bowl Serana"
+                  alt="Healthy Bowl"
                   className="w-full h-full object-cover"
                   loading="eager"
                 />
@@ -118,7 +115,7 @@ export default function Hero() {
                     />
                     <text className="text-[10px] uppercase font-bold tracking-[0.08em] fill-[#273617]">
                       <textPath href="#circlePath" startOffset="0%">
-                        Serana · Mercado consciente · Hecho en Bogotá ·
+                        100% Orgánico • Natural • Fresco •
                       </textPath>
                     </text>
                   </svg>

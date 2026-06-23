@@ -17,23 +17,23 @@ const VALUES: Array<{ number: string; title: string; italic: string; body: strin
   {
     number: '01',
     title: 'Consciencia',
-    italic: 'en cada elección',
+    italic: '',
     body: 'Elegimos con intención: lo que ofrecemos, cómo lo hacemos y el impacto que dejamos en cada paso. Nada es accidente.',
     tag: 'Elegir Serana es elegir consciencia',
     Icon: Leaf,
   },
   {
     number: '02',
-    title: 'Bienestar',
-    italic: 'que se siente',
+    title: 'Bienestar Integral',
+    italic: '',
     body: 'Una alimentación que no solo nutre el cuerpo, sino que también aporta una mejor forma de vivir el día a día.',
     tag: 'Comer bien también es sentirse bien',
     Icon: Drop,
   },
   {
     number: '03',
-    title: 'Cuidado',
-    italic: 'en cada detalle',
+    title: 'Cuidado en cada detalle',
+    italic: '',
     body: 'Desde la preparación hasta la entrega, cuidamos cada punto de contacto para que la experiencia se sienta tan bien como el producto.',
     tag: 'El cuidado se nota',
     Icon: Spark,
@@ -42,20 +42,20 @@ const VALUES: Array<{ number: string; title: string; italic: string; body: strin
 
 const CULTURE: Array<{ title: string; italic: string; body: string; Icon: IconCmp }> = [
   {
-    title: 'Practicidad',
-    italic: 'premium',
+    title: 'Practicidad Premium',
+    italic: '',
     body: 'Creamos soluciones que simplifican tu rutina sin sacrificar calidad, frescura ni experiencia.',
     Icon: Hourglass,
   },
   {
-    title: 'Innovación',
-    italic: 'consciente',
+    title: 'Innovación Consciente',
+    italic: '',
     body: 'Exploramos nuevas formas de nutrir, combinando funcionalidad, sabor y una mirada más inteligente sobre el bienestar.',
     Icon: Sprout,
   },
   {
-    title: 'Origen',
-    italic: 'sostenible',
+    title: 'Sostenibilidad',
+    italic: '',
     body: 'Buscamos decisiones más responsables en lo que elegimos, en cómo operamos y en el impacto que dejamos.',
     Icon: Seed,
   },
@@ -78,7 +78,7 @@ export default function AboutPage() {
                 className="inline-flex items-center gap-3 text-serana-terracotta font-bold tracking-[0.4em] uppercase text-[10px] mb-5"
               >
                 <span className="w-10 h-px bg-serana-terracotta/60" />
-                Mercado Serana · Manifiesto · Edición {editionNumber}
+                Nuestra Esencia
               </motion.span>
               <motion.h1
                 initial={{ opacity: 0, y: 24 }}
@@ -88,7 +88,7 @@ export default function AboutPage() {
               >
                 Bienestar con
                 <br />
-                <span className="italic text-serana-olive">consciencia y cariño</span>.
+                <span className="italic text-serana-olive">consciencia y cariño</span>
               </motion.h1>
             </div>
             <motion.div
@@ -98,7 +98,7 @@ export default function AboutPage() {
               className="lg:col-span-4 lg:pt-12"
             >
               <p className="text-base text-serana-forest/70 font-light leading-relaxed border-l border-serana-forest/15 pl-5 max-w-sm">
-                Serana nace para hacer del bienestar una experiencia simple, deliciosa y consciente. Cocina honesta, ingredientes reales y un cuidado que se siente.
+                Serana nace para hacer del bienestar una experiencia más simple, deliciosa y consciente, con alimentos frescos y un cuidado que se siente.
               </p>
               <div className="mt-5 flex items-center gap-4 text-[10px] uppercase tracking-[0.3em] text-serana-forest/50 font-bold">
                 <span>Mar — Sáb</span>
@@ -120,7 +120,7 @@ export default function AboutPage() {
               kicker: 'Lo que hacemos',
               title: 'Hacemos que comer bien se sienta',
               italic: 'fácil, fresco y consciente',
-              body: 'Creamos opciones prácticas y deliciosas que simplifican tu día sin desconectarte de lo que te hace bien. Sin atajos, sin compromisos vacíos.',
+              body: 'Creamos opciones prácticas y deliciosas que simplifican tu día sin desconectarte de lo que te hace bien.',
               accent: 'olive',
               number: 'I',
             },
@@ -128,7 +128,7 @@ export default function AboutPage() {
               kicker: 'Hacia dónde vamos',
               title: 'Inspirar una forma más',
               italic: 'sana, práctica y sostenible',
-              body: 'Soñamos con una cultura donde nutrirse bien sea parte natural de la rutina y no un esfuerzo extraordinario. Un país que come mejor, con cariño.',
+              body: 'Soñamos con una cultura donde nutrirse bien sea parte natural de la rutina y no un esfuerzo extraordinario.',
               accent: 'terracotta',
               number: 'II',
             },
@@ -171,13 +171,11 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12 items-end">
             <div className="lg:col-span-7">
               <h2 className="font-serif text-serana-forest text-3xl md:text-5xl tracking-tight leading-tight">
-                Tres principios
-                <br />
-                que <span className="italic text-serana-ochre">nos sostienen</span>.
+                Valores <span className="italic text-serana-ochre">Insignia</span>
               </h2>
             </div>
             <p className="lg:col-span-5 text-sm text-serana-forest/65 font-light leading-relaxed border-l border-serana-forest/15 pl-5 max-w-md">
-              Cada decisión que tomamos pasa por uno de estos filtros. Si no, no es Serana.
+              Los principios que dan forma a cada experiencia Serana.
             </p>
           </div>
 
@@ -209,8 +207,12 @@ export default function AboutPage() {
                   </div>
                   <h3 className="font-serif text-2xl md:text-3xl text-serana-forest leading-tight tracking-tight relative z-10">
                     {val.title}
-                    <br />
-                    <span className="italic text-serana-olive">{val.italic}</span>.
+                    {val.italic && (
+                      <>
+                        <br />
+                        <span className="italic text-serana-olive">{val.italic}</span>.
+                      </>
+                    )}
                   </h3>
                   <p className="mt-5 text-serana-forest/70 font-light leading-relaxed text-[14px] relative z-10">
                     {val.body}
@@ -266,15 +268,13 @@ export default function AboutPage() {
             >
               <span className="inline-flex items-center gap-3 text-serana-olive font-bold tracking-[0.4em] uppercase text-[10px] mb-4">
                 <span className="w-10 h-px bg-serana-olive/60" />
-                Cultura de la casa
+                Cultura Serana
               </span>
               <h2 className="font-serif text-serana-forest text-4xl md:text-5xl leading-[0.95] tracking-tight">
-                Cuidado de oficio,
-                <br />
-                <span className="italic text-serana-ochre">sin atajos</span>.
+                Cultura <span className="italic text-serana-ochre">Serana</span>
               </h2>
               <p className="mt-6 text-serana-forest/70 font-light leading-relaxed text-base max-w-md">
-                Nuestra cultura nace del equilibrio entre practicidad, consciencia e innovación. Convertimos el bienestar en una experiencia simple, cuidada y contemporánea.
+                Nuestra cultura nace del equilibrio entre practicidad, consciencia e innovación. Así convertimos el bienestar en una experiencia más simple, cuidada y contemporánea.
               </p>
 
               <div className="mt-10 space-y-6">
@@ -294,7 +294,8 @@ export default function AboutPage() {
                       </div>
                       <div>
                         <h4 className="font-serif text-xl md:text-2xl text-serana-forest leading-tight tracking-tight">
-                          {item.title} <span className="italic text-serana-olive">{item.italic}</span>.
+                          {item.title}
+                          {item.italic && <span className="italic text-serana-olive"> {item.italic}</span>}
                         </h4>
                         <p className="mt-2 text-serana-forest/70 font-light leading-relaxed text-sm max-w-md">
                           {item.body}
@@ -324,15 +325,15 @@ export default function AboutPage() {
             <div className="relative z-10 p-10 md:p-14 lg:p-20 text-center">
               <SerenaMark className="w-10 h-10 text-serana-ochre mx-auto mb-6" />
               <span className="inline-flex items-center gap-3 text-serana-ochre font-bold tracking-[0.4em] uppercase text-[10px] mb-5">
-                Visítanos en Bogotá
+                Nuestra esencia
               </span>
               <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl tracking-tight leading-[0.95] max-w-3xl mx-auto">
-                Te invitamos a sentir
+                Bienestar con
                 <br />
-                <span className="italic text-serana-ochre">cómo se cuida</span>.
+                <span className="italic text-serana-ochre">consciencia y cariño</span>
               </h2>
               <p className="mt-6 text-base text-serana-cream/70 font-light leading-relaxed max-w-xl mx-auto">
-                Cra · Bogotá, Colombia. Martes a sábado, 10am a 6pm. Pasa por el menú, conoce al equipo y llévate algo que te haga bien.
+                Serana nace para hacer del bienestar una experiencia más simple, deliciosa y consciente, con alimentos frescos y un cuidado que se siente.
               </p>
               <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
                 <Link

@@ -7,7 +7,6 @@ const LOGO_URL =
   'https://qlgjqvgjuscquhspjqdp.supabase.co/storage/v1/object/public/AETHERA-DOCS/LOGO%20PRINCIPAL-07.png';
 
 const today = new Date();
-const editionNumber = String(((today.getMonth() + 1) % 12) + 1).padStart(2, '0');
 
 export default function Footer() {
   const [email, setEmail] = useState('');
@@ -53,7 +52,7 @@ export default function Footer() {
           {/* Left rule + kicker */}
           <div className="hidden md:flex items-center gap-4 justify-end">
             <span className="text-serana-ochre text-[11px] font-bold tracking-[0.5em] uppercase whitespace-nowrap">
-              Mercado Serana
+              Serana
             </span>
             <span className="h-px w-20 bg-serana-ochre/40" />
           </div>
@@ -76,7 +75,7 @@ export default function Footer() {
                 </defs>
                 <text className="fill-current text-[7px] uppercase font-bold tracking-[0.28em]">
                   <textPath href="#footerSealPath" startOffset="0%">
-                    Cocina honesta · Hecho en Bogotá · Temporada {editionNumber} ·
+                    Serana Wellness S.A.S. · Bogotá, Colombia · contacto@serana.co ·
                   </textPath>
                 </text>
               </svg>
@@ -95,7 +94,7 @@ export default function Footer() {
           <div className="hidden md:flex items-center gap-4">
             <span className="h-px w-20 bg-serana-ochre/40" />
             <span className="text-serana-ochre text-[11px] font-bold tracking-[0.5em] uppercase whitespace-nowrap">
-              Edición {editionNumber}
+              Alimentación Consciente
             </span>
           </div>
         </div>
@@ -121,11 +120,10 @@ export default function Footer() {
           {/* Brand block */}
           <div className="md:col-span-5">
             <h4 className="font-serif text-3xl md:text-[2rem] mb-4 text-serana-cream leading-[1.05]">
-              Cocina de temporada,<br />
-              <span className="italic text-serana-ochre">hecha despacio.</span>
+              Serana.
             </h4>
             <p className="opacity-80 font-light text-[15px] leading-relaxed max-w-sm mb-7">
-              Un menú que cambia con la cosecha y se prepara cada mañana en nuestra casa de Bogotá.
+              Hacer de Colombia un país que come mejor, con consciencia y satisfacción.
             </p>
 
             {/* Socials — visual icons, not text */}
@@ -147,18 +145,18 @@ export default function Footer() {
             {/* Visit card — boutique signal */}
             <div className="rounded-2xl border border-serana-cream/10 bg-white/[0.03] p-5 max-w-sm">
               <p className="text-serana-ochre font-bold tracking-[0.4em] uppercase text-[9px] mb-3">
-                Visítanos
+                Soporte WhatsApp
               </p>
               <div className="flex items-start gap-3 mb-2.5">
                 <MapPin className="w-4 h-4 text-serana-cream/60 shrink-0 mt-0.5" strokeWidth={1.5} />
                 <p className="font-serif text-base leading-tight text-serana-cream">
-                  Cra · Bogotá, Colombia
+                  Bogotá, Colombia
                 </p>
               </div>
               <div className="flex items-start gap-3">
                 <Clock className="w-4 h-4 text-serana-cream/60 shrink-0 mt-0.5" strokeWidth={1.5} />
                 <p className="text-[12px] opacity-75 leading-snug">
-                  Martes a sábado <span className="opacity-50">·</span> 10 am — 6 pm
+                  Lun a Sáb <span className="opacity-50">·</span> 8am – 6pm
                 </p>
               </div>
             </div>
@@ -170,9 +168,9 @@ export default function Footer() {
               Explorar
             </h4>
             <ul className="space-y-3 text-sm tracking-wide">
-              <FooterLink to="/shop">Menú de la semana</FooterLink>
+              <FooterLink to="/shop">Menú</FooterLink>
               <FooterLink to="/shop?filter=subscription">Suscripciones</FooterLink>
-              <FooterLink to="/about">Nuestra historia</FooterLink>
+              <FooterLink to="/about">Nuestra Historia</FooterLink>
               <FooterLink to="/community">Comunidad</FooterLink>
             </ul>
           </div>
@@ -180,10 +178,10 @@ export default function Footer() {
           {/* Newsletter — moved into the grid for tighter rhythm */}
           <div className="md:col-span-4">
             <h4 className="font-bold uppercase tracking-[0.25em] text-[10px] mb-3 text-serana-ochre">
-              Carta del mercado
+              Recibe recetas + descuentos en tu correo
             </h4>
             <p className="text-[12px] text-serana-cream/65 leading-snug mb-4">
-              Recetas, temporada y descuentos. Una vez al mes, sin ruido.
+              Sin spam. Cancelas con un clic. Datos tratados según la Ley 1581/2012.
             </p>
             <form onSubmit={handleSubscribe} className="space-y-2">
               <div className="relative">
@@ -215,7 +213,7 @@ export default function Footer() {
                   ? 'Revisa tu correo e intenta de nuevo.'
                   : status === 'sent'
                     ? '¡Listo! Te escribimos pronto.'
-                    : 'Cancelas con un clic. Datos según Ley 1581/2012.'}
+                    : 'Cancelas con un clic. Datos tratados según la Ley 1581/2012.'}
               </p>
             </form>
           </div>
@@ -226,7 +224,7 @@ export default function Footer() {
       <div className="relative z-10 max-w-6xl mx-auto border-t border-serana-cream/10 pt-6">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] uppercase tracking-[0.18em] text-serana-cream/45">
           <p className="text-center md:text-left">
-            © {today.getFullYear()} Serana Wellness S.A.S. · Hecho en Bogotá
+            © {today.getFullYear()} Serana Wellness S.A.S. — Todos los derechos reservados.
           </p>
           <div className="flex flex-wrap gap-6 justify-center">
             <Link to="/privacidad" className="hover:text-serana-ochre transition-colors">

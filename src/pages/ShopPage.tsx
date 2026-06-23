@@ -20,7 +20,7 @@ const CATEGORIES: Array<{ id: Category; label: string; icon: SerenaIconName }> =
   { id: 'ensaladas', label: 'Ensaladas', icon: 'Bowl' },
   { id: 'sopas', label: 'Sopas y cremas', icon: 'Pot' },
   { id: 'bebidas', label: 'Bebidas y shots', icon: 'Drop' },
-  { id: 'salsas', label: 'Salsas', icon: 'Citrus' },
+  { id: 'salsas', label: 'Salsas y complementos', icon: 'Citrus' },
   { id: 'frutas', label: 'Mercado fresco', icon: 'Seed' },
   { id: 'verduras', label: 'Verduras', icon: 'Sprout' },
 ];
@@ -52,9 +52,9 @@ const COMPLEMENTS: Array<{
   { title: 'Agrégale una', italic: 'bebida', desc: 'Un shot funcional o jugo que potencia tu energía, digestión o enfoque.', action: 'bebidas', icon: 'Drop' },
   { title: 'Combínalo con una', italic: 'salsa', desc: 'Pesto, hummus, chimichurri o cualquier vinagreta para elevar tu plato.', action: 'salsas', icon: 'Citrus' },
   { title: 'Prueba un', italic: 'shot funcional', desc: 'Metabólico, serenidad, concentración, muscular o piel perfecta. Tu cuerpo te lo agradece.', action: 'bebidas', icon: 'Spark' },
-  { title: 'Completa con una', italic: 'crema', desc: 'Acompaña tu ensalada con una crema o sopa para una comida completa.', action: 'sopas', icon: 'Pot' },
+  { title: 'Completa tu', italic: 'elección', desc: 'Acompaña tu ensalada con una crema o sopa para una comida completa.', action: 'sopas', icon: 'Pot' },
   { title: 'Arma tu', italic: 'ritual', desc: 'Ensalada + bebida + salsa + shot. Crea tu combinación perfecta de bienestar.', action: 'combos', icon: 'SerenaMark' },
-  { title: 'Suma frutas', italic: 'frescas', desc: 'Completa tu pedido con frutas de temporada seleccionadas para ti.', action: 'frutas', icon: 'Seed' },
+  { title: 'Acompáñalo con', italic: 'frutas frescas', desc: 'Completa tu pedido con frutas de temporada seleccionadas para ti.', action: 'frutas', icon: 'Seed' },
 ];
 
 const RITUAL_OPTIONS: Array<{
@@ -129,7 +129,7 @@ export default function ShopPage() {
                 className="inline-flex items-center gap-3 text-serana-terracotta font-bold tracking-[0.4em] uppercase text-[10px] mb-5"
               >
                 <span className="w-10 h-px bg-serana-terracotta/60" />
-                El Mercado Serana · Edición {String(new Date().getMonth() + 1).padStart(2, '0')}
+                El Mercado Serana
               </motion.span>
               <motion.h1
                 initial={{ opacity: 0, y: 24 }}
@@ -139,7 +139,7 @@ export default function ShopPage() {
               >
                 Elige tu forma
                 <br />
-                de <span className="italic text-serana-olive">nutrirte</span>.
+                de <span className="italic text-serana-olive">nutrirte</span>
               </motion.h1>
             </div>
             <motion.div
@@ -149,7 +149,7 @@ export default function ShopPage() {
               className="lg:col-span-4 lg:pt-12"
             >
               <p className="text-base text-serana-forest/70 font-light leading-relaxed max-w-sm border-l border-serana-forest/15 pl-5">
-                Una colección curada de comida real: ensaladas frescas, sopas con cuerpo, jugos vivos y combos que se adaptan a tu semana.
+                Explora por categorías y encuentra opciones frescas, conscientes y deliciosas para tu alimentación diaria.
               </p>
               <div className="mt-5 flex items-center gap-4 text-[10px] uppercase tracking-[0.3em] text-serana-forest/50 font-bold">
                 <span>{products.length} referencias</span>
@@ -304,13 +304,11 @@ export default function ShopPage() {
                 ¿No sabes por dónde empezar?
               </span>
               <h2 className="font-serif text-serana-forest text-3xl md:text-5xl leading-tight tracking-tight">
-                Cuatro caminos para
-                <br />
-                <span className="italic text-serana-ochre">empezar tu menú</span>.
+                Te ayudamos a <span className="italic text-serana-ochre">elegir</span>
               </h2>
             </div>
             <p className="lg:col-span-5 text-sm text-serana-forest/65 font-light leading-relaxed border-l border-serana-forest/15 pl-5 max-w-md">
-              Cada perfil corresponde a una intención. Toca el que más se parezca a ti hoy y filtramos el menú al instante.
+              Elige según lo que necesitas hoy y filtra el menú al instante.
             </p>
           </div>
 
@@ -420,13 +418,13 @@ export default function ShopPage() {
                     Haz de Serana tu rutina
                   </span>
                   <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl tracking-tight leading-[0.95]">
-                    Nutrirte bien no
+                    Nutrirse bien no
                     <br />
                     tiene que ser <span className="italic text-serana-ochre">complicado</span>.
                   </h2>
                 </div>
                 <p className="lg:col-span-5 text-base text-serana-cream/70 font-light leading-relaxed border-l border-serana-cream/20 pl-5 max-w-md">
-                  Arma tu pedido semanal, activa tu suscripción o simplemente elige lo que te provoca hoy. Tú decides el ritmo.
+                  Arma tu pedido semanal, activa tu suscripción o simplemente elige lo que te provoca hoy. Tú decides cómo hacer de Serana parte de tu rutina.
                 </p>
               </div>
 
@@ -469,7 +467,7 @@ export default function ShopPage() {
               <div className="mt-10 flex items-center gap-3 text-serana-cream/50">
                 <SerenaMark className="w-6 h-6 text-serana-ochre" />
                 <span className="text-[10px] uppercase tracking-[0.4em] font-bold">
-                  Serana · Mercado consciente
+                  Club Serana
                 </span>
               </div>
             </div>

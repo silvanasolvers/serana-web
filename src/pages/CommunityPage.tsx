@@ -32,10 +32,10 @@ const EVENTS: Event[] = [
     number: '01',
     kicker: 'Reto · 7 días',
     date: '15 Oct',
-    title: 'Reinicio digestivo',
-    italic: 'guiado',
-    body: 'Una semana para reiniciar tu sistema digestivo con guías diarias, recetas de la casa y apoyo en grupo cerrado.',
-    cta: 'Inscribirme',
+    title: 'Reto Detox',
+    italic: 'de 7 Días',
+    body: 'Una semana para reiniciar tu sistema digestivo con guías diarias y apoyo grupal.',
+    cta: 'Unirse al Evento',
     Icon: Sprout,
     image: 'https://images.unsplash.com/photo-1544367563-12123d8965cd?auto=format&fit=crop&q=80&w=1000',
   },
@@ -43,21 +43,21 @@ const EVENTS: Event[] = [
     number: '02',
     kicker: 'Webinar · En línea',
     date: '22 Oct',
-    title: 'Nutrición para el',
-    italic: 'flow del trabajo',
-    body: 'Cómo combinar alimentos para mantener foco, energía y ánimo durante una jornada larga. Sesión en vivo + grabación.',
-    cta: 'Reservar cupo',
+    title: 'Webinar: Nutrición para el',
+    italic: 'Flow',
+    body: 'Aprende a combinar alimentos para mantener el enfoque durante tu jornada laboral.',
+    cta: 'Unirse al Evento',
     Icon: Spark,
     image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=1000',
   },
   {
     number: '03',
     kicker: 'Encuentro · Cada domingo',
-    date: 'Dom · 9 am',
+    date: 'Cada Domingo',
     title: 'Círculo de',
-    italic: 'bienestar',
-    body: 'Sesiones de meditación y mindfulness exclusivas para suscriptores. Un domingo lento que abre la semana con calma.',
-    cta: 'Conocer agenda',
+    italic: 'Bienestar',
+    body: 'Sesiones de meditación y mindfulness exclusivas para suscriptores.',
+    cta: 'Unirse al Evento',
     Icon: Sun,
     image: 'https://images.unsplash.com/photo-1593811167562-9cef47bfc4d7?auto=format&fit=crop&q=80&w=1000',
   },
@@ -72,21 +72,21 @@ const STATS = [
 const RITUALS: Array<{ Icon: IconCmp; title: string; italic: string; body: string }> = [
   {
     Icon: Calendar,
-    title: 'Calendario',
-    italic: 'editorial',
-    body: 'Cada mes lanzamos un menú nuevo, un reto y un encuentro físico en la casa. La agenda llega a tu correo antes que a Instagram.',
+    title: 'Reto Detox',
+    italic: 'de 7 Días',
+    body: 'Una semana para reiniciar tu sistema digestivo con guías diarias y apoyo grupal.',
   },
   {
     Icon: Drop,
-    title: 'Café del',
-    italic: 'productor',
-    body: 'Los segundos viernes recibimos a una huerta o productor aliado. Conoces de dónde viene lo que comes y cocinamos algo juntos.',
+    title: 'Webinar: Nutrición para el',
+    italic: 'Flow',
+    body: 'Aprende a combinar alimentos para mantener el enfoque durante tu jornada laboral.',
   },
   {
     Icon: Spark,
-    title: 'Drops',
-    italic: 'limitados',
-    body: 'Recetas de temporada que solo aparecen unas semanas al año. Las anunciamos primero a la comunidad — los demás se enteran después.',
+    title: 'Círculo de',
+    italic: 'Bienestar',
+    body: 'Sesiones de meditación y mindfulness exclusivas para suscriptores.',
   },
 ];
 
@@ -124,7 +124,7 @@ export default function CommunityPage() {
                 className="inline-flex items-center gap-3 text-serana-terracotta font-bold tracking-[0.4em] uppercase text-[10px] mb-5"
               >
                 <span className="w-10 h-px bg-serana-terracotta/60" />
-                Mercado Serana · Comunidad · Edición {editionNumber}
+                El Ecosistema
               </motion.span>
               <motion.h1
                 initial={{ opacity: 0, y: 24 }}
@@ -132,9 +132,7 @@ export default function CommunityPage() {
                 transition={{ delay: 0.1 }}
                 className="font-serif text-serana-forest text-5xl md:text-6xl lg:text-[5.5rem] leading-[0.92] tracking-tight"
               >
-                Más que un menú.
-                <br />
-                Una <span className="italic text-serana-olive">forma de juntarnos</span>.
+                Comunidad <span className="italic text-serana-olive">Serana</span>
               </motion.h1>
             </div>
             <motion.div
@@ -144,7 +142,7 @@ export default function CommunityPage() {
               className="lg:col-span-4 lg:pt-12"
             >
               <p className="text-base text-serana-forest/70 font-light leading-relaxed border-l border-serana-forest/15 pl-5 max-w-sm">
-                Retos cortos, encuentros lentos y conversaciones con quienes cultivan lo que comemos. Aquí entras como cliente y te quedas como vecino.
+                Más que una tienda, somos un movimiento. Únete a nuestros retos, eventos y círculos.
               </p>
               <div className="mt-5 flex items-center gap-4 text-[10px] uppercase tracking-[0.3em] text-serana-forest/50 font-bold">
                 <span>Mar — Sáb</span>
@@ -185,16 +183,14 @@ export default function CommunityPage() {
             <div className="lg:col-span-7">
               <span className="inline-flex items-center gap-3 text-serana-olive font-bold tracking-[0.4em] uppercase text-[10px] mb-4">
                 <span className="w-10 h-px bg-serana-olive/60" />
-                Próximos encuentros
+                Próximos eventos
               </span>
               <h2 className="font-serif text-serana-forest text-3xl md:text-5xl tracking-tight leading-tight">
-                Tres formas de entrar
-                <br />
-                <span className="italic text-serana-ochre">en la conversación</span>.
+                Retos, eventos y <span className="italic text-serana-ochre">círculos</span>
               </h2>
             </div>
             <p className="lg:col-span-5 text-sm text-serana-forest/65 font-light leading-relaxed border-l border-serana-forest/15 pl-5 max-w-md">
-              Pequeños grupos, agendas claras y un lugar al que volver. Lo que pasa aquí no se transmite por Instagram.
+              Vive experiencias diseñadas para acompañar tu bienestar más allá del menú.
             </p>
           </div>
 
@@ -262,7 +258,7 @@ export default function CommunityPage() {
           </div>
         </section>
 
-        <SectionDivider label="Rituales de la casa" />
+        <SectionDivider label="Comunidad Serana" />
 
         {/* ── Rituales ──────────────────────────────────────────────────── */}
         <section className="my-12 md:my-20">
@@ -328,7 +324,7 @@ export default function CommunityPage() {
               <div className="absolute -bottom-6 -right-4 hidden md:flex items-center gap-3 bg-serana-forest text-serana-cream rounded-full px-4 py-2 shadow-xl">
                 <SerenaMark className="w-5 h-5 text-serana-ochre" />
                 <span className="text-[10px] font-black uppercase tracking-[0.4em]">
-                  Cuaderno · Comunidad
+                  Comunidad · Serana
                 </span>
               </div>
             </motion.div>
@@ -342,18 +338,18 @@ export default function CommunityPage() {
             >
               <span className="inline-flex items-center gap-3 text-serana-olive font-bold tracking-[0.4em] uppercase text-[10px] mb-4">
                 <span className="w-10 h-px bg-serana-olive/60" />
-                Cuaderno abierto
+                Historias Serana
               </span>
               <h2 className="font-serif text-serana-forest text-4xl md:text-5xl leading-[0.95] tracking-tight">
-                Cuéntanos qué te
+                ¿Tienes una historia de
                 <br />
-                <span className="italic text-serana-ochre">cambió comer así</span>.
+                <span className="italic text-serana-ochre">transformación?</span>
               </h2>
               <p className="mt-6 text-serana-forest/70 font-light leading-relaxed text-base max-w-md">
-                Estamos armando el primer cuaderno físico de Serana — historias reales de personas que cambiaron su relación con la comida. Si la tuya cabe ahí, queremos escucharla.
+                Nos encanta escuchar cómo Serana ha impactado tu vida. Comparte tu historia y recibe un regalo especial en tu próxima caja.
               </p>
               <p className="mt-3 text-serana-forest/55 font-light text-sm max-w-md italic">
-                Las historias seleccionadas reciben un detalle de la edición y aparecen, si quieres, con tu nombre.
+                Tu experiencia también puede inspirar a otros a empezar.
               </p>
 
               <div className="mt-8 flex flex-col sm:flex-row gap-4">
@@ -361,7 +357,7 @@ export default function CommunityPage() {
                   href="mailto:contacto@serana.co?subject=Mi%20historia%20Serana"
                   className="group inline-flex items-center justify-center gap-2 px-8 py-4 bg-serana-forest text-serana-cream rounded-full transition-all hover:bg-serana-olive hover:-translate-y-0.5 font-sans font-bold tracking-widest text-[11px] uppercase shadow-lg"
                 >
-                  Comparte tu historia
+                  Comparte Tu Historia
                   <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                 </a>
                 <a
@@ -401,15 +397,15 @@ export default function CommunityPage() {
             <div className="relative z-10 p-10 md:p-14 lg:p-20 text-center">
               <SerenaMark className="w-10 h-10 text-serana-ochre mx-auto mb-6" />
               <span className="inline-flex items-center gap-3 text-serana-ochre font-bold tracking-[0.4em] uppercase text-[10px] mb-5">
-                Te esperamos
+                Comunidad Serana
               </span>
               <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl tracking-tight leading-[0.95] max-w-3xl mx-auto">
-                Una mesa larga,
+                Más que una tienda,
                 <br />
-                <span className="italic text-serana-ochre">muchos plates</span>.
+                <span className="italic text-serana-ochre">somos un movimiento</span>.
               </h2>
               <p className="mt-6 text-base text-serana-cream/70 font-light leading-relaxed max-w-xl mx-auto">
-                La comunidad Serana se construye un domingo a la vez. Empieza por probar el menú, después te invitamos al primer encuentro.
+                Únete a nuestros retos, eventos y círculos. Comparte tu historia y haz parte de una comunidad que elige cuidarse mejor.
               </p>
               <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
@@ -423,7 +419,7 @@ export default function CommunityPage() {
                   to="/about"
                   className="inline-flex items-center justify-center gap-2 px-8 py-4 border border-serana-cream/30 text-serana-cream rounded-full font-sans font-medium tracking-widest text-[11px] uppercase hover:bg-serana-cream/10 transition-all"
                 >
-                  Conocer la casa
+                  Comparte tu historia
                 </Link>
               </div>
             </div>

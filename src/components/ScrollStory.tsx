@@ -14,26 +14,26 @@ type Chapter = {
 const CHAPTERS: Chapter[] = [
   {
     number: '01',
-    kicker: 'Origen · Campo',
-    title: 'Sembrado por',
-    italic: 'manos colombianas',
-    body: 'Ingredientes traídos directo de pequeños productores de Cundinamarca y Boyacá. Trazabilidad real, no certificados decorativos: sabes quién cosechó cada lechuga.',
+    kicker: 'La Experiencia Serana',
+    title: 'Ingredientes de',
+    italic: 'origen cercano',
+    body: 'Elegimos ingredientes frescos y de productores locales para llevar más calidad y sentido a tu mesa.',
     Icon: Sprout,
   },
   {
     number: '02',
-    kicker: 'Preparación · Cocina',
-    title: 'Cocinado con',
-    italic: 'precisión y oficio',
-    body: 'Cada plato pasa por chefs que entienden la nutrición sin comprometer el sabor. Sin conservantes ni atajos industriales, solo técnica honesta.',
+    kicker: 'La Experiencia Serana',
+    title: 'Cero',
+    italic: 'Conservantes',
+    body: 'Nuestros platos son preparados diariamente sin químicos añadidos. Para una experiencia más orgánica.',
     Icon: Pot,
   },
   {
     number: '03',
-    kicker: 'Entrega · Mesa',
-    title: 'Servido cuando',
-    italic: 'tu cuerpo lo pide',
-    body: 'Despachado en empaques 100% compostables, justo cuando lo necesitas. Tú decides el ritmo: a domicilio, suscripción semanal o recogida.',
+    kicker: 'La Experiencia Serana',
+    title: 'Equilibrio que',
+    italic: 'se disfruta',
+    body: 'Nuestras recetas buscan unir nutrición, sabor y saciedad en una experiencia que se siente tan bien como sabe.',
     Icon: Bowl,
   },
 ];
@@ -50,16 +50,14 @@ export default function ScrollStory() {
         <div className="text-center max-w-2xl mx-auto mb-14 md:mb-20">
           <span className="inline-flex items-center gap-3 text-serana-olive font-bold tracking-[0.4em] uppercase text-[10px] mb-6">
             <span className="w-10 h-px bg-serana-olive/60" />
-            El recorrido Serana
+            La Experiencia Serana
             <span className="w-10 h-px bg-serana-olive/60" />
           </span>
           <h2 className="font-serif text-serana-forest text-4xl md:text-5xl lg:text-6xl leading-[1.02] tracking-tight">
-            De la <span className="italic text-serana-olive">tierra</span>
-            {' '}
-            a tu <span className="italic text-serana-terracotta">mesa</span>.
+            La diferencia está en <span className="italic text-serana-olive">cómo te nutres</span>
           </h2>
           <p className="mt-6 text-serana-forest/65 text-base md:text-lg leading-relaxed font-light">
-            Tres tiempos que respetan el ingrediente, la persona y el planeta.
+            Cada plato nace de ingredientes reales, selección consciente y una forma de preparar que prioriza frescura, sabor y equilibrio en cada bocado.
           </p>
         </div>
 
@@ -127,7 +125,7 @@ function ChapterCard({
       <div className="mt-7 pt-5 border-t border-serana-forest/8 flex items-center gap-2.5 relative z-10">
         <SerenaMark className="w-5 h-5 text-serana-ochre shrink-0" />
         <span className="text-[9px] font-black uppercase tracking-[0.35em] text-serana-forest/55">
-          Serana · Capítulo {chapter.number} / {String(total).padStart(2, '0')}
+          Serana · Experiencia {chapter.number} / {String(total).padStart(2, '0')}
         </span>
       </div>
     </motion.article>
