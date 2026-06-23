@@ -1,22 +1,7 @@
-import { motion, useInView } from 'motion/react';
+import { motion } from 'motion/react';
 import { Leaf, Heart, ShieldCheck } from 'lucide-react';
-import { useRef, useEffect } from 'react';
 
 export default function VideoSection() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const isInView = useInView(containerRef, { amount: 0.5 });
-
-  useEffect(() => {
-    if (videoRef.current) {
-      if (isInView) {
-        videoRef.current.play().catch(e => console.log("Autoplay prevented:", e));
-      } else {
-        videoRef.current.pause();
-      }
-    }
-  }, [isInView]);
-
   const valueProps = [
     {
       icon: Leaf,
@@ -36,7 +21,7 @@ export default function VideoSection() {
   ];
 
   return (
-    <section ref={containerRef} className="min-h-[100svh] py-12 lg:py-16 px-6 bg-serana-forest text-serana-cream relative overflow-hidden flex items-center">
+    <section className="min-h-[100svh] py-12 lg:py-16 px-6 bg-serana-forest text-serana-cream relative overflow-hidden flex items-center">
       {/* Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-20">
         <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-serana-olive rounded-full blur-[120px]" />
@@ -86,7 +71,7 @@ export default function VideoSection() {
             </div>
           </motion.div>
 
-          {/* Right: Vertical Video */}
+          {/* Right: Vertical Image */}
           <motion.div 
             initial={{ opacity: 0, x: 30, scale: 0.95 }}
             whileInView={{ opacity: 1, x: 0, scale: 1 }}
@@ -94,19 +79,12 @@ export default function VideoSection() {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="relative rounded-[2rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.4)] aspect-[9/16] max-h-[75vh] max-w-[320px] md:max-w-[380px] mx-auto lg:mx-0 lg:ml-auto w-full group cursor-pointer border border-white/10 bg-black/20"
           >
-            {/* Video Element */}
-            <video 
-              ref={videoRef}
-              loop 
-              muted 
-              playsInline
-              preload="none"
+            <img
+              loading="lazy"
+              src="/assets/serana-experience-bowl.webp"
+              alt="Bowl Serana preparado con ingredientes frescos"
               className="w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-1000 ease-out opacity-90 group-hover:opacity-100"
-              poster="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=800"
-            >
-              <source src="https://qlgjqvgjuscquhspjqdp.supabase.co/storage/v1/object/public/AETHERA-DOCS/video%20serana.mp4" type="video/mp4" />
-              Tu navegador no soporta el elemento de video.
-            </video>
+            />
 
             {/* Gradient Overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-serana-forest/90 via-serana-forest/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-500" />
