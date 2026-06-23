@@ -105,7 +105,7 @@ export default function AboutPage() {
                 <span className="w-1 h-1 rounded-full bg-serana-forest/30" />
                 <span>10 — 18 h</span>
                 <span className="w-1 h-1 rounded-full bg-serana-forest/30" />
-                <span>Bogotá</span>
+                <span>Medellín</span>
               </div>
             </motion.div>
           </div>

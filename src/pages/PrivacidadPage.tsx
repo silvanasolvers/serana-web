@@ -12,7 +12,7 @@ export default function PrivacidadPage() {
       <h2>1. Responsable del tratamiento</h2>
       <p>
         <strong>Serana Wellness S.A.S.</strong>, sociedad constituida en Colombia, con domicilio en
-        Bogotá D.C. Correo de contacto:{' '}
+        Medellín, Antioquia. Correo de contacto:{' '}
         <a href="mailto:contacto@serana.co">contacto@serana.co</a>.
       </p>
 
@@ -73,7 +73,7 @@ export default function PrivacidadPage() {
           forma segura. No almacenamos números de tarjeta.
         </li>
         <li>
-          <strong>Mensajería:</strong> aliados logísticos para la entrega de pedidos a domicilio en Bogotá.
+          <strong>Mensajería:</strong> aliados logísticos para la entrega de pedidos a domicilio en Medellín.
         </li>
         <li>
           <strong>Infraestructura:</strong> Supabase y proveedores de hosting para alojar la plataforma.

@@ -37,7 +37,7 @@ const initialForm: FormState = {
   phone: '',
   email: '',
   address: '',
-  city: 'Bogotá',
+  city: 'Medellín',
   notes: '',
   paymentMethod: 'mercado_pago',
 };

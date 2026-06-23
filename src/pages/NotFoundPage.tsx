@@ -72,7 +72,7 @@ export default function NotFoundPage() {
             <div className="mt-12 inline-flex items-center gap-2 text-serana-forest/40">
               <SerenaMark className="w-5 h-5 text-serana-ochre" />
               <span className="text-[10px] font-bold uppercase tracking-[0.3em]">
-                Serana · Hecho en Bogotá
+                Serana · Hecho en Medellín
               </span>
             </div>
           </motion.div>

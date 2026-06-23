@@ -75,7 +75,7 @@ export default function Footer() {
                 </defs>
                 <text className="fill-current text-[7px] uppercase font-bold tracking-[0.28em]">
                   <textPath href="#footerSealPath" startOffset="0%">
-                    Serana Wellness S.A.S. · Bogotá, Colombia · contacto@serana.co ·
+                    Serana Wellness S.A.S. · Medellín, Colombia · contacto@serana.co ·
                   </textPath>
                 </text>
               </svg>
@@ -150,7 +150,7 @@ export default function Footer() {
               <div className="flex items-start gap-3 mb-2.5">
                 <MapPin className="w-4 h-4 text-serana-cream/60 shrink-0 mt-0.5" strokeWidth={1.5} />
                 <p className="font-serif text-base leading-tight text-serana-cream">
-                  Bogotá, Colombia
+                  Medellín, Colombia
                 </p>
               </div>
               <div className="flex items-start gap-3">

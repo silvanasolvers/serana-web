@@ -11,7 +11,7 @@ export default function TerminosPage() {
     >
       <h2>1. Quiénes somos</h2>
       <p>
-        <strong>Serana Wellness S.A.S.</strong>, sociedad colombiana con domicilio en Bogotá D.C.,
+        <strong>Serana Wellness S.A.S.</strong>, sociedad colombiana con domicilio en Medellín, Antioquia,
         opera la tienda en línea serana.co, dedicada a la venta de alimentos preparados y
         productos de bienestar. Para cualquier asunto contractual:{' '}
         <a href="mailto:contacto@serana.co">contacto@serana.co</a>.
@@ -52,7 +52,7 @@ export default function TerminosPage() {
 
       <h2>5. Entregas</h2>
       <p>
-        Entregamos en Bogotá y municipios aledaños cubiertos por nuestros aliados logísticos. Los
+        Entregamos en Medellín y municipios aledaños cubiertos por nuestros aliados logísticos. Los
         tiempos estimados se muestran al hacer el pedido y dependen de la zona y el horario.
       </p>
       <p>
