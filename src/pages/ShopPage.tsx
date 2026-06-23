@@ -16,11 +16,11 @@ type Category = 'all' | 'ensaladas' | 'salsas' | 'sopas' | 'bebidas' | 'frutas' 
 
 const CATEGORIES: Array<{ id: Category; label: string; icon: SerenaIconName }> = [
   { id: 'all', label: 'Todos', icon: 'SerenaMark' },
-  { id: 'combos', label: 'Combos', icon: 'Spark' },
   { id: 'ensaladas', label: 'Ensaladas', icon: 'Bowl' },
   { id: 'sopas', label: 'Sopas y cremas', icon: 'Pot' },
   { id: 'bebidas', label: 'Bebidas y shots', icon: 'Drop' },
   { id: 'salsas', label: 'Salsas y complementos', icon: 'Citrus' },
+  { id: 'combos', label: 'Combos', icon: 'Spark' },
   { id: 'frutas', label: 'Mercado fresco', icon: 'Seed' },
   { id: 'verduras', label: 'Verduras', icon: 'Sprout' },
 ];

@@ -154,7 +154,7 @@ export const products: Product[] = [
     id: 'vinagreta-miel-balsamico',
     name: 'Vinagreta Miel y Balsámico (200ml)',
     price: 29900,
-    description: 'Una clásica de la cocina, hecha para paladares educados.',
+    description: 'Una clásica de la cocina es la vinagreta de balsámico, hecha para paladares educados.',
     image: 'https://picsum.photos/seed/vinagreta-miel-balsamico/400/300',
     category: 'salsas',
     benefits: ['Clásica', 'Elegante']
