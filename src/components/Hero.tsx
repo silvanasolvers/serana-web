@@ -96,7 +96,7 @@ export default function Hero() {
                 style={{ borderRadius: '40% 60% 65% 35% / 40% 35% 65% 60%' }}
               >
                 <img
-                  src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=1760&auto=format&fit=crop"
+                  src="/assets/serana-banner-bowl.png"
                   alt="Healthy Bowl"
                   className="w-full h-full object-cover"
                   loading="eager"
