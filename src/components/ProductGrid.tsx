@@ -15,6 +15,7 @@ const COP = (n: number) =>
   }).format(n);
 
 export type ProductGridViewMode = 'gallery' | 'list';
+type ProductVariant = NonNullable<Product['variants']>[number];
 
 interface Props {
   products: Product[];
@@ -69,7 +70,7 @@ export default function ProductGrid({
     const term = normalizeSearch(search);
     if (!term) return products;
     return products.filter((p) =>
-      normalizeSearch(`${p.name} ${p.category} ${p.description} ${p.benefits.join(' ')}`).includes(term),
+      normalizeSearch(productSearchText(p)).includes(term),
     );
   }, [products, search]);
 
@@ -232,6 +233,7 @@ function ToolbarToggle({
 
 function GalleryCard({ product, index }: { product: Product; index: number }) {
   const cutOptions = getCutOptions(product);
+  const { selectedVariant, setSelectedVariantLabel, productForCart } = useSelectedVariant(product);
 
   return (
     <motion.div
@@ -253,7 +255,7 @@ function GalleryCard({ product, index }: { product: Product; index: number }) {
           />
           <div className="absolute top-3 left-3">
             <span className="px-2 py-0.5 bg-serana-cream/90 rounded text-[9px] font-black uppercase tracking-widest text-serana-forest">
-              {product.category}
+              {formatCategory(product.category)}
             </span>
           </div>
           {product.isSubscription && (
@@ -271,6 +273,11 @@ function GalleryCard({ product, index }: { product: Product; index: number }) {
               {product.name}
             </h3>
             <p className="mt-1 text-[11px] md:text-xs text-serana-forest/62 leading-snug line-clamp-2">{product.description}</p>
+            {product.healthBenefit && (
+              <p className="mt-2 text-[10px] md:text-[11px] text-serana-forest/58 leading-snug line-clamp-2">
+                {product.healthBenefit}
+              </p>
+            )}
             <div className="mt-2 flex flex-wrap gap-1">
               {product.benefits.slice(0, 2).map((benefit) => (
                 <span key={benefit} className="inline-flex items-center gap-1 rounded-full bg-serana-olive/10 px-2 py-1 text-[8px] uppercase tracking-[0.15em] font-bold text-serana-forest/70">
@@ -282,11 +289,19 @@ function GalleryCard({ product, index }: { product: Product; index: number }) {
             {cutOptions.length > 0 && (
               <ProductCutOptions options={cutOptions} compact />
             )}
-            <ProductNotice compact />
+            {product.variants && (
+              <ProductVariantSelector
+                variants={product.variants}
+                selected={selectedVariant}
+                onSelect={setSelectedVariantLabel}
+                compact
+              />
+            )}
+            <ProductDetails product={product} compact />
           </div>
           <div className="flex items-center justify-between gap-2">
-            <span className="font-bold text-serana-terracotta text-sm md:text-base">{COP(product.price)}</span>
-            <QuantityControl product={product} variant="dark" />
+            <span className="font-bold text-serana-terracotta text-sm md:text-base">{COP(productForCart.price)}</span>
+            <QuantityControl product={productForCart} variant="dark" />
           </div>
         </div>
       </div>
@@ -296,6 +311,7 @@ function GalleryCard({ product, index }: { product: Product; index: number }) {
 
 function ListRow({ product, index }: { product: Product; index: number }) {
   const cutOptions = getCutOptions(product);
+  const { selectedVariant, setSelectedVariantLabel, productForCart } = useSelectedVariant(product);
 
   return (
     <motion.li
@@ -323,9 +339,17 @@ function ListRow({ product, index }: { product: Product; index: number }) {
           ))}
         </div>
         {cutOptions.length > 0 && <ProductCutOptions options={cutOptions} />}
+        {product.variants && (
+          <ProductVariantSelector
+            variants={product.variants}
+            selected={selectedVariant}
+            onSelect={setSelectedVariantLabel}
+          />
+        )}
+        <ProductDetails product={product} />
       </div>
-      <span className="font-bold text-serana-terracotta tabular-nums whitespace-nowrap">{COP(product.price)}</span>
-      <QuantityControl product={product} variant="soft" />
+      <span className="font-bold text-serana-terracotta tabular-nums whitespace-nowrap">{COP(productForCart.price)}</span>
+      <QuantityControl product={productForCart} variant="soft" />
     </motion.li>
   );
 }
@@ -360,6 +384,130 @@ function ProductCutOptions({ options, compact = false }: { options: string[]; co
       </div>
     </div>
   );
+}
+
+function ProductVariantSelector({
+  variants,
+  selected,
+  onSelect,
+  compact = false,
+}: {
+  variants: ProductVariant[];
+  selected: ProductVariant | null;
+  onSelect: (label: string) => void;
+  compact?: boolean;
+}) {
+  return (
+    <div className="mt-2">
+      <p className="mb-1 text-[8px] uppercase tracking-[0.18em] font-bold text-serana-forest/45">
+        Presentación
+      </p>
+      <div className="flex flex-wrap gap-1">
+        {variants.map((variant) => {
+          const active = selected?.label === variant.label;
+          return (
+            <button
+              key={variant.label}
+              type="button"
+              onClick={() => onSelect(variant.label)}
+              className={`rounded-full border font-bold uppercase transition-colors ${
+                compact ? 'px-2 py-1 text-[7px] tracking-[0.1em]' : 'px-2.5 py-1 text-[8px] tracking-[0.12em]'
+              } ${
+                active
+                  ? 'border-serana-forest bg-serana-forest text-serana-cream'
+                  : 'border-serana-forest/12 bg-serana-cream/70 text-serana-forest/68 hover:border-serana-forest/35'
+              }`}
+            >
+              {variant.label} · {COP(variant.price)}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function ProductDetails({ product, compact = false }: { product: Product; compact?: boolean }) {
+  const hasDetails = product.observation || product.portions || product.ingredients?.length;
+  if (!hasDetails) {
+    return <ProductNotice compact={compact} />;
+  }
+
+  return (
+    <details className="mt-2 rounded-xl border border-serana-forest/8 bg-serana-cream/45 px-2.5 py-2">
+      <summary className="cursor-pointer text-[8px] uppercase tracking-[0.18em] font-bold text-serana-forest/58">
+        Ingredientes y notas
+      </summary>
+      <div className="mt-2 space-y-2 text-serana-forest/62">
+        {product.observation && (
+          <p className={`${compact ? 'text-[9px]' : 'text-[10px]'} leading-snug`}>
+            <span className="font-bold text-serana-forest/70">Obs:</span> {product.observation}
+          </p>
+        )}
+        {product.portions && (
+          <p className={`${compact ? 'text-[9px]' : 'text-[10px]'} leading-snug`}>
+            <span className="font-bold text-serana-forest/70">Porciones:</span> {product.portions}
+          </p>
+        )}
+        {product.ingredients?.length ? (
+          <ul className={`${compact ? 'text-[9px]' : 'text-[10px]'} grid grid-cols-1 gap-0.5 leading-snug`}>
+            {product.ingredients.map((ingredient) => (
+              <li key={ingredient}>• {ingredient}</li>
+            ))}
+          </ul>
+        ) : null}
+      </div>
+    </details>
+  );
+}
+
+function useSelectedVariant(product: Product) {
+  const [selectedVariantLabel, setSelectedVariantLabel] = useState(product.variants?.[0]?.label ?? '');
+
+  useEffect(() => {
+    setSelectedVariantLabel(product.variants?.[0]?.label ?? '');
+  }, [product.id, product.variants]);
+
+  const selectedVariant =
+    product.variants?.find((variant) => variant.label === selectedVariantLabel) ?? product.variants?.[0] ?? null;
+
+  const productForCart = selectedVariant
+    ? {
+        ...product,
+        id: `${product.id}-${slugifyVariant(selectedVariant.label)}`,
+        name: `${product.name} - ${selectedVariant.label}`,
+        price: selectedVariant.price,
+      }
+    : product;
+
+  return { selectedVariant, setSelectedVariantLabel, productForCart };
+}
+
+function productSearchText(product: Product) {
+  return [
+    product.name,
+    product.category,
+    product.description,
+    product.healthBenefit,
+    product.observation,
+    product.portions,
+    product.benefits.join(' '),
+    product.ingredients?.join(' '),
+    product.variants?.map((variant) => variant.label).join(' '),
+  ]
+    .filter(Boolean)
+    .join(' ');
+}
+
+function slugifyVariant(label: string) {
+  return normalizeSearch(label).replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+}
+
+function formatCategory(category: string) {
+  return category
+    .split('-')
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ');
 }
 
 function getCutOptions(product: Product) {

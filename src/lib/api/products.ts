@@ -28,14 +28,20 @@ function rowToProduct(row: ProductRow): Product {
   // Falls back to UUID for catalogue rows that don't have a slug yet.
   const id = row.slug ?? row.id;
   const staticMatch = STATIC_BY_ID.get(id);
+  if (staticMatch) {
+    return {
+      ...staticMatch,
+      image: row.image_url || staticMatch.image,
+    };
+  }
   return {
     id,
-    name: normalizeUnitLabel(row.name || staticMatch?.name || ''),
+    name: normalizeUnitLabel(row.name || ''),
     price: Number(row.price ?? 0),
-    description: row.description || staticMatch?.description || '',
+    description: row.description || '',
     image: row.image_url || staticMatch?.image || '',
-    category: row.category_code ?? staticMatch?.category ?? 'otros',
-    benefits: staticMatch?.benefits ?? FALLBACK_BENEFITS,
+    category: row.category_code ?? 'otros',
+    benefits: FALLBACK_BENEFITS,
   };
 }
 

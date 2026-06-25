@@ -13,17 +13,29 @@ import { Link } from 'react-router-dom';
 import { SerenaIcons, SerenaMark, type SerenaIconName } from '../components/SeranaIcons';
 import { normalizeSearch } from '../lib/search';
 
-type Category = 'all' | 'ensaladas' | 'salsas' | 'sopas' | 'bebidas' | 'frutas' | 'verduras' | 'combos';
+type Category =
+  | 'all'
+  | 'ensaladas-gourmet'
+  | 'ensaladas-tradicionales'
+  | 'salsas'
+  | 'sopas'
+  | 'bebidas'
+  | 'frutas-picadas'
+  | 'verduras-picadas'
+  | 'mercado-fresco'
+  | 'combos';
 
 const CATEGORIES: Array<{ id: Category; label: string; icon: SerenaIconName }> = [
   { id: 'all', label: 'Todos', icon: 'SerenaMark' },
-  { id: 'ensaladas', label: 'Ensaladas', icon: 'Bowl' },
+  { id: 'ensaladas-gourmet', label: 'Ensaladas gourmet', icon: 'Bowl' },
+  { id: 'ensaladas-tradicionales', label: 'Ensaladas tradicionales', icon: 'Leaf' },
   { id: 'sopas', label: 'Sopas y cremas', icon: 'Pot' },
   { id: 'bebidas', label: 'Bebidas y shots', icon: 'Drop' },
   { id: 'salsas', label: 'Salsas y complementos', icon: 'Citrus' },
   { id: 'combos', label: 'Combos', icon: 'Spark' },
-  { id: 'frutas', label: 'Mercado fresco', icon: 'Seed' },
-  { id: 'verduras', label: 'Verduras', icon: 'Sprout' },
+  { id: 'frutas-picadas', label: 'Frutas picadas', icon: 'Seed' },
+  { id: 'verduras-picadas', label: 'Verduras picadas', icon: 'Sprout' },
+  { id: 'mercado-fresco', label: 'Mercado fresco', icon: 'Seed' },
 ];
 
 type SuggestionId = 'lighter' | 'energy' | 'quick' | 'house';
@@ -37,7 +49,7 @@ const SUGGESTIONS: Array<{
   filter: Category;
   icon: SerenaIconName;
 }> = [
-  { id: 'lighter', number: '01', kicker: 'Si buscas algo ligero', title: 'Frescas y', italic: 'crujientes', filter: 'ensaladas', icon: 'Leaf' },
+  { id: 'lighter', number: '01', kicker: 'Si buscas algo ligero', title: 'Frescas y', italic: 'crujientes', filter: 'ensaladas-gourmet', icon: 'Leaf' },
   { id: 'energy', number: '02', kicker: 'Si quieres más energía', title: 'Shots con', italic: 'propósito', filter: 'bebidas', icon: 'Spark' },
   { id: 'quick', number: '03', kicker: 'Si quieres algo práctico', title: 'Combos para', italic: 'la semana', filter: 'combos', icon: 'Hourglass' },
   { id: 'house', number: '04', kicker: 'Favoritos de la casa', title: 'Lo que más', italic: 'pedimos', filter: 'all', icon: 'SerenaMark' },
@@ -55,7 +67,7 @@ const COMPLEMENTS: Array<{
   { title: 'Prueba un', italic: 'shot funcional', desc: 'Metabólico, serenidad, concentración, muscular o piel perfecta. Tu cuerpo te lo agradece.', action: 'bebidas', icon: 'Spark' },
   { title: 'Completa tu', italic: 'elección', desc: 'Acompaña tu ensalada con una crema o sopa para una comida completa.', action: 'sopas', icon: 'Pot' },
   { title: 'Arma tu', italic: 'ritual', desc: 'Ensalada + bebida + salsa + shot. Crea tu combinación perfecta de bienestar.', action: 'combos', icon: 'SerenaMark' },
-  { title: 'Acompáñalo con', italic: 'frutas frescas', desc: 'Completa tu pedido con frutas de temporada seleccionadas para ti.', action: 'frutas', icon: 'Seed' },
+  { title: 'Acompáñalo con', italic: 'frutas frescas', desc: 'Completa tu pedido con frutas de temporada seleccionadas para ti.', action: 'mercado-fresco', icon: 'Seed' },
 ];
 
 const RITUAL_OPTIONS: Array<{
@@ -104,7 +116,11 @@ function DispatchNotice() {
 
 function MenuGuidance({ activeCategory }: { activeCategory: Category }) {
   const showCombos = activeCategory === 'all' || activeCategory === 'combos';
-  const showFresh = activeCategory === 'all' || activeCategory === 'frutas' || activeCategory === 'verduras';
+  const showFresh =
+    activeCategory === 'all' ||
+    activeCategory === 'frutas-picadas' ||
+    activeCategory === 'verduras-picadas' ||
+    activeCategory === 'mercado-fresco';
 
   if (!showCombos && !showFresh) return null;
 
@@ -136,14 +152,14 @@ function MenuGuidance({ activeCategory }: { activeCategory: Category }) {
             <Scissors className="w-4 h-4" />
             <span className="text-[10px] uppercase tracking-[0.28em] font-bold">Mercado fresco</span>
           </div>
-          <h3 className="font-serif text-2xl text-serana-forest leading-tight mb-3">Cortes según necesidad</h3>
+          <h3 className="font-serif text-2xl text-serana-forest leading-tight mb-3">Fresco, picado o sin picar</h3>
           <p className="text-sm text-serana-forest/68 leading-relaxed font-light">
-            Las verduras y frutas picadas muestran opciones de corte cuando aplica: zanahoria, pepino y fresa picada ya tienen alternativas visibles en sus fichas.
+            Frutas picadas y verduras picadas tienen botones propios. Mercado fresco reúne el fruver sin picar, tal como lo pidieron.
           </p>
           <div className="mt-4 flex items-start gap-2 rounded-xl bg-serana-cream/80 p-3 text-serana-forest/62">
             <AlertTriangle className="w-4 h-4 text-serana-terracotta shrink-0 mt-0.5" />
             <p className="text-[11px] leading-relaxed">
-              Hojas verdes como albahaca, cilantro y perejil se manejan por tandas de 150 g cuando así aparece en el producto.
+              Las presentaciones, porciones, ingredientes y observaciones aparecen dentro de cada ficha cuando vienen en la lista de precios.
             </p>
           </div>
         </div>
@@ -171,7 +187,21 @@ export default function ShopPage() {
     const term = normalizeSearch(search);
     if (!term) return base;
     return base.filter((p) =>
-      normalizeSearch(`${p.name} ${p.category} ${p.description} ${p.benefits.join(' ')}`).includes(term),
+      normalizeSearch(
+        [
+          p.name,
+          p.category,
+          p.description,
+          p.healthBenefit,
+          p.observation,
+          p.portions,
+          p.benefits.join(' '),
+          p.ingredients?.join(' '),
+          p.variants?.map((variant) => variant.label).join(' '),
+        ]
+          .filter(Boolean)
+          .join(' '),
+      ).includes(term),
     );
   }, [products, activeCategory, search]);
 
@@ -185,10 +215,9 @@ export default function ShopPage() {
   const productCount = filteredProducts.length;
   const activeMeta = CATEGORIES.find((c) => c.id === activeCategory) ?? CATEGORIES[0];
 
-  // Heuristic: ingredient categories default to compact list, prepared dishes
-  // to gallery — much easier to navigate the long verduras/frutas catalogues.
+  // Ingredient-heavy categories default to compact list; prepared dishes stay in gallery.
   useEffect(() => {
-    if (activeCategory === 'verduras' || activeCategory === 'frutas') {
+    if (activeCategory === 'mercado-fresco' || activeCategory === 'verduras-picadas' || activeCategory === 'frutas-picadas') {
       setViewMode('list');
     } else {
       setViewMode('gallery');

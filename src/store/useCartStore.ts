@@ -8,6 +8,14 @@ export interface Product {
   image: string;
   category: string;
   benefits: string[];
+  healthBenefit?: string;
+  observation?: string;
+  portions?: string | number;
+  ingredients?: string[];
+  variants?: Array<{
+    label: string;
+    price: number;
+  }>;
   isSubscription?: boolean;
 }
 
