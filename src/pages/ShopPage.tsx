@@ -246,8 +246,8 @@ export default function ShopPage() {
 
         {/* ── Sticky category nav with icons ─────────────────────────────── */}
         <div className="sticky top-20 z-40 -mx-6 px-6 mb-12">
-          <div className="bg-serana-cream/90 backdrop-blur-md border border-serana-forest/10 rounded-2xl shadow-[0_8px_30px_-15px_rgba(39,54,23,0.2)] py-3 px-3 overflow-x-auto scrollbar-hide">
-            <div className="flex gap-2 min-w-max md:justify-center">
+          <div className="bg-serana-cream/90 backdrop-blur-md border border-serana-forest/10 rounded-2xl shadow-[0_8px_30px_-15px_rgba(39,54,23,0.2)] py-2.5 px-2 sm:px-3 overflow-visible">
+            <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3 md:grid-cols-4 lg:flex lg:flex-wrap lg:justify-center lg:gap-2">
               {CATEGORIES.map((cat, i) => (
                 <motion.button
                   key={cat.id}
@@ -256,7 +256,7 @@ export default function ShopPage() {
                   transition={{ delay: 0.18 + i * 0.04 }}
                   onClick={() => setActiveCategory(cat.id)}
                   className={clsx(
-                    'group flex items-center gap-2.5 px-4 py-2 rounded-xl text-[10px] font-bold tracking-[0.18em] uppercase transition-colors duration-300 border',
+                    'group flex min-h-11 w-full min-w-0 items-center justify-start gap-2 rounded-xl border px-3 py-2 text-[9px] font-bold uppercase leading-tight tracking-[0.14em] transition-colors duration-300 sm:justify-center sm:text-[10px] lg:w-auto lg:px-3.5 lg:tracking-[0.16em]',
                     activeCategory === cat.id
                       ? 'bg-serana-forest text-serana-cream border-serana-forest shadow-md'
                       : 'bg-white/40 text-serana-forest border-transparent hover:border-serana-forest/15 hover:bg-white',
@@ -265,11 +265,11 @@ export default function ShopPage() {
                   <CategoryIcon
                     name={cat.icon}
                     className={clsx(
-                      'w-4 h-4 transition-colors',
+                      'h-4 w-4 shrink-0 transition-colors',
                       activeCategory === cat.id ? 'text-serana-ochre' : 'text-serana-olive',
                     )}
                   />
-                  <span>{cat.label}</span>
+                  <span className="min-w-0 text-left sm:text-center">{cat.label}</span>
                 </motion.button>
               ))}
             </div>
