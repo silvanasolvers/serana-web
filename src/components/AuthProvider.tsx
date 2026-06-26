@@ -25,7 +25,7 @@ type AuthContextValue = {
   accountLoading: boolean;
   authError: string | null;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (input: { email: string; password: string; fullName: string; phone: string }) => Promise<{ needsEmailConfirmation: boolean }>;
+  signUp: (input: { email: string; password: string; fullName: string; phone: string }) => Promise<{ needsEmailConfirmation: boolean; welcomeName: string }>;
   signOut: () => Promise<void>;
   saveProfile: (input: CustomerProfileInput) => Promise<void>;
   refreshAccount: () => Promise<void>;
@@ -40,7 +40,19 @@ function normalizeAuthError(message: string) {
   if (/email not confirmed/i.test(message)) return 'Confirma tu correo antes de entrar.';
   if (/password/i.test(message)) return 'La contraseña debe tener al menos 6 caracteres.';
   if (/already registered/i.test(message)) return 'Ese correo ya está registrado. Intenta iniciar sesión.';
+  if (/email_already_registered/i.test(message)) return 'Ese correo ya está registrado. Intenta iniciar sesión.';
+  if (/supabase_not_configured/i.test(message)) return 'El registro automático no está configurado en el servidor.';
+  if (/phone_required/i.test(message)) return 'Necesitamos un celular válido para crear tu cuenta.';
+  if (/full_name_required/i.test(message)) return 'Escribe tu nombre completo para crear la cuenta.';
+  if (/invalid_email/i.test(message)) return 'Escribe un correo válido.';
+  if (/weak_password/i.test(message)) return 'La contraseña debe tener al menos 6 caracteres.';
+  if (/rate_limited/i.test(message)) return 'Demasiados intentos. Intenta de nuevo en un minuto.';
   return message || 'No pudimos completar la acción.';
+}
+
+async function readApiError(resp: Response) {
+  const body = await resp.json().catch(() => null) as { error?: string } | null;
+  return body?.error ?? `HTTP ${resp.status}`;
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -119,34 +131,50 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signUp = useCallback(async (input: { email: string; password: string; fullName: string; phone: string }) => {
     setAuthError(null);
-    const { data, error } = await supabase.auth.signUp({
-      email: input.email.trim().toLowerCase(),
-      password: input.password,
-      options: {
-        data: {
-          full_name: input.fullName.trim(),
-          phone: input.phone.replace(/\D/g, ''),
-          role: 'CLIENTE',
-        },
-      },
-    });
+    const email = input.email.trim().toLowerCase();
+    const fullName = input.fullName.trim();
+    const phone = input.phone.replace(/\D/g, '');
 
-    if (error) {
-      const msg = normalizeAuthError(error.message);
+    try {
+      const resp = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          password: input.password,
+          full_name: fullName,
+          phone,
+          source_url: typeof window !== 'undefined' ? window.location.href : undefined,
+          user_agent: typeof navigator !== 'undefined' ? navigator.userAgent : undefined,
+        }),
+      });
+
+      if (!resp.ok) {
+        throw new Error(await readApiError(resp));
+      }
+
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password: input.password,
+      });
+      if (signInError) throw signInError;
+
+      const nextAccount = await upsertMyCustomerProfile({
+        full_name: fullName,
+        phone,
+      });
+      setAccount(nextAccount);
+
+      return {
+        needsEmailConfirmation: false,
+        welcomeName: fullName,
+      };
+    } catch (err: any) {
+      const msg = normalizeAuthError(err?.message ?? '');
       setAuthError(msg);
       throw new Error(msg);
     }
-
-    if (data.session) {
-      await upsertMyCustomerProfile({
-        full_name: input.fullName.trim(),
-        phone: input.phone.replace(/\D/g, ''),
-      });
-      await refreshAccount();
-    }
-
-    return { needsEmailConfirmation: !data.session };
-  }, [refreshAccount]);
+  }, []);
 
   const signOut = useCallback(async () => {
     setAuthError(null);

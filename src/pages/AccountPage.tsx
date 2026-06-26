@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { motion } from 'motion/react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { AnimatePresence, motion } from 'motion/react';
 import {
   ArrowRight,
   CalendarDays,
@@ -26,6 +26,7 @@ const COP = (n: number) =>
 
 export default function AccountPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const {
     user,
     loading,
@@ -43,12 +44,22 @@ export default function AccountPage() {
   const [address, setAddress] = useState('');
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [welcomeToast, setWelcomeToast] = useState<string | null>(null);
 
   useEffect(() => {
     if (!loading && !user) {
       navigate('/login', { replace: true, state: { from: '/cuenta' } });
     }
   }, [loading, navigate, user]);
+
+  useEffect(() => {
+    const state = location.state as { welcomeToast?: string } | null;
+    if (!state?.welcomeToast) return undefined;
+
+    setWelcomeToast(state.welcomeToast);
+    const timer = window.setTimeout(() => setWelcomeToast(null), 3800);
+    return () => window.clearTimeout(timer);
+  }, [location.state]);
 
   useEffect(() => {
     if (!profile) return;
@@ -94,6 +105,30 @@ export default function AccountPage() {
   return (
     <div className="min-h-screen pt-32">
       <Navbar />
+      <AnimatePresence>
+        {welcomeToast && (
+          <motion.div
+            initial={{ opacity: 0, y: -16, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -12, scale: 0.98 }}
+            transition={{ type: 'spring', stiffness: 360, damping: 28 }}
+            role="status"
+            className="fixed right-4 top-24 z-[70] max-w-sm rounded-2xl border border-serana-olive/20 bg-white px-4 py-3 shadow-xl shadow-serana-forest/10 sm:right-6"
+          >
+            <div className="flex items-start gap-3">
+              <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-serana-olive text-serana-cream">
+                <CheckCircle className="h-4 w-4" />
+              </span>
+              <div>
+                <p className="text-sm font-bold text-serana-forest">{welcomeToast}</p>
+                <p className="mt-0.5 text-xs leading-relaxed text-serana-forest/58">
+                  Tu perfil ya quedó conectado al dashboard de Serana.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       <main className="max-w-7xl mx-auto px-6 pb-20">
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-10">
           <div>

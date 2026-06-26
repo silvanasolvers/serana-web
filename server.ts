@@ -86,6 +86,38 @@ type OrderItemSummary = {
   unit_price: number;
 };
 
+type SignupPayload = {
+  email?: string;
+  password?: string;
+  full_name?: string;
+  phone?: string;
+  default_address?: string;
+  source_url?: string;
+  user_agent?: string;
+};
+
+function cleanText(value: unknown) {
+  return typeof value === 'string' ? value.trim() : '';
+}
+
+function normalizePhone(value: unknown) {
+  return cleanText(value).replace(/\D/g, '');
+}
+
+function isLikelyEmail(value: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+function signupErrorCode(error: unknown) {
+  const message = error instanceof Error ? error.message : String(error ?? '');
+  const lower = message.toLowerCase();
+  if (lower.includes('already') || lower.includes('registered') || lower.includes('exists')) {
+    return 'email_already_registered';
+  }
+  if (lower.includes('password')) return 'weak_password';
+  return 'signup_failed';
+}
+
 async function fetchOrderForCheckout(orderId: string) {
   if (!supabaseAdmin) throw new Error('supabase_admin_not_configured');
   const { data: order, error: oErr } = await supabaseAdmin
@@ -233,6 +265,14 @@ async function startServer() {
     message: { error: 'rate_limited' },
   });
 
+  const authLimiter = rateLimit({
+    windowMs: 60 * 1000,
+    max: 12,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { error: 'rate_limited' },
+  });
+
   // ----- API routes ------------------------------------------------------
 
   app.get('/api/health', (_req, res) => {
@@ -242,6 +282,91 @@ async function startServer() {
       mercadopago: Boolean(MP_ACCESS_TOKEN),
       supabase: Boolean(supabaseAdmin),
     });
+  });
+
+  // Public customer signup. We intentionally create the Supabase Auth user
+  // from the server with email_confirm=true so customers are not sent through
+  // the email-confirmation redirect flow. The browser receives no service-role
+  // credentials; it signs in normally after this endpoint succeeds.
+  app.post('/api/auth/signup', authLimiter, async (req, res) => {
+    try {
+      if (!supabaseAdmin) return res.status(500).json({ error: 'supabase_not_configured' });
+
+      const payload = (req.body ?? {}) as SignupPayload;
+      const email = cleanText(payload.email).toLowerCase();
+      const password = cleanText(payload.password);
+      const fullName = cleanText(payload.full_name);
+      const phone = normalizePhone(payload.phone);
+      const defaultAddress = cleanText(payload.default_address);
+      const sourceUrl = cleanText(payload.source_url);
+      const userAgent = cleanText(payload.user_agent);
+
+      if (!isLikelyEmail(email)) return res.status(400).json({ error: 'invalid_email' });
+      if (password.length < 6) return res.status(400).json({ error: 'weak_password' });
+      if (fullName.length < 2) return res.status(400).json({ error: 'full_name_required' });
+      if (phone.length < 7) return res.status(400).json({ error: 'phone_required' });
+
+      const registeredAt = new Date().toISOString();
+      const userMetadata = {
+        full_name: fullName,
+        phone,
+        default_address: defaultAddress || null,
+        role: 'CLIENTE',
+        signup_source: 'serana-web',
+        source_url: sourceUrl || null,
+        user_agent: userAgent || null,
+        registered_at: registeredAt,
+      };
+
+      const { data, error } = await supabaseAdmin.auth.admin.createUser({
+        email,
+        password,
+        email_confirm: true,
+        user_metadata: userMetadata,
+        app_metadata: {
+          role: 'CLIENTE',
+          source: 'serana-web',
+        },
+      });
+
+      if (error || !data.user) {
+        const code = signupErrorCode(error);
+        console.warn('[auth/signup] create user failed:', code, error?.message);
+        return res.status(code === 'email_already_registered' ? 409 : 400).json({ error: code });
+      }
+
+      // Keep a lightweight dashboard trail of web account creation. The actual
+      // customer row is created/linked right after login via
+      // upsert_my_customer_profile(), which uses auth.uid().
+      void supabaseAdmin.rpc('capture_lead', {
+        payload: {
+          channel: 'customer_signup',
+          full_name: fullName,
+          phone,
+          email,
+          message: 'Cuenta creada desde serana-web',
+          source_url: sourceUrl || undefined,
+          user_agent: userAgent || undefined,
+          metadata: {
+            auth_user_id: data.user.id,
+            signup_source: 'serana-web',
+            default_address: defaultAddress || null,
+            registered_at: registeredAt,
+          },
+        },
+      }).then(({ error: leadErr }) => {
+        if (leadErr) console.warn('[auth/signup] capture_lead failed:', leadErr.message);
+      });
+
+      return res.status(201).json({
+        user_id: data.user.id,
+        email: data.user.email,
+        confirmed: true,
+      });
+    } catch (err) {
+      console.error('[auth/signup] error:', err);
+      return res.status(500).json({ error: 'signup_failed' });
+    }
   });
 
   // Build a Mercado Pago Preference for a Supabase order. Returns the

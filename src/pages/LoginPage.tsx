@@ -33,13 +33,20 @@ export default function LoginPage() {
     try {
       if (mode === 'login') {
         await signIn(email, password);
-        navigate(redirectTo, { replace: true });
+        navigate(redirectTo, {
+          replace: true,
+          state: redirectTo === '/cuenta' ? { welcomeToast: 'Qué gusto verte de nuevo en Serana.' } : undefined,
+        });
       } else {
         const res = await signUp({ email, password, fullName, phone });
         if (res.needsEmailConfirmation) {
           setNotice('Te enviamos un correo de confirmación. Después de confirmarlo, vuelve a iniciar sesión.');
         } else {
-          navigate('/cuenta', { replace: true });
+          const firstName = res.welcomeName.split(' ')[0] || 'Serana';
+          navigate('/cuenta', {
+            replace: true,
+            state: { welcomeToast: `¡Qué bueno tenerte en Serana, ${firstName}!` },
+          });
         }
       }
     } catch {
