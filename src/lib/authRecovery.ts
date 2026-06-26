@@ -2,17 +2,7 @@ export const OFFICIAL_APP_ORIGIN = 'https://serana.food';
 export const PASSWORD_RESET_PATH = '/reset-password';
 
 export function getPasswordResetRedirectUrl() {
-  if (typeof window === 'undefined') {
-    return `${OFFICIAL_APP_ORIGIN}${PASSWORD_RESET_PATH}`;
-  }
-
-  const { hostname, origin } = window.location;
-  const isLocalHost = hostname === 'localhost'
-    || hostname === '127.0.0.1'
-    || hostname === '::1'
-    || hostname.endsWith('.local');
-
-  return `${isLocalHost ? origin : OFFICIAL_APP_ORIGIN}${PASSWORD_RESET_PATH}`;
+  return `${OFFICIAL_APP_ORIGIN}${PASSWORD_RESET_PATH}`;
 }
 
 export function getAuthReturnParams() {

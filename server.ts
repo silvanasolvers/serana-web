@@ -409,6 +409,28 @@ async function startServer() {
     }
   });
 
+  app.post('/api/auth/password-reset', authLimiter, async (req, res) => {
+    try {
+      if (!supabaseAdmin) return res.status(500).json({ error: 'supabase_not_configured' });
+
+      const email = cleanText((req.body as { email?: string } | undefined)?.email).toLowerCase();
+      if (!isLikelyEmail(email)) return res.status(400).json({ error: 'invalid_email' });
+
+      const { error } = await supabaseAdmin.auth.resetPasswordForEmail(email, {
+        redirectTo: PASSWORD_RESET_URL,
+      });
+      if (error) {
+        console.warn('[auth/password-reset] reset failed:', error.message);
+        return res.status(400).json({ error: 'password_reset_failed' });
+      }
+
+      return res.json({ ok: true });
+    } catch (err) {
+      console.error('[auth/password-reset] error:', err);
+      return res.status(500).json({ error: 'password_reset_failed' });
+    }
+  });
+
   // Some Supabase email templates can accidentally land on the app domain with
   // the Auth API verify path. Forward that shape back to Supabase Auth so the
   // recovery token is consumed by the service and then returns to our reset UI.

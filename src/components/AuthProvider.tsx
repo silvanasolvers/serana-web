@@ -15,7 +15,6 @@ import {
   type CustomerAccount,
   type CustomerProfileInput,
 } from '../lib/api/customerAccount';
-import { getPasswordResetRedirectUrl } from '../lib/authRecovery';
 
 type AuthContextValue = {
   configured: boolean;
@@ -51,6 +50,7 @@ function normalizeAuthError(message: string) {
   if (/invalid_email/i.test(message)) return 'Escribe un correo válido.';
   if (/weak_password/i.test(message)) return 'La contraseña debe tener al menos 6 caracteres.';
   if (/rate_limited/i.test(message)) return 'Demasiados intentos. Intenta de nuevo en un minuto.';
+  if (/password_reset_failed/i.test(message)) return 'No pudimos enviar el enlace. Intenta de nuevo en un minuto.';
   if (/not authenticated|auth session missing|session/i.test(message)) return 'El enlace expiró o no es válido. Solicita uno nuevo.';
   return message || 'No pudimos completar la acción.';
 }
@@ -188,14 +188,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const requestPasswordReset = useCallback(async (email: string) => {
     setAuthError(null);
-    const redirectTo = getPasswordResetRedirectUrl();
-
-    const { error } = await supabase.auth.resetPasswordForEmail(
-      email.trim().toLowerCase(),
-      { redirectTo },
-    );
-    if (error) {
-      const msg = normalizeAuthError(error.message);
+    const resp = await fetch('/api/auth/password-reset', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email.trim().toLowerCase() }),
+    });
+    if (!resp.ok) {
+      const msg = normalizeAuthError(await readApiError(resp));
       setAuthError(msg);
       throw new Error(msg);
     }
