@@ -101,7 +101,9 @@ export default function App() {
             <Route path="/cuenta" element={<AccountPage />} />
             <Route path="/reset-password" element={<ResetPasswordPage />} />
             <Route path="/auth/callback" element={<ResetPasswordPage />} />
+            <Route path="/auth/confirm" element={<ResetPasswordPage />} />
             <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
+            <Route path="/auth/verify" element={<ResetPasswordPage />} />
             <Route path="/password-reset" element={<ResetPasswordPage />} />
             <Route path="/recuperar-contrasena" element={<ResetPasswordPage />} />
             <Route path="/restablecer-contrasena" element={<ResetPasswordPage />} />

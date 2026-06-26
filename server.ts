@@ -36,7 +36,8 @@ dotenv.config({ path: path.join(__dirname, '.env') });
 
 const PORT = Number(process.env.PORT) || 3000;
 const HOST = '0.0.0.0';
-const APP_URL = process.env.APP_URL ?? `http://localhost:${PORT}`;
+const APP_URL = process.env.APP_URL
+  ?? (process.env.NODE_ENV === 'production' ? 'https://serana.food' : `http://localhost:${PORT}`);
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL ?? process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const MP_ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN;
@@ -404,6 +405,32 @@ async function startServer() {
       console.error('[auth/signup] error:', err);
       return res.status(500).json({ error: 'signup_failed' });
     }
+  });
+
+  // Some Supabase email templates can accidentally land on the app domain with
+  // the Auth API verify path. Forward that shape back to Supabase Auth so the
+  // recovery token is consumed by the service and then returns to our reset UI.
+  app.get('/auth/v1/verify', (req, res) => {
+    if (!SUPABASE_URL) {
+      return res.redirect('/reset-password');
+    }
+
+    const verifyUrl = new URL('/auth/v1/verify', SUPABASE_URL);
+    for (const [key, value] of Object.entries(req.query)) {
+      if (Array.isArray(value)) {
+        value.forEach((item) => {
+          if (typeof item === 'string') verifyUrl.searchParams.append(key, item);
+        });
+      } else if (typeof value === 'string') {
+        verifyUrl.searchParams.set(key, value);
+      }
+    }
+
+    if (verifyUrl.searchParams.get('type') === 'recovery') {
+      verifyUrl.searchParams.set('redirect_to', `${APP_URL}/reset-password`);
+    }
+
+    return res.redirect(302, verifyUrl.toString());
   });
 
   // Build a Mercado Pago Preference for a Supabase order. Returns the

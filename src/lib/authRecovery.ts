@@ -46,7 +46,11 @@ export function hasPasswordRecoveryReturn() {
       window.location.pathname === '/'
       || window.location.pathname.includes('reset')
       || window.location.pathname.includes('callback')
+      || window.location.pathname.includes('confirm')
+      || window.location.pathname.includes('verify')
+      || window.location.pathname.includes('recover')
       || window.location.pathname.includes('restablecer')
+      || window.location.pathname.includes('recuperar')
     ));
 }
 
