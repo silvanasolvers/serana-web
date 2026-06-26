@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useProducts } from '../lib/useProducts';
 import ProductGrid, { type ProductGridViewMode } from '../components/ProductGrid';
 import FeaturedStrip from '../components/FeaturedStrip';
@@ -172,6 +172,7 @@ export default function ShopPage() {
   const [activeCategory, setActiveCategory] = useState<Category>('all');
   const [search, setSearch] = useState('');
   const [viewMode, setViewMode] = useState<ProductGridViewMode>('gallery');
+  const productSectionRef = useRef<HTMLElement | null>(null);
   const { products } = useProducts();
 
   const filteredProducts = useMemo(() => {
@@ -223,6 +224,20 @@ export default function ShopPage() {
       setViewMode('gallery');
     }
   }, [activeCategory]);
+
+  const scrollToProducts = () => {
+    window.requestAnimationFrame(() => {
+      productSectionRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    });
+  };
+
+  const selectCategory = (category: Category) => {
+    setActiveCategory(category);
+    scrollToProducts();
+  };
 
   return (
     <div className="min-h-screen pt-24 bg-serana-cream/40">
@@ -283,7 +298,8 @@ export default function ShopPage() {
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.18 + i * 0.04 }}
-                  onClick={() => setActiveCategory(cat.id)}
+                  onClick={() => selectCategory(cat.id)}
+                  aria-pressed={activeCategory === cat.id}
                   className={clsx(
                     'group flex min-h-11 w-full min-w-0 items-center justify-start gap-2 rounded-xl border px-3 py-2 text-[9px] font-bold uppercase leading-tight tracking-[0.14em] transition-colors duration-300 sm:justify-center sm:text-[10px] lg:w-auto lg:px-3.5 lg:tracking-[0.16em]',
                     activeCategory === cat.id
@@ -399,15 +415,17 @@ export default function ShopPage() {
         {featured.length > 0 && <FeaturedStrip products={featured} />}
 
         {/* ── Product grid ───────────────────────────────────────────────── */}
-        <ProductGrid
-          products={filteredProducts}
-          externalSearch
-          searchTerm={search}
-          onSearchChange={setSearch}
-          viewMode={viewMode}
-          onViewModeChange={setViewMode}
-          pageSize={24}
-        />
+        <section ref={productSectionRef} className="scroll-mt-48">
+          <ProductGrid
+            products={filteredProducts}
+            externalSearch
+            searchTerm={search}
+            onSearchChange={setSearch}
+            viewMode={viewMode}
+            onViewModeChange={setViewMode}
+            pageSize={24}
+          />
+        </section>
 
         <SectionDivider label="Cómo elegir" />
 
@@ -435,10 +453,7 @@ export default function ShopPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-60px' }}
                 transition={{ delay: idx * 0.06, ease: [0.16, 1, 0.3, 1] }}
-                onClick={() => {
-                  setActiveCategory(sug.filter);
-                  window.scrollTo({ top: 200, behavior: 'smooth' });
-                }}
+                onClick={() => selectCategory(sug.filter)}
                 className="group relative bg-white border border-serana-forest/10 rounded-2xl p-6 text-left overflow-hidden transition-all duration-300 hover:border-serana-forest/30 hover:shadow-lg"
               >
                 <span
@@ -488,10 +503,7 @@ export default function ShopPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.05 }}
-                onClick={() => {
-                  setActiveCategory(item.action);
-                  window.scrollTo({ top: 200, behavior: 'smooth' });
-                }}
+                onClick={() => selectCategory(item.action)}
                 className="group relative bg-white border border-serana-forest/10 hover:border-serana-olive/30 hover:shadow-lg rounded-[1.5rem] p-6 text-left transition-all overflow-hidden"
               >
                 <span
@@ -563,8 +575,7 @@ export default function ShopPage() {
               <div className="flex flex-col sm:flex-row gap-4">
                 <button
                   onClick={() => {
-                    setActiveCategory('all');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    selectCategory('all');
                   }}
                   className="group inline-flex items-center justify-center gap-2 px-8 py-4 bg-serana-ochre text-serana-forest rounded-full transition-all hover:shadow-xl hover:-translate-y-0.5 font-sans font-bold tracking-widest text-[11px] uppercase"
                 >
