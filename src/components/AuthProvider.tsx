@@ -15,6 +15,7 @@ import {
   type CustomerAccount,
   type CustomerProfileInput,
 } from '../lib/api/customerAccount';
+import { getPasswordResetRedirectUrl } from '../lib/authRecovery';
 
 type AuthContextValue = {
   configured: boolean;
@@ -24,6 +25,7 @@ type AuthContextValue = {
   loading: boolean;
   accountLoading: boolean;
   authError: string | null;
+  passwordRecovery: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (input: { email: string; password: string; fullName: string; phone: string }) => Promise<{ needsEmailConfirmation: boolean; welcomeName: string }>;
   requestPasswordReset: (email: string) => Promise<void>;
@@ -64,6 +66,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [accountLoading, setAccountLoading] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
+  const [passwordRecovery, setPasswordRecovery] = useState(false);
 
   const refreshAccount = useCallback(async () => {
     if (!isSupabaseConfigured) {
@@ -103,13 +106,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (data.session) void refreshAccount();
     });
 
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+    const { data: listener } = supabase.auth.onAuthStateChange((event, nextSession) => {
       setSession(nextSession);
       setAuthError(null);
+      if (event === 'PASSWORD_RECOVERY') {
+        setPasswordRecovery(true);
+      }
       if (nextSession) {
         void refreshAccount();
       } else {
         setAccount(null);
+        setPasswordRecovery(false);
       }
     });
 
@@ -181,13 +188,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const requestPasswordReset = useCallback(async (email: string) => {
     setAuthError(null);
-    const redirectTo = typeof window !== 'undefined'
-      ? `${window.location.origin}/reset-password`
-      : undefined;
+    const redirectTo = getPasswordResetRedirectUrl();
 
     const { error } = await supabase.auth.resetPasswordForEmail(
       email.trim().toLowerCase(),
-      redirectTo ? { redirectTo } : undefined,
+      { redirectTo },
     );
     if (error) {
       const msg = normalizeAuthError(error.message);
@@ -204,6 +209,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setAuthError(msg);
       throw new Error(msg);
     }
+    setPasswordRecovery(false);
   }, []);
 
   const signOut = useCallback(async () => {
@@ -234,6 +240,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     loading,
     accountLoading,
     authError,
+    passwordRecovery,
     signIn,
     signUp,
     requestPasswordReset,
@@ -247,6 +254,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     loading,
     accountLoading,
     authError,
+    passwordRecovery,
     signIn,
     signUp,
     requestPasswordReset,

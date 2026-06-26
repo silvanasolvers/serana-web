@@ -5,16 +5,106 @@ import { ArrowLeft, CheckCircle, Eye, EyeOff, Loader2, Lock } from 'lucide-react
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { useAuth } from '../components/AuthProvider';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
+import { getAuthReturnParams, replaceWithCleanPasswordResetUrl } from '../lib/authRecovery';
 
 export default function ResetPasswordPage() {
   const navigate = useNavigate();
-  const { user, loading, updatePassword, authError } = useAuth();
+  const { user, loading, updatePassword, authError, passwordRecovery } = useAuth();
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [checkingRecoveryLink, setCheckingRecoveryLink] = useState(true);
+  const [recoveryReady, setRecoveryReady] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [linkError, setLinkError] = useState<string | null>(null);
   const [localError, setLocalError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let mounted = true;
+
+    async function openRecoveryLink() {
+      if (!isSupabaseConfigured) {
+        setCheckingRecoveryLink(false);
+        return;
+      }
+
+      try {
+        const params = getAuthReturnParams();
+        const urlError = params.get('error_description') ?? params.get('error_code') ?? params.get('error');
+        if (urlError) {
+          throw new Error(urlError);
+        }
+
+        const type = params.get('type');
+        const isRecoveryType = !type || type === 'recovery';
+        const code = params.get('code');
+        const accessToken = params.get('access_token');
+        const refreshToken = params.get('refresh_token');
+        const tokenHash = params.get('token_hash');
+        const token = params.get('token');
+        const email = params.get('email');
+
+        if (code) {
+          const { error } = await supabase.auth.exchangeCodeForSession(code);
+          if (error) throw error;
+          if (mounted) setRecoveryReady(true);
+          replaceWithCleanPasswordResetUrl();
+          return;
+        }
+
+        if (accessToken && refreshToken) {
+          const { error } = await supabase.auth.setSession({
+            access_token: accessToken,
+            refresh_token: refreshToken,
+          });
+          if (error) throw error;
+          if (mounted) setRecoveryReady(true);
+          replaceWithCleanPasswordResetUrl();
+          return;
+        }
+
+        if (tokenHash && isRecoveryType) {
+          const { error } = await supabase.auth.verifyOtp({
+            type: 'recovery',
+            token_hash: tokenHash,
+          });
+          if (error) throw error;
+          if (mounted) setRecoveryReady(true);
+          replaceWithCleanPasswordResetUrl();
+          return;
+        }
+
+        if (token && email && isRecoveryType) {
+          const { error } = await supabase.auth.verifyOtp({
+            type: 'recovery',
+            token,
+            email,
+          });
+          if (error) throw error;
+          if (mounted) setRecoveryReady(true);
+          replaceWithCleanPasswordResetUrl();
+          return;
+        }
+
+        const { data } = await supabase.auth.getSession();
+        if (mounted && data.session) {
+          setRecoveryReady(true);
+        }
+      } catch (err) {
+        if (mounted) setLinkError(recoveryLinkErrorMessage(err));
+      } finally {
+        if (mounted) setCheckingRecoveryLink(false);
+      }
+    }
+
+    void openRecoveryLink();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   useEffect(() => {
     setLocalError(null);
@@ -45,7 +135,9 @@ export default function ResetPasswordPage() {
     }
   };
 
-  const unavailable = !loading && !user;
+  const canReset = Boolean(user || recoveryReady || passwordRecovery);
+  const checkingLink = loading || checkingRecoveryLink;
+  const unavailable = !checkingLink && !canReset;
 
   return (
     <div className="min-h-screen pt-32">
@@ -80,14 +172,14 @@ export default function ResetPasswordPage() {
           transition={{ delay: 0.08 }}
           className="bg-white/75 backdrop-blur-md border border-serana-forest/5 rounded-[1.75rem] shadow-sm p-6 md:p-8"
         >
-          {loading ? (
+          {checkingLink ? (
             <div className="flex items-center justify-center py-16 text-serana-olive">
               <Loader2 className="w-7 h-7 animate-spin" />
             </div>
           ) : unavailable ? (
             <div className="space-y-5">
               <div className="rounded-2xl bg-amber-50 border border-amber-200 text-amber-800 p-4 text-sm leading-relaxed">
-                El enlace expiró o no pudimos abrir la sesión de recuperación. Solicita un nuevo enlace desde la pantalla de entrada.
+                {linkError ?? 'El enlace expiró o no pudimos abrir la sesión de recuperación. Solicita un nuevo enlace desde la pantalla de entrada.'}
               </div>
               <Link
                 to="/login"
@@ -141,6 +233,28 @@ export default function ResetPasswordPage() {
       <Footer />
     </div>
   );
+}
+
+function recoveryLinkErrorMessage(error: unknown) {
+  const message = error instanceof Error ? error.message : String(error ?? '');
+  let normalized = message.replace(/\+/g, ' ').toLowerCase();
+  try {
+    normalized = decodeURIComponent(normalized);
+  } catch {
+    // Keep the raw message when it contains malformed URL escapes.
+  }
+
+  if (normalized.includes('expired') || normalized.includes('otp_expired')) {
+    return 'El enlace de recuperación expiró. Solicita uno nuevo desde la pantalla de entrada.';
+  }
+  if (normalized.includes('invalid') || normalized.includes('token') || normalized.includes('otp')) {
+    return 'No pudimos validar este enlace de recuperación. Solicita uno nuevo desde la pantalla de entrada.';
+  }
+  if (normalized.includes('redirect')) {
+    return 'El enlace llegó con una redirección no válida. Solicita un nuevo enlace desde serana.food.';
+  }
+
+  return 'No pudimos abrir la recuperación de contraseña. Solicita un nuevo enlace desde la pantalla de entrada.';
 }
 
 function PasswordField({

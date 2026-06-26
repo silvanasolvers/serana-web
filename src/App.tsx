@@ -3,12 +3,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { Suspense, lazy, useEffect } from 'react';
 import CustomCursor from './components/CustomCursor';
 import SerenaSplash from './components/SerenaSplash';
 import ScrollVine from './components/ScrollVine';
-import { AuthProvider } from './components/AuthProvider';
+import { AuthProvider, useAuth } from './components/AuthProvider';
+import {
+  PASSWORD_RESET_PATH,
+  getPasswordRecoveryRouteWithParams,
+  hasPasswordRecoveryReturn,
+} from './lib/authRecovery';
 
 // Eager: tiny pages that the user lands on most often.
 import HomePage from './pages/HomePage';
@@ -39,6 +44,23 @@ function ScrollToTop() {
   return null;
 }
 
+function RecoveryLinkRedirect() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { passwordRecovery } = useAuth();
+
+  useEffect(() => {
+    if (
+      location.pathname !== PASSWORD_RESET_PATH
+      && (passwordRecovery || hasPasswordRecoveryReturn())
+    ) {
+      navigate(getPasswordRecoveryRouteWithParams(), { replace: true });
+    }
+  }, [location.pathname, navigate, passwordRecovery]);
+
+  return null;
+}
+
 function RouteFallback() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-serana-cream">
@@ -58,6 +80,7 @@ export default function App() {
         </Suspense>
         <ScrollVine />
         <ScrollToTop />
+        <RecoveryLinkRedirect />
         <Suspense fallback={null}>
           <ChatBot />
         </Suspense>
@@ -77,6 +100,10 @@ export default function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/cuenta" element={<AccountPage />} />
             <Route path="/reset-password" element={<ResetPasswordPage />} />
+            <Route path="/auth/callback" element={<ResetPasswordPage />} />
+            <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
+            <Route path="/password-reset" element={<ResetPasswordPage />} />
+            <Route path="/recuperar-contrasena" element={<ResetPasswordPage />} />
             <Route path="/restablecer-contrasena" element={<ResetPasswordPage />} />
             <Route path="/privacidad" element={<PrivacidadPage />} />
             <Route path="/terminos" element={<TerminosPage />} />
