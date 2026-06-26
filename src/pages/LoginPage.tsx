@@ -1,7 +1,7 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { ArrowLeft, ArrowRight, Loader2, Lock, Mail, Phone, UserRound } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Eye, EyeOff, Loader2, Lock, Mail, Phone, UserRound } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { useAuth } from '../components/AuthProvider';
@@ -17,8 +17,12 @@ export default function LoginPage() {
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
+  const [localError, setLocalError] = useState<string | null>(null);
 
   const redirectTo = (location.state as { from?: string } | null)?.from ?? '/cuenta';
 
@@ -28,8 +32,15 @@ export default function LoginPage() {
 
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
-    setBusy(true);
     setNotice(null);
+    setLocalError(null);
+
+    if (mode === 'register' && password !== confirmPassword) {
+      setLocalError('Las contraseñas no coinciden.');
+      return;
+    }
+
+    setBusy(true);
     try {
       if (mode === 'login') {
         await signIn(email, password);
@@ -113,7 +124,7 @@ export default function LoginPage() {
               <button
                 key={value}
                 type="button"
-                onClick={() => { setMode(value); setNotice(null); }}
+                onClick={() => { setMode(value); setNotice(null); setLocalError(null); }}
                 className={`flex-1 rounded-full py-3 text-xs font-bold uppercase tracking-widest transition ${
                   mode === value
                     ? 'bg-serana-forest text-serana-cream shadow-sm'
@@ -176,24 +187,30 @@ export default function LoginPage() {
               </FieldIcon>
 
               {mode !== 'forgot' && (
-                <FieldIcon Icon={Lock}>
-                  <input
-                    required
-                    minLength={6}
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Contraseña"
-                    className="w-full bg-transparent outline-none"
-                  />
-                </FieldIcon>
+                <PasswordField
+                  value={password}
+                  onChange={(value) => { setPassword(value); setLocalError(null); }}
+                  placeholder="Contraseña"
+                  visible={showPassword}
+                  onToggle={() => setShowPassword((visible) => !visible)}
+                />
+              )}
+
+              {mode === 'register' && (
+                <PasswordField
+                  value={confirmPassword}
+                  onChange={(value) => { setConfirmPassword(value); setLocalError(null); }}
+                  placeholder="Confirmar contraseña"
+                  visible={showConfirmPassword}
+                  onToggle={() => setShowConfirmPassword((visible) => !visible)}
+                />
               )}
 
               {mode === 'login' && (
                 <div className="flex justify-end">
                   <button
                     type="button"
-                    onClick={() => { setMode('forgot'); setNotice(null); }}
+                    onClick={() => { setMode('forgot'); setNotice(null); setLocalError(null); }}
                     className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-widest text-serana-terracotta hover:text-serana-forest transition-colors"
                   >
                     Olvidé mi contraseña <ArrowRight className="w-3 h-3" />
@@ -201,9 +218,9 @@ export default function LoginPage() {
                 </div>
               )}
 
-              {(authError || notice) && (
-                <p className={`text-sm leading-relaxed ${notice ? 'text-serana-olive' : 'text-rose-600'}`}>
-                  {notice ?? authError}
+              {(authError || notice || localError) && (
+                <p className={`text-sm leading-relaxed ${notice && !localError ? 'text-serana-olive' : 'text-rose-600'}`}>
+                  {localError ?? notice ?? authError}
                 </p>
               )}
 
@@ -221,7 +238,7 @@ export default function LoginPage() {
               {mode === 'forgot' && (
                 <button
                   type="button"
-                  onClick={() => { setMode('login'); setNotice(null); }}
+                  onClick={() => { setMode('login'); setNotice(null); setLocalError(null); }}
                   className="w-full text-center text-[11px] font-bold uppercase tracking-widest text-serana-forest/55 hover:text-serana-forest transition-colors"
                 >
                   Volver a entrar
@@ -233,6 +250,42 @@ export default function LoginPage() {
       </main>
       <Footer />
     </div>
+  );
+}
+
+function PasswordField({
+  value,
+  onChange,
+  placeholder,
+  visible,
+  onToggle,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  placeholder: string;
+  visible: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <FieldIcon Icon={Lock}>
+      <input
+        required
+        minLength={6}
+        type={visible ? 'text' : 'password'}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        className="w-full bg-transparent outline-none"
+      />
+      <button
+        type="button"
+        onClick={onToggle}
+        className="text-serana-forest/45 hover:text-serana-forest transition-colors"
+        aria-label={visible ? `Ocultar ${placeholder.toLowerCase()}` : `Ver ${placeholder.toLowerCase()}`}
+      >
+        {visible ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+      </button>
+    </FieldIcon>
   );
 }
 

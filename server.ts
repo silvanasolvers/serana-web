@@ -118,6 +118,39 @@ function signupErrorCode(error: unknown) {
   return 'signup_failed';
 }
 
+async function authUserEmailExists(email: string) {
+  if (!supabaseAdmin) return false;
+
+  const perPage = 1000;
+  for (let page = 1; page <= 20; page += 1) {
+    const { data, error } = await supabaseAdmin.auth.admin.listUsers({ page, perPage });
+    if (error) throw error;
+
+    const users = data.users ?? [];
+    if (users.some((user) => user.email?.toLowerCase() === email)) {
+      return true;
+    }
+    if (users.length < perPage) return false;
+  }
+
+  // createUser still enforces Auth uniqueness; this warning means the early
+  // duplicate check hit its scan cap and will fall back to the Auth API.
+  console.warn('[auth/signup] auth user duplicate scan reached page cap');
+  return false;
+}
+
+async function customerEmailExists(email: string) {
+  if (!supabaseAdmin) return false;
+
+  const { data, error } = await supabaseAdmin
+    .from('customers_view')
+    .select('id')
+    .ilike('email', email)
+    .limit(1);
+  if (error) throw error;
+  return Boolean(data?.length);
+}
+
 async function fetchOrderForCheckout(orderId: string) {
   if (!supabaseAdmin) throw new Error('supabase_admin_not_configured');
   const { data: order, error: oErr } = await supabaseAdmin
@@ -305,6 +338,10 @@ async function startServer() {
       if (password.length < 6) return res.status(400).json({ error: 'weak_password' });
       if (fullName.length < 2) return res.status(400).json({ error: 'full_name_required' });
       if (phone.length < 7) return res.status(400).json({ error: 'phone_required' });
+
+      if (await authUserEmailExists(email) || await customerEmailExists(email)) {
+        return res.status(409).json({ error: 'email_already_registered' });
+      }
 
       const registeredAt = new Date().toISOString();
       const userMetadata = {

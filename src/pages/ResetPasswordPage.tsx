@@ -1,7 +1,7 @@
 import { useEffect, useState, type FormEvent, type ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { ArrowLeft, CheckCircle, Loader2, Lock } from 'lucide-react';
+import { ArrowLeft, CheckCircle, Eye, EyeOff, Loader2, Lock } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { useAuth } from '../components/AuthProvider';
@@ -11,6 +11,8 @@ export default function ResetPasswordPage() {
   const { user, loading, updatePassword, authError } = useAuth();
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [busy, setBusy] = useState(false);
   const [localError, setLocalError] = useState<string | null>(null);
 
@@ -103,28 +105,20 @@ export default function ResetPasswordPage() {
                 </p>
               </div>
 
-              <FieldIcon>
-                <input
-                  required
-                  minLength={6}
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Nueva contraseña"
-                  className="w-full bg-transparent outline-none"
-                />
-              </FieldIcon>
-              <FieldIcon>
-                <input
-                  required
-                  minLength={6}
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="Confirmar contraseña"
-                  className="w-full bg-transparent outline-none"
-                />
-              </FieldIcon>
+              <PasswordField
+                value={password}
+                onChange={setPassword}
+                placeholder="Nueva contraseña"
+                visible={showPassword}
+                onToggle={() => setShowPassword((visible) => !visible)}
+              />
+              <PasswordField
+                value={confirmPassword}
+                onChange={setConfirmPassword}
+                placeholder="Confirmar contraseña"
+                visible={showConfirmPassword}
+                onToggle={() => setShowConfirmPassword((visible) => !visible)}
+              />
 
               {(localError || authError) && (
                 <p className="text-sm leading-relaxed text-rose-600">
@@ -146,6 +140,42 @@ export default function ResetPasswordPage() {
       </main>
       <Footer />
     </div>
+  );
+}
+
+function PasswordField({
+  value,
+  onChange,
+  placeholder,
+  visible,
+  onToggle,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  placeholder: string;
+  visible: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <FieldIcon>
+      <input
+        required
+        minLength={6}
+        type={visible ? 'text' : 'password'}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        className="w-full bg-transparent outline-none"
+      />
+      <button
+        type="button"
+        onClick={onToggle}
+        className="text-serana-forest/45 hover:text-serana-forest transition-colors"
+        aria-label={visible ? `Ocultar ${placeholder.toLowerCase()}` : `Ver ${placeholder.toLowerCase()}`}
+      >
+        {visible ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+      </button>
+    </FieldIcon>
   );
 }
 
