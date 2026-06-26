@@ -203,7 +203,7 @@ export const products: Product[] = [
     benefits: ['Grasas buenas', 'Proteína'],
     healthBenefit: 'Excelente fuente de grasas buenas y proteína, útil para saciar y complementar tus comidas.',
     observation: 'Contiene trazos de huevo, posible alérgeno. Es una salsa balanceada y especiada ideal para ensaladas frescas.',
-    portions: 10
+    portions: 10,
   },
   {
     id: 'vinagreta-mostaza-miel',
@@ -215,7 +215,7 @@ export const products: Product[] = [
     benefits: ['Energía rápida', 'Metabolismo'],
     healthBenefit: 'Perfecta combinación para tu activación metabólica y energía rápida. Un preentreno ligero.',
     observation: 'Contiene semillas de chía.',
-    portions: 10
+    portions: 10,
   },
   {
     id: 'pesto',
@@ -227,7 +227,7 @@ export const products: Product[] = [
     benefits: ['Grasas saludables', 'Calcio'],
     healthBenefit: 'Una de las salsas más completas nutricionalmente, aporta grasas saludables, proteína y calcio.',
     observation: 'Contiene trazos de nueces, posible alérgeno.',
-    portions: 10
+    portions: 10,
   },
   {
     id: 'mayonesa-griega',
@@ -239,7 +239,7 @@ export const products: Product[] = [
     benefits: ['Proteica', 'Probióticos'],
     healthBenefit: 'La salsa más proteica de la lista, con proteínas, probióticos y cualidad digestiva.',
     observation: 'Contiene lácteos, posible alérgeno.',
-    portions: 10
+    portions: 10,
   },
   {
     id: 'vinagreta-fresa-menta',
@@ -251,7 +251,7 @@ export const products: Product[] = [
     benefits: ['Antioxidante', 'Fresca'],
     healthBenefit: 'Una salsa con alta carga antioxidante y muy fresca.',
     observation: 'Es una vinagreta balanceada y dulce, contiene azúcar.',
-    portions: 10
+    portions: 10,
   },
   {
     id: 'vinagreta-miel-balsamico',
@@ -263,7 +263,7 @@ export const products: Product[] = [
     benefits: ['Cardiovascular', 'Energía natural'],
     healthBenefit: 'Te brinda protección cardiovascular y regula tu glucosa con energía natural.',
     observation: 'Es una vinagreta balanceada, entre dulce y ácida.',
-    portions: 10
+    portions: 10,
   },
   {
     id: 'vinagreta-naranja-cilantro',
@@ -275,7 +275,7 @@ export const products: Product[] = [
     benefits: ['Vitamina C', 'Detox'],
     healthBenefit: 'Una vinagreta altísima en vitamina C, tiene efecto detox natural y refuerza tu sistema inmune.',
     observation: 'Es una vinagreta fresca y frutal.',
-    portions: 10
+    portions: 10,
   },
   {
     id: 'hummus',
@@ -287,7 +287,7 @@ export const products: Product[] = [
     benefits: ['Proteína vegetal', 'Fibra'],
     healthBenefit: 'Una salsa con proteína vegetal de alta calidad, aporta fibra y regula el azúcar en sangre.',
     observation: 'Es una salsa clásica cremosa, ideal para acompañar carbohidratos como pan o pasta.',
-    portions: 10
+    portions: 10,
   },
   {
     id: 'chimichurri',
@@ -299,7 +299,7 @@ export const products: Product[] = [
     benefits: ['Antiinflamatorio', 'Digestivo'],
     healthBenefit: 'Tiene poder antiinflamatorio y mejora la digestión de proteínas, ideal para acompañar carnes.',
     observation: 'Contiene pimienta, posible alérgeno.',
-    portions: 10
+    portions: 10,
   },
 
   // Sopas prelistas
@@ -358,7 +358,22 @@ export const products: Product[] = [
     description: 'Sopa tradicional colombiana de tubérculos sancochados.',
     image: 'https://picsum.photos/seed/sancocho/400/300',
     category: 'sopas',
-    benefits: ['Tradicional', 'Completo']
+    benefits: ['Tradicional', 'Completo'],
+    healthBenefit: 'Aporta alta densidad energética, alto en carbohidratos complejos y minerales esenciales, ayuda a la recuperación muscular y es hidratante.',
+    portions: 4,
+    ingredients: [
+      'papa capira',
+      'papa criolla',
+      'yuca',
+      'arracacha',
+      'plátano verde',
+      'mazorca',
+      'cilantro',
+      'ajo',
+      'zanahoria',
+      'cebolla blanca',
+      'cebolla larga'
+    ]
   },
   {
     id: 'frijoles',
@@ -367,7 +382,19 @@ export const products: Product[] = [
     description: 'Sopa tradicional colombiana, especial para tu día a día.',
     image: 'https://picsum.photos/seed/frijoles/400/300',
     category: 'sopas',
-    benefits: ['Proteína', 'Caseros']
+    benefits: ['Proteína', 'Caseros'],
+    healthBenefit: 'Es una sopa con proteína vegetal de calidad, con altos niveles de fibra y te aporta energía sostenida.',
+    portions: 4,
+    ingredients: [
+      'frijol verde',
+      'ahuyama',
+      'cebolla blanca',
+      'plátano verde',
+      'ajo',
+      'zanahoria',
+      'cebolla larga',
+      'pico de gallo'
+    ]
   },
 
   // Bebidas (Jugos y Shots)
@@ -378,7 +405,16 @@ export const products: Product[] = [
     description: 'Contiene pepino, piña, apio, menta y espinaca: especial para tu sistema digestivo y la desinflamación abdominal.',
     image: 'https://picsum.photos/seed/jugo-verde/400/300',
     category: 'bebidas',
-    benefits: ['Detox', 'Energizante']
+    benefits: ['Detox', 'Energizante'],
+    healthBenefit: 'Es un batido detox natural, y alcalinizante (reduce inflamación), contiene fibra y clorofila, ideal para hacer ayunos y bajar de peso.',
+    portions: 5,
+    ingredients: [
+      'pepino',
+      'apio',
+      'piña',
+      'menta',
+      'espinaca'
+    ]
   },
   {
     id: 'batido-circulacion',
@@ -387,7 +423,10 @@ export const products: Product[] = [
     description: 'Contiene remolacha, cúrcuma, zanahoria y mora: para tus músculos y la circulación efectiva de la sangre.',
     image: 'https://picsum.photos/seed/batido-circulacion/400/300',
     category: 'bebidas',
-    benefits: ['Saludable', 'Natural']
+    benefits: ['Saludable', 'Natural'],
+    healthBenefit: 'Mejora la circulación sanguínea, es un pre-entreno natural y ayuda a mejorar la resistencia física.',
+    portions: 5,
+    ingredients: ['remolacha', 'zanahoria', 'cúrcuma raíz', 'mora']
   },
   {
     id: 'batido-detox',
@@ -396,7 +435,10 @@ export const products: Product[] = [
     description: 'Contiene papaya, piña, pepino y jengibre: calma el estrés y te activa la microbiota.',
     image: 'https://picsum.photos/seed/batido-detox/400/300',
     category: 'bebidas',
-    benefits: ['Relajante', 'Depurativo']
+    benefits: ['Relajante', 'Depurativo'],
+    healthBenefit: 'Tiene un efecto calmante, disminuye la sensación de pesadez y es perfecto para el estrés, ansiedad y mala digestión.',
+    portions: 5,
+    ingredients: ['papaya', 'piña', 'pepino', 'jengibre']
   },
   {
     id: 'jugo-naranja',
@@ -405,7 +447,11 @@ export const products: Product[] = [
     description: 'Jugos siempre frescos, dulcecitos y con naranjas seleccionadas.',
     image: 'https://picsum.photos/seed/jugo-naranja/400/300',
     category: 'bebidas',
-    benefits: ['Vitamina C', 'Refrescante']
+    benefits: ['Vitamina C', 'Refrescante'],
+    healthBenefit: 'Contiene vitamina C y es refrescante.',
+    portions: 6,
+    observation: 'Dulce y recién exprimido, sin conservantes.',
+    ingredients: ['naranja valencia']
   },
   {
     id: 'shot-metabolico',
@@ -414,7 +460,18 @@ export const products: Product[] = [
     description: 'Una combinación de ingredientes que te activan el metabolismo y te ayudan a bajar de peso.',
     image: 'https://picsum.photos/seed/shot-metabolico/400/300',
     category: 'bebidas',
-    benefits: ['Metabolismo', 'Energía']
+    benefits: ['Metabolismo', 'Energía'],
+    healthBenefit: 'Acelera el metabolismo como activador total, activa tu sistema digestivo en ayunas. Es perfecto para perder grasa.',
+    portions: 6,
+    ingredients: [
+      'manzana verde',
+      'limón tahiti',
+      'jengibre',
+      'vinagre de manzana',
+      'miel',
+      'canela en polvo',
+      'agua'
+    ]
   },
   {
     id: 'shot-serenidad',
@@ -423,7 +480,19 @@ export const products: Product[] = [
     description: 'Un shot que te calma el estrés y te calma el sistema nervioso central.',
     image: 'https://picsum.photos/seed/shot-serenidad/400/300',
     category: 'bebidas',
-    benefits: ['Calma', 'Bienestar']
+    benefits: ['Calma', 'Bienestar'],
+    healthBenefit: 'Es un shot antiestrés, regula el sistema nervioso y mejora el estado de ánimo, funciona como "pausa emocional".',
+    portions: 6,
+    ingredients: [
+      'maracuyá',
+      'mango tommy maduro',
+      'menta',
+      'limón tahiti',
+      'miel',
+      'cúrcuma',
+      'agua',
+      'pimienta'
+    ]
   },
   {
     id: 'shot-concentracion',
@@ -432,7 +501,17 @@ export const products: Product[] = [
     description: 'Un shot cargado de antioxidantes que tiene repercusión directa y positiva en tu cerebro.',
     image: 'https://picsum.photos/seed/shot-concentracion/400/300',
     category: 'bebidas',
-    benefits: ['Enfoque', 'Mental']
+    benefits: ['Enfoque', 'Mental'],
+    healthBenefit: 'Mejora el enfoque mental, aumenta la claridad cognitiva, contiene energía limpia a través del matcha.',
+    portions: 6,
+    ingredients: [
+      'arándanos',
+      'uva isabella',
+      'espinaca criolla',
+      'limón tahiti',
+      'té matcha',
+      'agua'
+    ]
   },
   {
     id: 'shot-antiinflamatorio',
@@ -441,7 +520,19 @@ export const products: Product[] = [
     description: 'Este shot con ingredientes que te desinflaman y te hace sentir más ligero.',
     image: 'https://picsum.photos/seed/shot-antiinflamatorio/400/300',
     category: 'bebidas',
-    benefits: ['Salud', 'Recuperación']
+    benefits: ['Salud', 'Recuperación'],
+    healthBenefit: 'Es una defensa total para tu cuerpo, potente antiinflamatorio, refuerza tu sistema inmune y reduce el dolor y la fatiga.',
+    portions: 6,
+    ingredients: [
+      'jengibre',
+      'cúrcuma',
+      'naranja',
+      'limón tahiti',
+      'miel pura',
+      'pimienta negra',
+      'vinagre de manzana',
+      'agua'
+    ]
   },
   {
     id: 'shot-muscular',
@@ -450,7 +541,20 @@ export const products: Product[] = [
     description: 'El shot perfecto para activar tu cuerpo, para deportistas o incluso para un mejor rendimiento sexual.',
     image: 'https://picsum.photos/seed/shot-muscular/400/300',
     category: 'bebidas',
-    benefits: ['Recuperación', 'Fuerza']
+    benefits: ['Recuperación', 'Fuerza'],
+    healthBenefit: 'Mejora el flujo sanguíneo, es un energizante natural además de que es un poderoso antiinflamatorio.',
+    portions: 6,
+    ingredients: [
+      'naranja',
+      'limón tahiti',
+      'jengibre',
+      'miel',
+      'remolacha',
+      'cúrcuma',
+      'pimienta negra',
+      'canela en polvo',
+      'agua'
+    ]
   },
   {
     id: 'shot-piel',
@@ -459,7 +563,17 @@ export const products: Product[] = [
     description: 'El shot que tiene todos los ingredientes que tienen beneficios directos a la salud cutánea.',
     image: 'https://picsum.photos/seed/shot-piel/400/300',
     category: 'bebidas',
-    benefits: ['Belleza', 'Nutrición']
+    benefits: ['Belleza', 'Nutrición'],
+    healthBenefit: 'Es un antioxidante para la piel y reduce el envejecimiento prematuro. Hidratación celular profunda.',
+    portions: 6,
+    ingredients: [
+      'zanahoria',
+      'papaya',
+      'naranja',
+      'limón',
+      'agua',
+      'vinagre de manzana'
+    ]
   },
 
   // Frutas picadas
@@ -470,7 +584,11 @@ export const products: Product[] = [
     description: 'Delicioso mango tommy picadito: pídelo maduro, pintón o verde.',
     image: 'https://picsum.photos/seed/mango-picado/400/300',
     category: 'frutas-picadas',
-    benefits: ['Listo para comer', 'Dulce']
+    benefits: ['Listo para comer', 'Dulce'],
+    healthBenefit: 'Ayuda al sistema inmune por su alto contenido de vitamina C y apoya la salud digestiva.',
+    portions: 4,
+    observation: 'Maduración a elección: verde, pintón o maduro. Corte a elección: cubos o bastones.',
+    ingredients: ['mango']
   },
   {
     id: 'pina-picada',
@@ -479,7 +597,11 @@ export const products: Product[] = [
     description: 'Piña en cubitos sin corazón, cuidadosamente seleccionada.',
     image: 'https://picsum.photos/seed/pina-picada/400/300',
     category: 'frutas-picadas',
-    benefits: ['Diurética', 'Dulce']
+    benefits: ['Diurética', 'Dulce'],
+    healthBenefit: 'Es diurética, digestiva y tiene poderes antiinflamatorios, es ideal para después de comidas.',
+    portions: 4,
+    observation: 'Viene en cubos.',
+    ingredients: ['piña']
   },
   {
     id: 'fresa-picada',
@@ -488,7 +610,11 @@ export const products: Product[] = [
     description: 'Fresas grandes siempre rojas y de la mejor calidad.',
     image: 'https://picsum.photos/seed/fresa-picada/400/300',
     category: 'frutas-picadas',
-    benefits: ['Antioxidantes', 'Fresca']
+    benefits: ['Antioxidantes', 'Fresca'],
+    healthBenefit: 'Contiene vitamina C (colágeno) además de ser una fruta con alto contenido de agua y es un antioxidante natural.',
+    portions: 4,
+    observation: 'Corte a elección: cuartos, tajadas, mitades o enteras.',
+    ingredients: ['fresa']
   },
   {
     id: 'sandia-baby-picada',
@@ -497,7 +623,11 @@ export const products: Product[] = [
     description: 'Las sandías más rojitas y maduras.',
     image: 'https://picsum.photos/seed/sandia-baby-picada/400/300',
     category: 'frutas-picadas',
-    benefits: ['Hidratante', 'Baja en calorías']
+    benefits: ['Hidratante', 'Baja en calorías'],
+    healthBenefit: 'Alta hidratación, contiene electrolitos naturales y recupera tus músculos, ideal para el post ejercicio.',
+    portions: 4,
+    observation: 'Viene en cubos.',
+    ingredients: ['sandía baby']
   },
   {
     id: 'coco-picado',
@@ -506,7 +636,11 @@ export const products: Product[] = [
     description: 'Sin cáscara, sin dificultades, sólo la carne del coco como te gusta.',
     image: 'https://picsum.photos/seed/coco-picado/400/300',
     category: 'frutas-picadas',
-    benefits: ['Energía', 'Grasas saludables']
+    benefits: ['Energía', 'Grasas saludables'],
+    healthBenefit: 'Es una grasa saludable, energía rápida sin picos fuertes y ayuda a la protección cerebral.',
+    portions: 4,
+    observation: 'Viene en cubos.',
+    ingredients: ['coco']
   },
   {
     id: 'melon-picado',
@@ -515,7 +649,11 @@ export const products: Product[] = [
     description: 'Melón siempre maduro, rosado y dulcecito.',
     image: 'https://picsum.photos/seed/melon-picado/400/300',
     category: 'frutas-picadas',
-    benefits: ['Refrescante', 'Vitaminas']
+    benefits: ['Refrescante', 'Vitaminas'],
+    healthBenefit: 'Es hidratante, bajo en calorías y contiene vitaminas A y C, es ideal para seguir dietas bajas en calorías.',
+    portions: 4,
+    observation: 'Viene en cubos.',
+    ingredients: ['melón']
   },
   {
     id: 'guayaba-manzana-picada',
@@ -524,7 +662,11 @@ export const products: Product[] = [
     description: 'Seleccionamos siempre cuidadosamente para que su textura sea impecable.',
     image: 'https://picsum.photos/seed/guayaba-manzana-picada/400/300',
     category: 'frutas-picadas',
-    benefits: ['Vitamina C', 'Fibra']
+    benefits: ['Vitamina C', 'Fibra'],
+    healthBenefit: 'Muy alta en vitamina C, contiene fibra que protege tu microbiota y regula tu sistema digestivo.',
+    portions: 4,
+    observation: 'Viene en rodajas.',
+    ingredients: ['guayaba manzana']
   },
   {
     id: 'uchuva',
@@ -533,7 +675,11 @@ export const products: Product[] = [
     description: 'Sin capacho, lavada y desinfectada.',
     image: 'https://picsum.photos/seed/uchuva/400/300',
     category: 'frutas-picadas',
-    benefits: ['Exótica', 'Antioxidante']
+    benefits: ['Exótica', 'Antioxidante'],
+    healthBenefit: 'Contiene altos niveles de antioxidantes, protege tus células y aporta a tu sistema inmune.',
+    portions: 4,
+    observation: 'Viene entera y descapachada.',
+    ingredients: ['uchuva']
   },
   {
     id: 'papaya-picada',
@@ -542,7 +688,11 @@ export const products: Product[] = [
     description: 'Seleccionamos las papayas más dulces y deliciosas.',
     image: 'https://picsum.photos/seed/papaya-picada/400/300',
     category: 'frutas-picadas',
-    benefits: ['Digestiva', 'Suave']
+    benefits: ['Digestiva', 'Suave'],
+    healthBenefit: 'Es digestiva y antiinflamatoria, gracias a la papaína. Mejora el tránsito digestivo y reduce inflamación.',
+    portions: 4,
+    observation: 'Viene en cubos.',
+    ingredients: ['papaya']
   },
   {
     id: 'baby-bowl-berry',
@@ -551,7 +701,11 @@ export const products: Product[] = [
     description: 'Una combinación de frutos del bosque: frambuesa, fresa y arándanos, simplemente exquisito.',
     image: 'https://picsum.photos/seed/baby-bowl-berry/400/300',
     category: 'frutas-picadas',
-    benefits: ['Antioxidantes', 'Snack perfecto']
+    benefits: ['Antioxidantes', 'Snack perfecto'],
+    healthBenefit: 'Alta carga antioxidante, apoyo antienvejecimiento, y bajo índice glucémico.',
+    portions: 2,
+    observation: 'Las frutas vienen enteras y muy frescas.',
+    ingredients: ['frambuesa', 'fresa', 'arándanos']
   },
   {
     id: 'baby-bowl-amarillos',
@@ -560,7 +714,11 @@ export const products: Product[] = [
     description: 'Una combinación de mango con piña deliciosa.',
     image: 'https://picsum.photos/seed/baby-bowl-amarillos/400/300',
     category: 'frutas-picadas',
-    benefits: ['Vitamina C', 'Tropical']
+    benefits: ['Vitamina C', 'Tropical'],
+    healthBenefit: 'Es alta en vitamina C y apoya el sistema inmune. Es un desayuno perfecto o snack energético.',
+    portions: 2,
+    observation: 'Viene en cubos.',
+    ingredients: ['mango', 'piña']
   },
   // Verduras picadas y mercado fresco
   {
@@ -570,7 +728,11 @@ export const products: Product[] = [
     description: 'Un vegetal infaltable en tus preparaciones.',
     image: 'https://picsum.photos/seed/zucchini-picado/400/300',
     category: 'verduras-picadas',
-    benefits: ['Bajo en calorías', 'Versátil']
+    benefits: ['Bajo en calorías', 'Versátil'],
+    healthBenefit: 'Aporta hidratación celular, bajo en calorías así que es ideal para etapa de definición o bajar de peso.',
+    portions: 4,
+    observation: 'Corte a elección: julianas, rodajas, cubos o bastones.',
+    ingredients: ['zucchini verde o amarillo']
   },
   {
     id: 'pimenton-picado',
@@ -579,7 +741,11 @@ export const products: Product[] = [
     description: 'Un ingrediente que le da sabor a tus comidas.',
     image: 'https://picsum.photos/seed/pimenton-picado/400/300',
     category: 'verduras-picadas',
-    benefits: ['Vitamina C', 'Sabor']
+    benefits: ['Vitamina C', 'Sabor'],
+    healthBenefit: 'Es el alimento con mayor contenido de vitamina C, poderoso para el sistema inmune y la piel.',
+    portions: 4,
+    observation: 'Corte a elección: julianas, rodajas, cubos o bastones.',
+    ingredients: ['pimentón rojo']
   },
   {
     id: 'cebolla-blanca-picada',
@@ -588,7 +754,11 @@ export const products: Product[] = [
     description: 'Qué es de una comida sin la sazón de las cebollas.',
     image: 'https://picsum.photos/seed/cebolla-blanca-picada/400/300',
     category: 'verduras-picadas',
-    benefits: ['Básica', 'Sabor']
+    benefits: ['Básica', 'Sabor'],
+    healthBenefit: 'Antibacteriana natural, mejora la salud intestinal y protege el sistema inmune.',
+    portions: 4,
+    observation: 'Corte a elección: julianas, rodajas o cubos.',
+    ingredients: ['cebolla blanca']
   },
   {
     id: 'tomate-cherry',
@@ -597,7 +767,11 @@ export const products: Product[] = [
     description: 'Un tomate redondo y acidito, delicioso para ensaladas.',
     image: 'https://picsum.photos/seed/tomate-cherry/400/300',
     category: 'mercado-fresco',
-    benefits: ['Snack', 'Ensaladas']
+    benefits: ['Snack', 'Ensaladas'],
+    healthBenefit: 'Contiene mayor concentración de antioxidantes que el tomate de aliño, protege la piel y las células.',
+    portions: 4,
+    observation: 'Viene entero.',
+    ingredients: ['tomate cherry']
   },
   {
     id: 'lechuga-hidroponica',
@@ -606,7 +780,11 @@ export const products: Product[] = [
     description: 'Una lechuga crespa de consistencia firme, lavada y desinfectada.',
     image: 'https://picsum.photos/seed/lechuga-hidroponica/400/300',
     category: 'mercado-fresco',
-    benefits: ['Fresca', 'Crujiente']
+    benefits: ['Fresca', 'Crujiente'],
+    healthBenefit: 'Es rica en agua y fibra además de ser un relajante natural.',
+    portions: 2,
+    observation: 'Lavada, desinfectada y deshojada.',
+    ingredients: ['lechuga hidropónica']
   },
   {
     id: 'mezclum',
@@ -615,7 +793,11 @@ export const products: Product[] = [
     description: 'Una variedad de 11 hojas orgánicas e hidropónicas, lavado y desinfectado.',
     image: 'https://picsum.photos/seed/mezclum/400/300',
     category: 'mercado-fresco',
-    benefits: ['Orgánico', 'Premium']
+    benefits: ['Orgánico', 'Premium'],
+    healthBenefit: 'Contiene antioxidantes variados, fuente de hierro y clorofila que mejora la salud digestiva.',
+    portions: 8,
+    observation: 'Lavado, desinfectado y centrifugado.',
+    ingredients: ['mezclum orgánico']
   },
   {
     id: 'cebolla-roja',
@@ -624,7 +806,11 @@ export const products: Product[] = [
     description: 'De sabor más fuerte que la blanca pero te realza las comidas de la mejor manera.',
     image: 'https://picsum.photos/seed/cebolla-roja/400/300',
     category: 'verduras-picadas',
-    benefits: ['Sabor intenso', 'Versátil']
+    benefits: ['Sabor intenso', 'Versátil'],
+    healthBenefit: 'Contiene más antioxidantes que la cebolla blanca, mejora la salud cardiovascular y es antiinflamatoria.',
+    portions: 4,
+    observation: 'Corte a elección: julianas, rodajas o cubos.',
+    ingredients: ['cebolla roja']
   },
   {
     id: 'cebolla-puerro',
@@ -633,7 +819,10 @@ export const products: Product[] = [
     description: 'Para cremas, salteados y sopas.',
     image: 'https://picsum.photos/seed/cebolla-puerro/400/300',
     category: 'mercado-fresco',
-    benefits: ['Aromática', 'Versátil']
+    benefits: ['Aromática', 'Versátil'],
+    healthBenefit: 'Contiene fibra prebiótica, mejora la microbiota y apoya la digestión.',
+    portions: 4,
+    ingredients: ['cebolla puerro']
   },
   {
     id: 'cebolla-larga',
@@ -642,7 +831,10 @@ export const products: Product[] = [
     description: 'Para guisos y sopas.',
     image: 'https://picsum.photos/seed/cebolla-larga/400/300',
     category: 'mercado-fresco',
-    benefits: ['Tradicional', 'Sabor']
+    benefits: ['Tradicional', 'Sabor'],
+    healthBenefit: 'Mejora la digestión, refuerza el sistema inmune y es rica en vitamina K.',
+    portions: 4,
+    ingredients: ['cebolla larga']
   },
   {
     id: 'habichuela',
@@ -651,7 +843,10 @@ export const products: Product[] = [
     description: 'Contiene fibra y le hace bien a tu salud digestiva.',
     image: 'https://picsum.photos/seed/habichuela/400/300',
     category: 'mercado-fresco',
-    benefits: ['Fibra', 'Digestiva']
+    benefits: ['Fibra', 'Digestiva'],
+    healthBenefit: 'Contiene fibra, regula el azúcar en sangre y mejora la digestión.',
+    portions: 5,
+    ingredients: ['habichuela']
   },
   {
     id: 'rabano',
@@ -660,7 +855,10 @@ export const products: Product[] = [
     description: 'Un alimento que favorece la salud cardiovascular y digestiva.',
     image: 'https://picsum.photos/seed/rabano/400/300',
     category: 'mercado-fresco',
-    benefits: ['Cardiovascular', 'Digestivo']
+    benefits: ['Cardiovascular', 'Digestivo'],
+    healthBenefit: 'Es un desintoxicante hepático, mejora la digestión y estimula la bilis.',
+    portions: 4,
+    ingredients: ['rábano']
   },
   {
     id: 'auyama',
@@ -669,7 +867,10 @@ export const products: Product[] = [
     description: 'Para hacer sopas, puré o hacer láminas en el airfryer.',
     image: 'https://picsum.photos/seed/auyama/400/300',
     category: 'mercado-fresco',
-    benefits: ['Versátil', 'Nutritiva']
+    benefits: ['Versátil', 'Nutritiva'],
+    healthBenefit: 'Es energía limpia, antioxidante y mejora la digestión.',
+    portions: 1,
+    ingredients: ['auyama']
   },
   {
     id: 'remolacha',
@@ -678,7 +879,10 @@ export const products: Product[] = [
     description: 'El vegetal que mejora tu salud cardiovascular.',
     image: 'https://picsum.photos/seed/remolacha/400/300',
     category: 'mercado-fresco',
-    benefits: ['Cardiovascular', 'Antioxidante']
+    benefits: ['Cardiovascular', 'Antioxidante'],
+    healthBenefit: 'Mejora la circulación, aumenta el rendimiento físico y es un detox hepático.',
+    portions: 2,
+    ingredients: ['remolacha']
   },
   {
     id: 'tomate-aliño',
@@ -687,7 +891,11 @@ export const products: Product[] = [
     description: 'No es un vegetal, es una fruta, pero especial para hacer ensaladas y guisos.',
     image: 'https://picsum.photos/seed/tomate-aliño/400/300',
     category: 'mercado-fresco',
-    benefits: ['Esencial', 'Versátil']
+    benefits: ['Esencial', 'Versátil'],
+    healthBenefit: 'Es antioxidante, antiinflamatorio y protege el corazón.',
+    portions: 3,
+    observation: 'Maduración a elección: verde, pintón o maduro.',
+    ingredients: ['tomate de aliño']
   },
   {
     id: 'tomate-uvalina',
@@ -696,7 +904,11 @@ export const products: Product[] = [
     description: 'Parecido al cherry pero más dulce y ovalado.',
     image: 'https://picsum.photos/seed/tomate-uvalina/400/300',
     category: 'mercado-fresco',
-    benefits: ['Dulce', 'Ensaladas']
+    benefits: ['Dulce', 'Ensaladas'],
+    healthBenefit: 'Es más alto en vitamina C que los dos anteriores, mejora el sistema inmune además es ligero y digestivo.',
+    portions: 4,
+    observation: 'Viene entero.',
+    ingredients: ['tomate uvalina']
   },
   {
     id: 'repollo',
@@ -705,7 +917,10 @@ export const products: Product[] = [
     description: 'Un alimento completo que te mejora la digestión.',
     image: 'https://picsum.photos/seed/repollo/400/300',
     category: 'mercado-fresco',
-    benefits: ['Digestión', 'Fibra']
+    benefits: ['Digestión', 'Fibra'],
+    healthBenefit: 'Es un desintoxicante hepático, contiene fibra así que mejora el intestino y el morado contiene más antioxidantes.',
+    portions: 1,
+    ingredients: ['repollo blanco o morado']
   },
   {
     id: 'apio',
@@ -714,7 +929,10 @@ export const products: Product[] = [
     description: 'Un vegetal potente para tu salud digestiva y metabólica.',
     image: 'https://picsum.photos/seed/apio/400/300',
     category: 'mercado-fresco',
-    benefits: ['Digestivo', 'Metabólico']
+    benefits: ['Digestivo', 'Metabólico'],
+    healthBenefit: 'Es un diurético natural, desinflama y regula la presión.',
+    portions: 1,
+    ingredients: ['apio']
   },
   {
     id: 'brocoli',
@@ -723,7 +941,10 @@ export const products: Product[] = [
     description: 'Proteína vegetal, un superalimento.',
     image: 'https://picsum.photos/seed/brocoli/400/300',
     category: 'mercado-fresco',
-    benefits: ['Superalimento', 'Proteína']
+    benefits: ['Superalimento', 'Proteína'],
+    healthBenefit: 'Es anticancerígeno, contiene gran cantidad de fibra y refuerza el sistema inmune, es considerado superalimento.',
+    portions: 1,
+    ingredients: ['brócoli']
   },
   {
     id: 'pepino',
@@ -732,7 +953,10 @@ export const products: Product[] = [
     description: 'Altamente hidratante y bajo en calorías.',
     image: 'https://picsum.photos/seed/pepino/400/300',
     category: 'mercado-fresco',
-    benefits: ['Hidratante', 'Ligero']
+    benefits: ['Hidratante', 'Ligero'],
+    healthBenefit: 'Es altamente hidratante, desinflama y mejora la piel.',
+    portions: 2,
+    ingredients: ['pepino']
   },
   {
     id: 'penca-sabila',
@@ -741,7 +965,10 @@ export const products: Product[] = [
     description: 'Sirve como tópico (quemaduras, hidratar la piel y cicatrizar heridas) o para hacer licuados y mejorar tu digestión.',
     image: 'https://picsum.photos/seed/penca-sabila/400/300',
     category: 'mercado-fresco',
-    benefits: ['Medicinal', 'Digestiva']
+    benefits: ['Medicinal', 'Digestiva'],
+    healthBenefit: 'Regenera el intestino, es antiinflamatorio y mejora la digestión.',
+    portions: 1,
+    ingredients: ['penca sábila']
   },
   {
     id: 'yuca-pelada',
@@ -750,7 +977,11 @@ export const products: Product[] = [
     description: 'Perfectamente seleccionada, bien lavada y sin vena.',
     image: 'https://picsum.photos/seed/yuca-pelada/400/300',
     category: 'mercado-fresco',
-    benefits: ['Lista', 'Tradicional']
+    benefits: ['Lista', 'Tradicional'],
+    healthBenefit: 'Es fuente de energía limpia, es libre de gluten y mejora la digestión.',
+    portions: 4,
+    observation: 'Viene en trozos, en mitades y sin vena.',
+    ingredients: ['yuca pelada desvenada']
   },
   {
     id: 'zanahoria',
@@ -759,7 +990,10 @@ export const products: Product[] = [
     description: 'Dulce y fresca, especial para tu salud ocular.',
     image: 'https://picsum.photos/seed/zanahoria/400/300',
     category: 'mercado-fresco',
-    benefits: ['Vitamina A', 'Salud ocular']
+    benefits: ['Vitamina A', 'Salud ocular'],
+    healthBenefit: 'Contiene betacarotenas especial para la piel y la visión. Además es antioxidante.',
+    portions: 2,
+    ingredients: ['zanahoria']
   },
   {
     id: 'lechuga-batavia',
@@ -768,7 +1002,10 @@ export const products: Product[] = [
     description: 'La inconfundible lechuga batavia para ensaladas, ya lista para consumir.',
     image: 'https://picsum.photos/seed/lechuga-batavia/400/300',
     category: 'mercado-fresco',
-    benefits: ['Fresca', 'Lista']
+    benefits: ['Fresca', 'Lista'],
+    healthBenefit: 'Es hidratante, mejora la digestión y es fibra ligera.',
+    portions: 1,
+    ingredients: ['lechuga batavia']
   },
   {
     id: 'perejil',
@@ -777,7 +1014,11 @@ export const products: Product[] = [
     description: 'Lavado y desinfectado, pídelo crespo o liso.',
     image: 'https://picsum.photos/seed/perejil/400/300',
     category: 'mercado-fresco',
-    benefits: ['Aromático', 'Fresco']
+    benefits: ['Aromático', 'Fresco'],
+    healthBenefit: 'Es un desintoxicante natural para los riñones. Es rico en vitamina C y hierro además de ser un antiinflamatorio natural.',
+    portions: 10,
+    observation: 'Lavado, desinfectado y centrifugado.',
+    ingredients: ['perejil']
   },
   {
     id: 'coliflor',
@@ -786,7 +1027,10 @@ export const products: Product[] = [
     description: 'Un vegetal que te ayuda a perder peso, bajo en calorías y cargado de proteína.',
     image: 'https://picsum.photos/seed/coliflor/400/300',
     category: 'mercado-fresco',
-    benefits: ['Bajo en calorías', 'Proteína']
+    benefits: ['Bajo en calorías', 'Proteína'],
+    healthBenefit: 'Es un desintoxicante hepático, contiene fibra y regula las hormonas.',
+    portions: 1,
+    ingredients: ['coliflor']
   },
   {
     id: 'cilantro',
@@ -795,329 +1039,538 @@ export const products: Product[] = [
     description: 'Cilantro fresco, desinfectado y lavado.',
     image: 'https://picsum.photos/seed/cilantro/400/300',
     category: 'mercado-fresco',
-    benefits: ['Aromático', 'Fresco']
+    benefits: ['Aromático', 'Fresco'],
+    healthBenefit: 'Elimina metales pesados, es antibacteriano y mejora la digestión. Ideal para un detox profundo.',
+    portions: 10,
+    observation: 'Lavado, desinfectado y centrifugado.',
+    ingredients: ['cilantro']
   },
 
     {
     id: 'papa-capira', name: 'Papa Capira (Libra)', price: 4900,
     description: 'Lavadas y desinfectadas.', image: 'https://picsum.photos/seed/papa-capira/400/300',
-    category: 'mercado-fresco', benefits: ['Tradicional', 'Lista']
+    category: 'mercado-fresco', benefits: ['Tradicional', 'Lista'],
+    healthBenefit: 'Contiene carbohidratos complejos y es fuente de energía, aporta potasio y genera saciedad.',
+    portions: 3,
+    ingredients: ['papa capira']
   },
   {
     id: 'papa-criolla', name: 'Papa Criolla (Libra)', price: 6900,
     description: 'Lavadas y desinfectadas.', image: 'https://picsum.photos/seed/papa-criolla/400/300',
-    category: 'mercado-fresco', benefits: ['Colombiana', 'Lista']
+    category: 'mercado-fresco', benefits: ['Colombiana', 'Lista'],
+    healthBenefit: 'Es rica en antioxidantes, contiene energía aún más limpia y es más ligera, recomendada para dietas.',
+    portions: 6,
+    ingredients: ['papa criolla']
   },
   {
     id: 'papa-nevada', name: 'Papa Nevada (Libra)', price: 5900,
     description: 'Lavadas y desinfectadas.', image: 'https://picsum.photos/seed/papa-nevada/400/300',
-    category: 'mercado-fresco', benefits: ['Versátil', 'Lista']
+    category: 'mercado-fresco', benefits: ['Versátil', 'Lista'],
+    healthBenefit: 'Contiene carbohidratos complejos y es fuente de energía, aporta potasio y genera saciedad.',
+    portions: 3,
+    ingredients: ['papa nevada']
   },
   {
     id: 'frijol-rojo', name: 'Frijol Rojo (Libra)', price: 7900,
     description: 'Desinfectado y seleccionado.', image: 'https://picsum.photos/seed/frijol-rojo/400/300',
-    category: 'mercado-fresco', benefits: ['Proteína', 'Tradicional']
+    category: 'mercado-fresco', benefits: ['Proteína', 'Tradicional'],
+    healthBenefit: 'Es proteína vegetal, alta en fibra y regula el azúcar en sangre.',
+    portions: 5,
+    ingredients: ['frijol rojo']
   },
   {
     id: 'guineo', name: 'Guineo (Libra)', price: 4900,
     description: 'Siempre verde y fresco.', image: 'https://picsum.photos/seed/guineo/400/300',
-    category: 'mercado-fresco', benefits: ['Verde', 'Fresco']
+    category: 'mercado-fresco', benefits: ['Verde', 'Fresco'],
+    healthBenefit: 'Es fuente de potasio para el mejoramiento de la función muscular. Es energía rápida y mejora la digestión.',
+    portions: 3,
+    ingredients: ['guineo']
   },
   {
     id: 'platano', name: 'Plátano (Libra)', price: 4900,
     description: 'Pídelo verde, pintón o maduro.', image: 'https://picsum.photos/seed/platano/400/300',
-    category: 'mercado-fresco', benefits: ['Versátil', 'Tradicional']
+    category: 'mercado-fresco', benefits: ['Versátil', 'Tradicional'],
+    healthBenefit: 'Es energía sostenida, rico en fibra y mejora la digestión.',
+    portions: 2,
+    observation: 'Maduración a elección: verde, pintón o maduro.',
+    ingredients: ['plátano']
   },
   {
     id: 'yuca-libra', name: 'Yuca (Libra)', price: 4900,
     description: 'Seleccionada con ojo de halcón.', image: 'https://picsum.photos/seed/yuca-libra/400/300',
-    category: 'mercado-fresco', benefits: ['Tradicional', 'Seleccionada']
+    category: 'mercado-fresco', benefits: ['Tradicional', 'Seleccionada'],
+    healthBenefit: 'Es libre de gluten, contiene energía limpia y es de fácil digestión.',
+    portions: 3,
+    ingredients: ['yuca']
   },
   {
     id: 'champinon', name: 'Champiñón (Libra)', price: 14900,
     description: 'Pide media libra, libra o kilo.', image: 'https://picsum.photos/seed/champinon/400/300',
-    category: 'mercado-fresco', benefits: ['Gourmet', 'Versátil']
+    category: 'mercado-fresco', benefits: ['Gourmet', 'Versátil'],
+    healthBenefit: 'Es bajo en calorías, es fuente de proteína vegetal y refuerza el sistema inmune.',
+    portions: 4,
+    ingredients: ['champiñón']
   },
   {
     id: 'orellana', name: 'Orellana (Libra)', price: 16900,
     description: 'Pide media libra, libra o kilo.', image: 'https://picsum.photos/seed/orellana/400/300',
-    category: 'mercado-fresco', benefits: ['Gourmet', 'Premium']
+    category: 'mercado-fresco', benefits: ['Gourmet', 'Premium'],
+    healthBenefit: 'Es proteína vegetal, reduce el colesterol y es antiinflamatoria.',
+    portions: 4,
+    ingredients: ['orellana']
   },
   {
     id: 'tomate-san-marzano', name: 'Tomate San Marzano (Libra)', price: 9900,
     description: 'Perfectamente seleccionados.', image: 'https://picsum.photos/seed/tomate-san-marzano/400/300',
-    category: 'mercado-fresco', benefits: ['Premium', 'Salsas']
+    category: 'mercado-fresco', benefits: ['Premium', 'Salsas'],
+    healthBenefit: 'Contiene mayor concentración de antioxidantes, mejora la salud celular y refuerza las defensas.',
+    portions: 4,
+    observation: 'Se entrega entero y maduro.',
+    ingredients: ['tomate san marzano']
   },
   {
     id: 'cebolla-morada', name: 'Cebolla Morada (Libra)', price: 5900,
     description: 'Lavada, pelada y limpia.', image: 'https://picsum.photos/seed/cebolla-morada/400/300',
-    category: 'mercado-fresco', benefits: ['Sabor', 'Lista']
+    category: 'mercado-fresco', benefits: ['Sabor', 'Lista'],
+    healthBenefit: 'Es antiinflamatoria, mejora la circulación y contiene mayor concentración de antioxidantes.',
+    portions: 3,
+    ingredients: ['cebolla morada']
   },
   {
     id: 'cebollin', name: 'Cebollín (Atado)', price: 3900,
     description: 'Lavado y desinfectado.', image: 'https://picsum.photos/seed/cebollin/400/300',
-    category: 'mercado-fresco', benefits: ['Aromático', 'Fresco']
+    category: 'mercado-fresco', benefits: ['Aromático', 'Fresco'],
+    healthBenefit: 'Es antioxidante, mejora la digestión y refuerza el sistema inmune.',
+    portions: 10,
+    ingredients: ['cebollín']
   },
   {
     id: 'cebolla-chalota', name: 'Cebolla Chalota (Libra)', price: 12900,
     description: 'Son más dulces y delicadas.', image: 'https://picsum.photos/seed/cebolla-chalota/400/300',
-    category: 'mercado-fresco', benefits: ['Gourmet', 'Dulce']
+    category: 'mercado-fresco', benefits: ['Gourmet', 'Dulce'],
+    healthBenefit: 'Es rica en antioxidantes, mejora la circulación y es antiinflamatoria.',
+    portions: 6,
+    ingredients: ['cebolla chalota']
   },
   {
     id: 'ajo', name: 'Ajo (Libra)', price: 3900,
     description: 'Seleccionado con cuidado.', image: 'https://picsum.photos/seed/ajo/400/300',
-    category: 'mercado-fresco', benefits: ['Esencial', 'Sabor']
+    category: 'mercado-fresco', benefits: ['Esencial', 'Sabor'],
+    healthBenefit: 'Es un antibiótico natural, mejora el sistema inmune y reduce la inflamación.',
+    portions: 10,
+    ingredients: ['ajo']
   },
   {
     id: 'lechuga-romana', name: 'Lechuga Romana (Libra)', price: 5900,
     description: 'Para ensaladas y emparedados.', image: 'https://picsum.photos/seed/lechuga-romana/400/300',
-    category: 'mercado-fresco', benefits: ['Fresca', 'Crujiente']
+    category: 'mercado-fresco', benefits: ['Fresca', 'Crujiente'],
+    healthBenefit: 'Rica en fibra, mejora la digestión y aporta minerales.',
+    portions: 1,
+    ingredients: ['lechuga romana']
   },
   {
     id: 'cogollo-europeo', name: 'Cogollo Europeo (Libra)', price: 7900,
     description: 'Para ensaladas y emparedados.', image: 'https://picsum.photos/seed/cogollo-europeo/400/300',
-    category: 'mercado-fresco', benefits: ['Premium', 'Ensaladas']
+    category: 'mercado-fresco', benefits: ['Premium', 'Ensaladas'],
+    healthBenefit: 'Rica en fibra, mejora la digestión y es hidratante.',
+    portions: 3,
+    ingredients: ['cogollo europeo']
   },
   {
     id: 'arracacha', name: 'Arracacha (Libra)', price: 5900,
     description: 'Tubérculo tradicional colombiano.', image: 'https://picsum.photos/seed/arracacha/400/300',
-    category: 'mercado-fresco', benefits: ['Tradicional', 'Nutritiva']
+    category: 'mercado-fresco', benefits: ['Tradicional', 'Nutritiva'],
+    healthBenefit: 'Energía de fácil digestión, rica en carbohidratos suaves y mejora la digestión.',
+    portions: 3,
+    ingredients: ['arracacha']
   },
   {
     id: 'jengibre', name: 'Jengibre (100g)', price: 4900,
     description: 'Raíz potente para infusiones y preparaciones.', image: 'https://picsum.photos/seed/jengibre/400/300',
-    category: 'mercado-fresco', benefits: ['Medicinal', 'Antiinflamatorio']
+    category: 'mercado-fresco', benefits: ['Medicinal', 'Antiinflamatorio'],
+    healthBenefit: 'Es antiinflamatorio, refuerza el sistema inmune y mejora la digestión. Este es otro superalimento.',
+    portions: 5,
+    ingredients: ['jengibre']
   },
   {
     id: 'aji-dulce', name: 'Ají Dulce (Libra)', price: 7900,
     description: 'Sabor sin picante.', image: 'https://picsum.photos/seed/aji-dulce/400/300',
-    category: 'mercado-fresco', benefits: ['Aromático', 'Suave']
+    category: 'mercado-fresco', benefits: ['Aromático', 'Suave'],
+    healthBenefit: 'Es antioxidante, mejora la digestión y es rico en vitamina C.',
+    portions: 10,
+    ingredients: ['ají dulce']
   },
   {
     id: 'aji-rocoto', name: 'Ají Rocoto Picante (Libra)', price: 12900,
     description: 'Para los amantes del picante.', image: 'https://picsum.photos/seed/aji-rocoto/400/300',
-    category: 'mercado-fresco', benefits: ['Picante', 'Intenso']
+    category: 'mercado-fresco', benefits: ['Picante', 'Intenso'],
+    healthBenefit: 'Activa el metabolismo, mejora la circulación y es antiinflamatorio.',
+    portions: 6,
+    ingredients: ['ají rocoto picante']
   },
   {
     id: 'jalapeno', name: 'Jalapeño (Libra)', price: 9900,
     description: 'El clásico picante mexicano.', image: 'https://picsum.photos/seed/jalapeno/400/300',
-    category: 'mercado-fresco', benefits: ['Picante', 'Versátil']
+    category: 'mercado-fresco', benefits: ['Picante', 'Versátil'],
+    healthBenefit: 'Activa el metabolismo, mejora la circulación y es antiinflamatorio.',
+    portions: 8,
+    ingredients: ['jalapeño']
   },
   {
     id: 'mazorca', name: 'Bandeja Mazorca (Libra)', price: 5900,
     description: 'Lista para asar o cocinar.', image: 'https://picsum.photos/seed/mazorca/400/300',
-    category: 'mercado-fresco', benefits: ['Tradicional', 'Versátil']
+    category: 'mercado-fresco', benefits: ['Tradicional', 'Versátil'],
+    healthBenefit: 'Es energía natural, contiene fibra y genera saciedad.',
+    portions: 3,
+    ingredients: ['mazorca']
   },
   {
     id: 'berenjena', name: 'Berenjena (Libra)', price: 7900,
     description: 'Versátil para múltiples preparaciones.', image: 'https://picsum.photos/seed/berenjena/400/300',
-    category: 'mercado-fresco', benefits: ['Versátil', 'Baja en calorías']
+    category: 'mercado-fresco', benefits: ['Versátil', 'Baja en calorías'],
+    healthBenefit: 'Es antioxidante, reduce el colesterol y mejora la salud cardiovascular.',
+    portions: 2,
+    ingredients: ['berenjena']
   },
   {
     id: 'col-bruselas', name: 'Col de Bruselas (Libra)', price: 14900,
     description: 'Perfectas para hornear o saltear.', image: 'https://picsum.photos/seed/col-bruselas/400/300',
-    category: 'mercado-fresco', benefits: ['Premium', 'Nutritiva']
+    category: 'mercado-fresco', benefits: ['Premium', 'Nutritiva'],
+    healthBenefit: 'Es un antioxidante potente, desintoxica y refuerza el sistema inmune.',
+    portions: 1,
+    ingredients: ['col de bruselas']
   },
   {
     id: 'esparragos', name: 'Espárragos (Atado)', price: 12900,
     description: 'Frescos y listos para preparar.', image: 'https://picsum.photos/seed/esparragos/400/300',
-    category: 'mercado-fresco', benefits: ['Gourmet', 'Saludable']
+    category: 'mercado-fresco', benefits: ['Gourmet', 'Saludable'],
+    healthBenefit: 'Son diuréticos, es un desintoxicante renal y mejora la digestión.',
+    portions: 3,
+    ingredients: ['espárragos']
   },
   {
     id: 'kale', name: 'Kale (250g)', price: 8900,
     description: 'Superalimento de moda.', image: 'https://picsum.photos/seed/kale/400/300',
-    category: 'mercado-fresco', benefits: ['Superalimento', 'Antioxidante']
+    category: 'mercado-fresco', benefits: ['Superalimento', 'Antioxidante'],
+    healthBenefit: 'Es un superalimento, altamente antioxidante y refuerza el sistema inmune.',
+    portions: 3,
+    ingredients: ['kale']
   },
   {
     id: 'espinaca', name: 'Espinaca (250g)', price: 5900,
     description: 'Hojas frescas y nutritivas.', image: 'https://picsum.photos/seed/espinaca/400/300',
-    category: 'mercado-fresco', benefits: ['Hierro', 'Nutritiva']
+    category: 'mercado-fresco', benefits: ['Hierro', 'Nutritiva'],
+    healthBenefit: 'Es otro superalimento, rica en hierro, mejora la energía y es antioxidante.',
+    portions: 4,
+    ingredients: ['espinaca']
   },
   {
     id: 'acelga', name: 'Acelga (Atado)', price: 4900,
     description: 'Hojas verdes nutritivas.', image: 'https://picsum.photos/seed/acelga/400/300',
-    category: 'mercado-fresco', benefits: ['Nutritiva', 'Versátil']
+    category: 'mercado-fresco', benefits: ['Nutritiva', 'Versátil'],
+    healthBenefit: 'Rica en minerales, mejora la digestión y es antioxidante.',
+    portions: 4,
+    ingredients: ['acelga']
   },
   {
     id: 'col-china', name: 'Col China (Libra)', price: 6900,
     description: 'Ideal para salteados asiáticos.', image: 'https://picsum.photos/seed/col-china/400/300',
-    category: 'mercado-fresco', benefits: ['Asiática', 'Ligera']
+    category: 'mercado-fresco', benefits: ['Asiática', 'Ligera'],
+    healthBenefit: 'Es ligera, digestiva y rica en antioxidantes.',
+    portions: 4,
+    ingredients: ['col china']
   },
   {
     id: 'hinojo', name: 'Hinojo (Libra)', price: 8900,
     description: 'Sabor anisado único.', image: 'https://picsum.photos/seed/hinojo/400/300',
-    category: 'mercado-fresco', benefits: ['Aromático', 'Digestivo']
+    category: 'mercado-fresco', benefits: ['Aromático', 'Digestivo'],
+    healthBenefit: 'Reduce gases estomacales, mejora la digestión y es antiinflamatorio.',
+    portions: 5,
+    ingredients: ['hinojo']
   },
   {
     id: 'eneldo', name: 'Eneldo (Atado)', price: 3900,
     description: 'Hierba aromática fresca.', image: 'https://picsum.photos/seed/eneldo/400/300',
-    category: 'mercado-fresco', benefits: ['Aromático', 'Gourmet']
+    category: 'mercado-fresco', benefits: ['Aromático', 'Gourmet'],
+    healthBenefit: 'Es digestivo, antiinflamatorio y mejora el metabolismo.',
+    portions: 5,
+    ingredients: ['eneldo']
   },
   {
     id: 'menta', name: 'Menta (Atado)', price: 3900,
     description: 'Fresca y aromática.', image: 'https://picsum.photos/seed/menta/400/300',
-    category: 'mercado-fresco', benefits: ['Refrescante', 'Aromática']
+    category: 'mercado-fresco', benefits: ['Refrescante', 'Aromática'],
+    healthBenefit: 'Es refrescante, mejora la digestión y es relajante.',
+    portions: 5,
+    ingredients: ['menta']
   },
   {
     id: 'yerbabuena', name: 'Yerbabuena (Atado)', price: 3900,
     description: 'Para infusiones y cocina.', image: 'https://picsum.photos/seed/yerbabuena/400/300',
-    category: 'mercado-fresco', benefits: ['Aromática', 'Digestiva']
+    category: 'mercado-fresco', benefits: ['Aromática', 'Digestiva'],
+    healthBenefit: 'Es digestiva, relajante y antiinflamatoria.',
+    portions: 5,
+    ingredients: ['yerbabuena']
   },
   {
     id: 'albahaca', name: 'Albahaca (Atado)', price: 3900,
     description: 'La reina de las hierbas aromáticas.', image: 'https://picsum.photos/seed/albahaca/400/300',
-    category: 'mercado-fresco', benefits: ['Aromática', 'Italiana']
+    category: 'mercado-fresco', benefits: ['Aromática', 'Italiana'],
+    healthBenefit: 'Es antioxidante, antiinflamatoria y mejora la digestión.',
+    portions: 5,
+    ingredients: ['albahaca']
   },
   {
     id: 'tomillo', name: 'Tomillo (Atado)', price: 3900,
     description: 'Hierba esencial de cocina.', image: 'https://picsum.photos/seed/tomillo/400/300',
-    category: 'mercado-fresco', benefits: ['Aromático', 'Esencial']
+    category: 'mercado-fresco', benefits: ['Aromático', 'Esencial'],
+    healthBenefit: 'Es antibacteriano, refuerza el sistema inmune y mejora la respiración.',
+    portions: 10,
+    ingredients: ['tomillo']
   },
   {
     id: 'romero', name: 'Romero (Atado)', price: 3900,
     description: 'Perfecto para carnes y asados.', image: 'https://picsum.photos/seed/romero/400/300',
-    category: 'mercado-fresco', benefits: ['Aromático', 'Asados']
+    category: 'mercado-fresco', benefits: ['Aromático', 'Asados'],
+    healthBenefit: 'Mejora la memoria, es antioxidante y estimula la circulación.',
+    portions: 10,
+    ingredients: ['romero']
   },
 
   {
     id: 'manzana-libra', name: 'Manzana (Libra)', price: 8900,
     description: 'Pídela verdes o rojas.', image: 'https://picsum.photos/seed/manzana-libra/400/300',
-    category: 'mercado-fresco', benefits: ['Fresca', 'Versátil']
+    category: 'mercado-fresco', benefits: ['Fresca', 'Versátil'],
+    healthBenefit: 'Es rica en fibra, favorece la salud intestinal y mejora la digestión. además es perfecta para el control de peso.',
+    portions: 1,
+    observation: 'Color a elección: verde o roja.',
+    ingredients: ['manzana']
   },
   {
     id: 'pera-libra', name: 'Pera (Libra)', price: 9900,
     description: 'Seleccionadas cuidadosamente.', image: 'https://picsum.photos/seed/pera-libra/400/300',
-    category: 'mercado-fresco', benefits: ['Dulce', 'Jugosa']
+    category: 'mercado-fresco', benefits: ['Dulce', 'Jugosa'],
+    healthBenefit: 'Alta en fibra, mejora el tránsito intestinal además es hidratante y baja en calorías.',
+    portions: 1,
+    ingredients: ['pera']
   },
   {
     id: 'banano-libra', name: 'Banano (Racimo)', price: 5900,
     description: 'Por racimos.', image: 'https://picsum.photos/seed/banano-libra/400/300',
-    category: 'mercado-fresco', benefits: ['Energía', 'Potasio']
+    category: 'mercado-fresco', benefits: ['Energía', 'Potasio'],
+    healthBenefit: 'Alto en potasio perfecto para la recuperación muscular, reduce la fatiga y es fuente rápida de energía.',
+    portions: 12,
+    observation: 'Se entrega verde o pintón, en racimos pequeños.',
+    ingredients: ['banano']
   },
   {
     id: 'limon-libra', name: 'Limón (Libra)', price: 4900,
     description: 'Los más jugosos y frescos.', image: 'https://picsum.photos/seed/limon-libra/400/300',
-    category: 'mercado-fresco', benefits: ['Vitamina C', 'Fresco']
+    category: 'mercado-fresco', benefits: ['Vitamina C', 'Fresco'],
+    healthBenefit: 'Es alto en vitamina C, perfecta para proteger el sistema inmune.',
+    portions: 8,
+    ingredients: ['limón']
   },
   {
     id: 'granadilla', name: 'Granadilla (Libra)', price: 12900,
     description: 'Una fruta exótica colombiana.', image: 'https://picsum.photos/seed/granadilla/400/300',
-    category: 'mercado-fresco', benefits: ['Exótica', 'Digestiva']
+    category: 'mercado-fresco', benefits: ['Exótica', 'Digestiva'],
+    healthBenefit: 'Rica en fibra, mejora la digestión y es un relajante natural.',
+    portions: 3,
+    ingredients: ['granadilla']
   },
   {
     id: 'mango-libra', name: 'Mango (Libra)', price: 7900,
     description: 'Un infaltable en tu nevera.', image: 'https://picsum.photos/seed/mango-libra/400/300',
-    category: 'mercado-fresco', benefits: ['Tropical', 'Dulce']
+    category: 'mercado-fresco', benefits: ['Tropical', 'Dulce'],
+    healthBenefit: 'Alto en vitaminas A y C, mejora el sistema inmune y la piel.',
+    portions: 1,
+    observation: 'Maduración a elección: verde, pintón o maduro.',
+    ingredients: ['mango']
   },
   {
     id: 'coco-libra', name: 'Coco (Libra)', price: 8900,
     description: 'El sabor dulce inconfundible del coco.', image: 'https://picsum.photos/seed/coco-libra/400/300',
-    category: 'mercado-fresco', benefits: ['Tropical', 'Energía']
+    category: 'mercado-fresco', benefits: ['Tropical', 'Energía'],
+    healthBenefit: 'Son grasas saludables, hidratante y mejora el metabolismo.',
+    portions: 1,
+    ingredients: ['coco']
   },
   {
     id: 'lulo', name: 'Lulo (Libra)', price: 8900,
     description: 'Acidito y especial para hacer jugo.', image: 'https://picsum.photos/seed/lulo/400/300',
-    category: 'mercado-fresco', benefits: ['Cítrico', 'Jugos']
+    category: 'mercado-fresco', benefits: ['Cítrico', 'Jugos'],
+    healthBenefit: 'Muy alto en vitamina C, es antioxidante y refuerza el sistema inmune.',
+    portions: 4,
+    ingredients: ['lulo']
   },
   {
     id: 'kiwi-libra', name: 'Kiwi (Libra)', price: 19900,
     description: 'Importados de calidad.', image: 'https://picsum.photos/seed/kiwi-libra/400/300',
-    category: 'mercado-fresco', benefits: ['Importado', 'Vitamina C']
+    category: 'mercado-fresco', benefits: ['Importado', 'Vitamina C'],
+    healthBenefit: 'Altísimo en vitamina C, refuerza las defensas y mejora la digestión.',
+    portions: 4,
+    observation: 'Maduración a elección: verde o pintón.',
+    ingredients: ['kiwi']
   },
   {
     id: 'durazno', name: 'Durazno (Libra)', price: 12900,
     description: 'Una fruta deliciosa con sabor delicado.', image: 'https://picsum.photos/seed/durazno/400/300',
-    category: 'mercado-fresco', benefits: ['Dulce', 'Delicado']
+    category: 'mercado-fresco', benefits: ['Dulce', 'Delicado'],
+    healthBenefit: 'Es hidratante, y rico en antioxidantes.',
+    portions: 4,
+    ingredients: ['durazno']
   },
   {
     id: 'pitahaya', name: 'Pitahaya (Libra)', price: 14900,
     description: 'Para mejorar tu salud digestiva.', image: 'https://picsum.photos/seed/pitahaya/400/300',
-    category: 'mercado-fresco', benefits: ['Digestiva', 'Exótica']
+    category: 'mercado-fresco', benefits: ['Digestiva', 'Exótica'],
+    healthBenefit: 'Rica en fibra, regula la digestión y es antioxidante.',
+    portions: 2,
+    ingredients: ['pitahaya']
   },
   {
     id: 'mandarina', name: 'Mandarina (Libra)', price: 6900,
     description: 'Un cítrico que acompaña loncheras.', image: 'https://picsum.photos/seed/mandarina/400/300',
-    category: 'mercado-fresco', benefits: ['Cítrica', 'Snack']
+    category: 'mercado-fresco', benefits: ['Cítrica', 'Snack'],
+    healthBenefit: 'Contiene vitamina C, es hidratante y mejora el sistema inmune.',
+    portions: 4,
+    ingredients: ['mandarina']
   },
   {
     id: 'fresa-libra', name: 'Fresa (Libra)', price: 12900,
     description: 'Dulces y grandes perfectamente seleccionadas.', image: 'https://picsum.photos/seed/fresa-libra/400/300',
-    category: 'mercado-fresco', benefits: ['Dulce', 'Seleccionada']
+    category: 'mercado-fresco', benefits: ['Dulce', 'Seleccionada'],
+    healthBenefit: 'Es un potente antioxidante, mejora la piel y es antiinflamatoria.',
+    portions: 4,
+    ingredients: ['fresa']
   },
   {
     id: 'guayaba-pera', name: 'Guayaba Pera (Libra)', price: 7900,
     description: 'La guayaba rosadita y dulce.', image: 'https://picsum.photos/seed/guayaba-pera/400/300',
-    category: 'mercado-fresco', benefits: ['Dulce', 'Jugos']
+    category: 'mercado-fresco', benefits: ['Dulce', 'Jugos'],
+    healthBenefit: 'Es muy alta en vitamina C, mejora el sistema inmune y contiene fibra.',
+    portions: 3,
+    observation: 'Maduración a elección: verde, pintón o maduro.',
+    ingredients: ['guayaba pera']
   },
   {
     id: 'guayaba-manzana-libra', name: 'Guayaba Manzana (Libra)', price: 7900,
     description: 'La guayaba verde y acidita.', image: 'https://picsum.photos/seed/guayaba-manzana-libra/400/300',
-    category: 'mercado-fresco', benefits: ['Acidita', 'Fresca']
+    category: 'mercado-fresco', benefits: ['Acidita', 'Fresca'],
+    healthBenefit: 'Es rica en antioxidantes, mejora la digestión y apoya al sistema inmune.',
+    portions: 2,
+    ingredients: ['guayaba manzana']
   },
   {
     id: 'aguacate-hass', name: 'Aguacate Hass (Libra)', price: 5900,
     description: 'Perfecto para hacer guacamole.', image: 'https://picsum.photos/seed/aguacate-hass/400/300',
-    category: 'mercado-fresco', benefits: ['Grasas saludables', 'Versátil']
+    category: 'mercado-fresco', benefits: ['Grasas saludables', 'Versátil'],
+    healthBenefit: 'Contiene grasas saludables, mejora la salud cardiovascular y aumenta la saciedad.',
+    portions: 3,
+    observation: 'Maduración a elección: verde, pintón o maduro.',
+    ingredients: ['aguacate hass']
   },
   {
     id: 'sandia-baby-libra', name: 'Sandía Baby (Libra)', price: 12900,
     description: 'Las sandías más dulces.', image: 'https://picsum.photos/seed/sandia-baby-libra/400/300',
-    category: 'mercado-fresco', benefits: ['Hidratante', 'Dulce']
+    category: 'mercado-fresco', benefits: ['Hidratante', 'Dulce'],
+    healthBenefit: 'Es hidratación extrema, es diurética y refrescante.',
+    portions: 1,
+    observation: 'Se entrega entera por unidad y madura.',
+    ingredients: ['sandía baby']
   },
   {
     id: 'tomate-arbol', name: 'Tomate de Árbol (Libra)', price: 6900,
     description: 'Perfecto para hacer jugo.', image: 'https://picsum.photos/seed/tomate-arbol/400/300',
-    category: 'mercado-fresco', benefits: ['Jugos', 'Vitaminas']
+    category: 'mercado-fresco', benefits: ['Jugos', 'Vitaminas'],
+    healthBenefit: 'Es alto en antioxidantes, mejora la salud cardiovascular y regula el colesterol.',
+    portions: 3,
+    ingredients: ['tomate de árbol']
   },
   {
     id: 'papaya-maradol', name: 'Papaya Maradol (Libra)', price: 8900,
     description: 'Seleccionada perfectamente.', image: 'https://picsum.photos/seed/papaya-maradol/400/300',
-    category: 'mercado-fresco', benefits: ['Digestiva', 'Dulce']
+    category: 'mercado-fresco', benefits: ['Digestiva', 'Dulce'],
+    healthBenefit: 'Contiene enzimás digestivas (papaína) mejora la digestión y es antiinflamatoria.',
+    portions: 1,
+    observation: 'Maduración a elección: verde, pintón o maduro.',
+    ingredients: ['papaya maradol']
   },
   {
     id: 'melon-libra', name: 'Melón (Libra)', price: 9900,
     description: 'Dulce y exquisito.', image: 'https://picsum.photos/seed/melon-libra/400/300',
-    category: 'mercado-fresco', benefits: ['Dulce', 'Refrescante']
+    category: 'mercado-fresco', benefits: ['Dulce', 'Refrescante'],
+    healthBenefit: 'Es hidratante, ligero y bajo en calorías.',
+    portions: 1,
+    observation: 'Se entrega entero por unidad y maduro.',
+    ingredients: ['melón']
   },
   {
     id: 'guanabana', name: 'Guanábana (Libra)', price: 14900,
     description: 'Perfectamente seleccionada.', image: 'https://picsum.photos/seed/guanabana/400/300',
-    category: 'mercado-fresco', benefits: ['Exótica', 'Jugos']
+    category: 'mercado-fresco', benefits: ['Exótica', 'Jugos'],
+    healthBenefit: 'Es un antioxidante potente, refuerza el sistema inmune y es un relajante natural.',
+    portions: 1,
+    observation: 'Se entrega entera por unidad y pintona.',
+    ingredients: ['guanábana']
   },
   {
     id: 'mangostino', name: 'Mangostino (Libra)', price: 19900,
     description: 'Un sabor único y exótico.', image: 'https://picsum.photos/seed/mangostino/400/300',
-    category: 'mercado-fresco', benefits: ['Exótico', 'Premium']
+    category: 'mercado-fresco', benefits: ['Exótico', 'Premium'],
+    healthBenefit: 'Es riquísimo en antioxidantes, antiinflamatorio y mejora el sistema inmune.',
+    portions: 3,
+    ingredients: ['mangostino']
   },
   {
     id: 'rambutan', name: 'Rambután (Libra)', price: 24900,
     description: 'Un producto exclusivo.', image: 'https://picsum.photos/seed/rambutan/400/300',
-    category: 'mercado-fresco', benefits: ['Exclusivo', 'Exótico']
+    category: 'mercado-fresco', benefits: ['Exclusivo', 'Exótico'],
+    healthBenefit: 'Rico en vitamina C, es energía natural y mejora el sistema inmune.',
+    portions: 8,
+    ingredients: ['rambután']
   },
   {
     id: 'arandanos', name: 'Arándanos (125g)', price: 14900,
     description: 'Fruta cargada de antioxidantes.', image: 'https://picsum.photos/seed/arandanos/400/300',
-    category: 'mercado-fresco', benefits: ['Antioxidantes', 'Premium']
+    category: 'mercado-fresco', benefits: ['Antioxidantes', 'Premium'],
+    healthBenefit: 'Es un potente antioxidante, mejora la memoria y protege el sistema cardiovascular.',
+    portions: 1,
+    ingredients: ['arándanos']
   },
   {
     id: 'frambuesa', name: 'Frambuesa (125g)', price: 17900,
     description: 'Exclusivo y exótico.', image: 'https://picsum.photos/seed/frambuesa/400/300',
-    category: 'mercado-fresco', benefits: ['Exclusivo', 'Antioxidante']
+    category: 'mercado-fresco', benefits: ['Exclusivo', 'Antioxidante'],
+    healthBenefit: 'Es rica en fibra, antioxidante y mejora la digestión.',
+    portions: 1,
+    ingredients: ['frambuesa']
   },
   {
     id: 'maracuya', name: 'Maracuyá (Libra)', price: 7900,
     description: 'La fruta de la pasión.', image: 'https://picsum.photos/seed/maracuya/400/300',
-    category: 'mercado-fresco', benefits: ['Tropical', 'Jugos']
+    category: 'mercado-fresco', benefits: ['Tropical', 'Jugos'],
+    healthBenefit: 'Es una pasiflora natural, te relaja además de que mejora el sueño y es antioxidante.',
+    portions: 2,
+    ingredients: ['maracuyá']
   },
   {
     id: 'naranja-libra', name: 'Naranja (Libra)', price: 4900,
     description: 'Dulces y perfectamente seleccionadas.', image: 'https://picsum.photos/seed/naranja-libra/400/300',
-    category: 'mercado-fresco', benefits: ['Vitamina C', 'Jugos']
+    category: 'mercado-fresco', benefits: ['Vitamina C', 'Jugos'],
+    healthBenefit: 'Contiene vitamina C, es hidratante y mejora el sistema inmune.',
+    portions: 3,
+    ingredients: ['naranja']
   },
   {
     id: 'aguacate-papelillo', name: 'Aguacate Papelillo (Libra)', price: 4900,
     description: 'Especial para acompañar almuerzos y ensaladas.', image: 'https://picsum.photos/seed/aguacate-papelillo/400/300',
-    category: 'mercado-fresco', benefits: ['Tradicional', 'Versátil']
+    category: 'mercado-fresco', benefits: ['Tradicional', 'Versátil'],
+    healthBenefit: 'Es una grasa saludable, te aporta energía sostenida y apoya la salud cardiovascular.',
+    portions: 1,
+    observation: 'Maduración a elección: verde, pintón o maduro.',
+    ingredients: ['aguacate papelillo']
   },
 
   // Combos
@@ -1128,7 +1581,29 @@ export const products: Product[] = [
     description: 'Selección perfecta para parejas o consumo individual.',
     image: 'https://picsum.photos/seed/combo-1-2/400/300',
     category: 'combos',
-    benefits: ['Completo', 'Ahorro']
+    benefits: ['Completo', 'Ahorro'],
+    healthBenefit: 'La porción perfecta para tu mercado saludable quincenal.',
+    portions: 84,
+    observation: 'Incluye opciones para escoger sopas o cremas, frutas picadas, verduras picadas, una ensalada gourmet, una ensalada tradicional, jugos saludables o jugo de naranja, frutos secos y frutas de mano.',
+    ingredients: [
+      '3 sopas o cremas',
+      '3 baby bowls de fruta x 250 gr',
+      '3 baby bowls de verduras x 250 gr',
+      '1 bowl de ensalada gourmet',
+      '1 bowl de ensalada tradicional',
+      '6 frutas de mano',
+      '1 kg de aguacate hass',
+      'cilantro x 200 gr',
+      '1 kg de papa capira',
+      '1 lb de papa criolla',
+      '1 kg de plátano',
+      '1,5 kg de banano',
+      '2 cabezas de ajo',
+      '1 kg de limón tahiti',
+      '5 jugos saludables o six pack de jugo de naranja',
+      'mix de frutos secos x 2',
+      'queso saludable 500 gr x 1'
+    ]
   },
   {
     id: 'combo-familiar',
@@ -1137,7 +1612,29 @@ export const products: Product[] = [
     description: 'Abastecimiento completo para la familia.',
     image: 'https://picsum.photos/seed/combo-familiar/400/300',
     category: 'combos',
-    benefits: ['Familiar', 'Gran ahorro']
+    benefits: ['Familiar', 'Gran ahorro'],
+    healthBenefit: 'Un mercado saludable para compartir entre familia y amigos.',
+    portions: 118,
+    observation: 'Incluye opciones para escoger sopas o cremas, frutas picadas, verduras picadas, ensaladas gourmet, ensaladas tradicionales, jugos saludables o jugo de naranja, frutos secos y frutas de mano.',
+    ingredients: [
+      '5 sopas o cremas',
+      '6 baby bowls de fruta x 250 gr',
+      '6 baby bowls de verduras x 250 gr',
+      '2 bowls de ensalada gourmet',
+      '2 bowls de ensalada tradicional',
+      '8 frutas de mano',
+      '1 kg de aguacate hass',
+      'cilantro x 200 gr',
+      '2 kg de papa capira',
+      '1 kg de papa criolla',
+      '2 kg de plátano',
+      '2 kg de banano',
+      '3 cabezas de ajo',
+      '1 kg de limón tahiti',
+      '5 jugos saludables o six pack de jugo de naranja',
+      'mix de frutos secos x 2 de 140 gr',
+      'queso saludable 500 gr x 2'
+    ]
   },
   {
     id: 'combo-tardes',
@@ -1146,7 +1643,24 @@ export const products: Product[] = [
     description: 'Snacks y bebidas para tus tardes.',
     image: 'https://picsum.photos/seed/combo-tardes/400/300',
     category: 'combos',
-    benefits: ['Snacks', 'Merienda']
+    benefits: ['Snacks', 'Merienda'],
+    healthBenefit: 'Pensado para convertir tus tardes en tardes saludables y balanceadas.',
+    portions: 68,
+    observation: 'Incluye base predeterminada y una fruta de elección.',
+    ingredients: [
+      '1 lt de yogurt griego',
+      '2 mini bowl berry mix x 250 gr',
+      '2 kg de banano',
+      '1 frutos secos mix 140 gr',
+      '1 almendra 140 gr',
+      '1 baby bowl de frutos amarillos',
+      '1 baby bowl de kiwi',
+      '1 miel de abejas x 250 gr',
+      '1 mantequilla de maní x 200 gr',
+      '1 avena en hojuelas 150 gr',
+      '1 baby bowl de fruta x 250 gr',
+      '1 semillas de calabaza 140 gr'
+    ]
   },
   {
     id: 'combo-lonchera',
@@ -1155,7 +1669,21 @@ export const products: Product[] = [
     description: 'Opciones saludables para el colegio.',
     image: 'https://picsum.photos/seed/combo-lonchera/400/300',
     category: 'combos',
-    benefits: ['Niños', 'Saludable']
+    benefits: ['Niños', 'Saludable'],
+    healthBenefit: 'Pensado en porciónes exactas para niños.',
+    portions: 19,
+    observation: 'Incluye opciones para escoger frutas picadas, ensalada tradicional, ensalada gourmet y frutas de mano.',
+    ingredients: [
+      '2 mini bowls de fruta x 200 gr',
+      '2 mini bowl berry mix x 150 gr',
+      '2 mini bowls de frutos amarillos x 200 gr',
+      '1 ensalada mini tradicional x 250 gr',
+      '1 ensalada mini gourmet x 250 gr',
+      '5 frutos secos mix 50 gr',
+      '5 frutas de mano',
+      '6 galletas de avena',
+      '5 barritas de granola'
+    ]
   },
   {
     id: 'combo-oficina',
@@ -1164,7 +1692,21 @@ export const products: Product[] = [
     description: 'Energía y salud para tu jornada laboral.',
     image: 'https://picsum.photos/seed/combo-oficina/400/300',
     category: 'combos',
-    benefits: ['Productividad', 'Práctico']
+    benefits: ['Productividad', 'Práctico'],
+    healthBenefit: 'Pensado en la practicidad y el ajetreo de tu día a día en la oficina.',
+    portions: 21,
+    observation: 'Incluye opciones para escoger frutas picadas, ensalada tradicional, ensalada gourmet y frutas de mano.',
+    ingredients: [
+      '2 baby bowls de fruta x 250 gr',
+      '2 baby bowl berry mix x 200 gr',
+      '2 baby bowls de frutos amarillos x 250 gr',
+      '1 ensalada mini tradicional x 250 gr',
+      '1 ensalada mini gourmet x 250 gr',
+      '6 frutos secos mix 50 gr',
+      '6 frutas de mano',
+      '6 galletas de avena',
+      '5 barritas de granola'
+    ]
   },
 
   {
@@ -1174,7 +1716,11 @@ export const products: Product[] = [
     description: 'Variedad de jugos naturales.',
     image: 'https://picsum.photos/seed/kit-jugos/400/300',
     category: 'combos',
-    benefits: ['Variedad', 'Natural']
+    benefits: ['Variedad', 'Natural'],
+    healthBenefit: 'Un kit completo de jugos de fruta para que nunca te quedes sin opciones saludables en tu sobremesa.',
+    portions: 18,
+    observation: 'Opciones de jugos de fruta: mango, piña, melón maduro, sandía, maracuyá, mora, fresa, tomate de árbol o papaya.',
+    ingredients: ['3 packs de batidos de fruta x 5 und de 150 gr', 'jugo de naranja x 3']
   },
   {
     id: 'kit-ensaladas',
@@ -1183,6 +1729,10 @@ export const products: Product[] = [
     description: 'Tus ensaladas favoritas para la semana.',
     image: 'https://picsum.photos/seed/kit-ensaladas/400/300',
     category: 'combos',
-    benefits: ['Semanal', 'Práctico']
+    benefits: ['Semanal', 'Práctico'],
+    healthBenefit: 'Un kit de ensaladas para tu día a día.',
+    portions: 15,
+    observation: 'Ensaladas tradicionales a elección.',
+    ingredients: ['5 ensaladas tradicionales a elección']
   }
 ];
