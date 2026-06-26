@@ -1,8 +1,9 @@
-import { useCartStore } from '../store/useCartStore';
+import { type CartItem, useCartStore } from '../store/useCartStore';
 import { X, Plus, Minus, Trash2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { MarketBasket } from './SeranaIcons';
+import { getComboSummaryLines, stripComboPayloadMarker } from '../data/comboCustomizations';
 
 export default function CartDrawer() {
   const { isOpen, items, toggleCart, removeItem, updateQuantity, total } = useCartStore();
@@ -51,6 +52,7 @@ export default function CartDrawer() {
                         <p className="text-sm text-serana-olive font-medium mt-1">
                           {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(item.price)}
                         </p>
+                        <CartItemCustomizations item={item} />
                       </div>
                       <div className="flex items-center justify-between mt-2">
                         <div className="flex items-center space-x-3 bg-white/50 rounded-full px-2 py-1 border border-serana-forest/10">
@@ -108,3 +110,23 @@ export default function CartDrawer() {
   );
 }
 
+function CartItemCustomizations({ item }: { item: CartItem }) {
+  if (item.comboSelections) {
+    return (
+      <ul className="mt-2 space-y-1 rounded-xl bg-white/55 px-3 py-2 text-[10px] leading-snug text-serana-forest/62">
+        {getComboSummaryLines(item.comboSelections).map((line) => (
+          <li key={line}>{line}</li>
+        ))}
+      </ul>
+    );
+  }
+
+  const customizations = stripComboPayloadMarker(item.customizations);
+  if (!customizations) return null;
+
+  return (
+    <p className="mt-2 rounded-xl bg-white/55 px-3 py-2 text-[10px] leading-snug text-serana-forest/62">
+      {customizations}
+    </p>
+  );
+}

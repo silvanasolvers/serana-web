@@ -412,12 +412,13 @@ export default function ShopPage() {
         <MenuGuidance activeCategory={activeCategory} />
 
         {/* ── Featured strip (only when "Todos" + no search) ─────────────── */}
-        {featured.length > 0 && <FeaturedStrip products={featured} />}
+        {featured.length > 0 && <FeaturedStrip products={featured} allProducts={products} />}
 
         {/* ── Product grid ───────────────────────────────────────────────── */}
         <section ref={productSectionRef} className="scroll-mt-48">
           <ProductGrid
             products={filteredProducts}
+            allProducts={products}
             externalSearch
             searchTerm={search}
             onSearchChange={setSearch}

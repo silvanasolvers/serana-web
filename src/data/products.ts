@@ -1670,7 +1670,7 @@ export const products: Product[] = [
     image: 'https://picsum.photos/seed/combo-lonchera/400/300',
     category: 'combos',
     benefits: ['Niños', 'Saludable'],
-    healthBenefit: 'Pensado en porciónes exactas para niños.',
+    healthBenefit: 'Pensado en porciones exactas para niños.',
     portions: 19,
     observation: 'Incluye opciones para escoger frutas picadas, ensalada tradicional, ensalada gourmet y frutas de mano.',
     ingredients: [

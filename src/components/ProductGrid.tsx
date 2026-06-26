@@ -4,6 +4,7 @@ import { AlertTriangle, CheckCircle2, Scissors, Search, LayoutGrid, List as List
 import { type Product } from '../store/useCartStore';
 import { Spark } from './SeranaIcons';
 import QuantityControl from './QuantityControl';
+import { ComboCartControl } from './ComboConfigurator';
 import { normalizeSearch } from '../lib/search';
 
 const COP = (n: number) =>
@@ -27,6 +28,7 @@ interface Props {
   onSearchChange?: (term: string) => void;
   viewMode?: ProductGridViewMode;
   onViewModeChange?: (mode: ProductGridViewMode) => void;
+  allProducts?: Product[];
 }
 
 /**
@@ -45,6 +47,7 @@ export default function ProductGrid({
   onSearchChange,
   viewMode,
   onViewModeChange,
+  allProducts,
 }: Props) {
   const [internalSearch, setInternalSearch] = useState('');
   const [internalView, setInternalView] = useState<ProductGridViewMode>('gallery');
@@ -102,7 +105,7 @@ export default function ProductGrid({
             className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-7"
           >
             {visible.map((product, i) => (
-              <GalleryCard key={product.id} product={product} index={i} />
+              <GalleryCard key={product.id} product={product} index={i} allProducts={allProducts ?? products} />
             ))}
           </motion.div>
         ) : (
@@ -115,7 +118,7 @@ export default function ProductGrid({
             className="grid grid-cols-1 md:grid-cols-2 gap-2"
           >
             {visible.map((product, i) => (
-              <ListRow key={product.id} product={product} index={i} />
+              <ListRow key={product.id} product={product} index={i} allProducts={allProducts ?? products} />
             ))}
           </motion.ul>
         )}
@@ -231,7 +234,7 @@ function ToolbarToggle({
   );
 }
 
-function GalleryCard({ product, index }: { product: Product; index: number }) {
+function GalleryCard({ product, index, allProducts }: { product: Product; index: number; allProducts: Product[] }) {
   const cutOptions = getCutOptions(product);
   const { selectedVariant, setSelectedVariantLabel, productForCart } = useSelectedVariant(product);
   const summary = getProductSummary(product);
@@ -297,7 +300,7 @@ function GalleryCard({ product, index }: { product: Product; index: number }) {
           </div>
           <div className="flex items-center justify-between gap-2">
             <span className="font-bold text-serana-terracotta text-sm md:text-base">{COP(productForCart.price)}</span>
-            <QuantityControl product={productForCart} variant="dark" />
+            <ComboCartControl product={productForCart} allProducts={allProducts} variant="dark" />
           </div>
         </div>
       </div>
@@ -305,7 +308,7 @@ function GalleryCard({ product, index }: { product: Product; index: number }) {
   );
 }
 
-function ListRow({ product, index }: { product: Product; index: number }) {
+function ListRow({ product, index, allProducts }: { product: Product; index: number; allProducts: Product[] }) {
   const cutOptions = getCutOptions(product);
   const { selectedVariant, setSelectedVariantLabel, productForCart } = useSelectedVariant(product);
   const summary = getProductSummary(product);
@@ -347,7 +350,7 @@ function ListRow({ product, index }: { product: Product; index: number }) {
       </div>
       <div className="flex shrink-0 flex-col items-end gap-2">
         <span className="font-bold text-serana-terracotta tabular-nums whitespace-nowrap">{COP(productForCart.price)}</span>
-        <QuantityControl product={productForCart} variant="soft" />
+        <ComboCartControl product={productForCart} allProducts={allProducts} variant="soft" />
       </div>
     </motion.li>
   );

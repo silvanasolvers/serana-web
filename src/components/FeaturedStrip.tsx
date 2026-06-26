@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { type Product } from '../store/useCartStore';
 import { Spark } from './SeranaIcons';
-import QuantityControl from './QuantityControl';
+import { ComboCartControl } from './ComboConfigurator';
 
 const COP = (n: number) =>
   new Intl.NumberFormat('es-CO', {
@@ -18,7 +18,7 @@ const COP = (n: number) =>
  * when no category filter is active so visitors land on something specific
  * instead of the full 143-product list.
  */
-export default function FeaturedStrip({ products }: { products: Product[] }) {
+export default function FeaturedStrip({ products, allProducts = products }: { products: Product[]; allProducts?: Product[] }) {
   const scroller = useRef<HTMLDivElement>(null);
 
   if (products.length === 0) return null;
@@ -97,7 +97,7 @@ export default function FeaturedStrip({ products }: { products: Product[] }) {
                 </h4>
                 <p className="mt-1 font-bold text-serana-terracotta">{COP(product.price)}</p>
               </div>
-              <QuantityControl product={product} variant="dark" />
+              <ComboCartControl product={product} allProducts={allProducts} variant="dark" />
             </div>
           </motion.article>
         ))}

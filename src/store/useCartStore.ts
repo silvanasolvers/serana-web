@@ -2,6 +2,7 @@ import { create } from 'zustand';
 
 export interface Product {
   id: string;
+  productSlug?: string;
   name: string;
   price: number;
   description: string;
@@ -17,9 +18,37 @@ export interface Product {
     price: number;
   }>;
   isSubscription?: boolean;
+  customizations?: string;
+  comboSelections?: ComboSelectionPayload;
 }
 
-interface CartItem extends Product {
+export interface ComboSelectionPayload {
+  version: 1;
+  type: 'combo_configuration';
+  comboSlug: string;
+  comboName: string;
+  groups: Array<{
+    id: string;
+    label: string;
+    max: number;
+    unitLabel?: string;
+    selections: Array<{
+      slug: string;
+      name: string;
+      quantity: number;
+    }>;
+  }>;
+  selectedProducts: Array<{
+    slug: string;
+    name: string;
+    quantity: number;
+    groupId: string;
+    groupLabel: string;
+  }>;
+  fixedItems?: string[];
+}
+
+export interface CartItem extends Product {
   quantity: number;
 }
 

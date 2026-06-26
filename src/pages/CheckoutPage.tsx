@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useCartStore } from '../store/useCartStore';
+import { type CartItem, useCartStore } from '../store/useCartStore';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { motion, AnimatePresence } from 'motion/react';
@@ -14,6 +14,11 @@ import {
 } from '../lib/api/orders';
 import MercadoPagoBrick from '../components/MercadoPagoBrick';
 import { useAuth } from '../components/AuthProvider';
+import {
+  buildComboCustomizationText,
+  getComboSummaryLines,
+  stripComboPayloadMarker,
+} from '../data/comboCustomizations';
 
 const MP_PUBLIC_KEY = import.meta.env.VITE_MP_PUBLIC_KEY ?? '';
 
@@ -209,9 +214,11 @@ export default function CheckoutPage() {
       source_code: 'web' as const,
       coupon_code: couponApplied?.valid ? couponApplied.code ?? undefined : undefined,
       items: items.map((item) => ({
-        product_slug: item.id,
+        product_slug: item.productSlug ?? item.id,
         quantity: item.quantity,
-        customizations: undefined,
+        customizations: item.comboSelections
+          ? buildComboCustomizationText(item.comboSelections)
+          : item.customizations,
       })),
     };
   };
@@ -573,13 +580,14 @@ export default function CheckoutPage() {
 
               <div className="space-y-3 mb-5 max-h-72 overflow-y-auto pr-1">
                 {items.map((item) => (
-                  <div key={item.id} className="flex gap-3 items-center">
+                  <div key={item.id} className="flex gap-3 items-start">
                     <div className="w-12 h-12 rounded-lg overflow-hidden shadow-sm shrink-0 bg-slate-100">
                       <img src={item.image} alt={item.name} className="w-full h-full object-cover" loading="lazy" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-sm text-serana-forest leading-tight truncate">{item.name}</p>
                       <p className="text-[11px] text-gray-500 uppercase tracking-wider">x{item.quantity}</p>
+                      <CheckoutItemCustomizations item={item} compact />
                     </div>
                     <span className="text-sm font-bold text-serana-forest shrink-0">{COP(item.price * item.quantity)}</span>
                   </div>
@@ -705,15 +713,7 @@ function CheckoutAccountPrompt({ loggedIn }: { loggedIn: boolean }) {
   );
 }
 
-type CartLine = {
-  id: string;
-  name: string;
-  price: number;
-  image: string;
-  quantity: number;
-};
-
-function Step1Cart({ items, subtotal }: { items: CartLine[]; subtotal: number }) {
+function Step1Cart({ items, subtotal }: { items: CartItem[]; subtotal: number }) {
   return (
     <div className="space-y-6">
       <p className="text-gray-600 leading-relaxed">
@@ -729,6 +729,7 @@ function Step1Cart({ items, subtotal }: { items: CartLine[]; subtotal: number })
             <div className="flex-1 min-w-0">
               <p className="font-serif text-lg text-serana-forest leading-tight truncate">{it.name}</p>
               <p className="text-xs text-gray-500 uppercase tracking-wider mt-1">Cantidad: {it.quantity}</p>
+              <CheckoutItemCustomizations item={it} />
             </div>
             <span className="font-bold text-serana-forest shrink-0">{COP(it.price * it.quantity)}</span>
           </div>
@@ -738,6 +739,26 @@ function Step1Cart({ items, subtotal }: { items: CartLine[]; subtotal: number })
         Subtotal calculado · {COP(subtotal)}. Si quieres cambiar cantidades, ábrelo desde la cesta.
       </p>
     </div>
+  );
+}
+
+function CheckoutItemCustomizations({ item, compact = false }: { item: CartItem; compact?: boolean }) {
+  if (item.comboSelections) {
+    return (
+      <ul className={`mt-2 space-y-1 rounded-xl bg-serana-cream/70 px-3 py-2 leading-snug text-serana-forest/62 ${compact ? 'text-[9px]' : 'text-[10px]'}`}>
+        {getComboSummaryLines(item.comboSelections).map((line) => (
+          <li key={line}>{line}</li>
+        ))}
+      </ul>
+    );
+  }
+
+  const customizations = stripComboPayloadMarker(item.customizations);
+  if (!customizations) return null;
+  return (
+    <p className={`mt-2 rounded-xl bg-serana-cream/70 px-3 py-2 leading-snug text-serana-forest/62 ${compact ? 'text-[9px]' : 'text-[10px]'}`}>
+      {customizations}
+    </p>
   );
 }
 
