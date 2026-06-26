@@ -36,8 +36,10 @@ dotenv.config({ path: path.join(__dirname, '.env') });
 
 const PORT = Number(process.env.PORT) || 3000;
 const HOST = '0.0.0.0';
+const OFFICIAL_APP_URL = 'https://serana.food';
 const APP_URL = process.env.APP_URL
-  ?? (process.env.NODE_ENV === 'production' ? 'https://serana.food' : `http://localhost:${PORT}`);
+  ?? (process.env.NODE_ENV === 'production' ? OFFICIAL_APP_URL : `http://localhost:${PORT}`);
+const PASSWORD_RESET_URL = `${OFFICIAL_APP_URL}/reset-password`;
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL ?? process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const MP_ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN;
@@ -427,7 +429,7 @@ async function startServer() {
     }
 
     if (verifyUrl.searchParams.get('type') === 'recovery') {
-      verifyUrl.searchParams.set('redirect_to', `${APP_URL}/reset-password`);
+      verifyUrl.searchParams.set('redirect_to', PASSWORD_RESET_URL);
     }
 
     return res.redirect(302, verifyUrl.toString());
