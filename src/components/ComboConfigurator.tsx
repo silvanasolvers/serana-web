@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'motion/react';
 import { Check, Minus, Plus, SlidersHorizontal, X } from 'lucide-react';
 import clsx from 'clsx';
@@ -27,10 +28,12 @@ export function ComboCartControl({
   product,
   allProducts,
   variant = 'dark',
+  fullWidth = false,
 }: {
   product: Product;
   allProducts: Product[];
   variant?: Variant;
+  fullWidth?: boolean;
 }) {
   const definition = getComboDefinition(product);
   const [open, setOpen] = useState(false);
@@ -57,7 +60,8 @@ export function ComboCartControl({
           setOpen(true);
         }}
         className={clsx(
-          'relative inline-flex h-9 items-center justify-center gap-2 rounded-full px-3 text-[10px] font-black uppercase tracking-[0.18em] transition-colors active:scale-95',
+          'relative inline-flex h-9 items-center justify-center gap-2 rounded-full px-3 text-[10px] font-black uppercase tracking-[0.14em] transition-colors active:scale-95',
+          fullWidth && 'w-full px-4',
           variant === 'dark'
             ? 'bg-serana-forest text-serana-cream hover:bg-serana-olive'
             : 'bg-serana-forest/10 text-serana-forest hover:bg-serana-forest hover:text-serana-cream',
@@ -65,7 +69,7 @@ export function ComboCartControl({
         aria-label={`Personalizar ${product.name}`}
       >
         <SlidersHorizontal className="h-3.5 w-3.5" />
-        <span className="hidden sm:inline">Personalizar</span>
+        <span className={fullWidth ? 'inline' : 'hidden sm:inline'}>Personalizar</span>
         {configuredCount > 0 && (
           <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-serana-ochre px-1 text-[9px] font-black text-serana-forest">
             {configuredCount}
@@ -115,7 +119,7 @@ function ComboConfigurator({
     if (open) setSelections({});
   }, [open, product.id]);
 
-  if (!definition) return null;
+  if (!definition || typeof document === 'undefined') return null;
 
   const selectedTotal = groups.reduce((total, group) => total + getGroupTotal(selections, group.id), 0);
   const requiredTotal = groups.reduce((total, group) => total + group.min, 0);
@@ -137,12 +141,12 @@ function ComboConfigurator({
     onClose();
   };
 
-  return (
+  return createPortal(
     <AnimatePresence>
       {open && (
         <>
           <motion.div
-            className="fixed inset-0 z-[60] bg-black/30 backdrop-blur-sm"
+            className="fixed inset-0 z-[90] bg-black/30 backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -152,7 +156,7 @@ function ComboConfigurator({
             role="dialog"
             aria-modal="true"
             aria-label={`Personalizar ${product.name}`}
-            className="fixed inset-x-0 bottom-0 z-[61] max-h-[94vh] overflow-hidden rounded-t-[1.5rem] bg-serana-cream shadow-2xl md:inset-x-auto md:left-1/2 md:top-1/2 md:bottom-auto md:w-[min(920px,calc(100vw-48px))] md:-translate-x-1/2 md:-translate-y-1/2 md:rounded-[1.5rem]"
+            className="fixed inset-x-0 bottom-0 z-[91] max-h-[94vh] overflow-hidden rounded-t-[1.5rem] bg-serana-cream shadow-2xl md:inset-x-auto md:left-1/2 md:top-1/2 md:bottom-auto md:w-[min(920px,calc(100vw-48px))] md:-translate-x-1/2 md:-translate-y-1/2 md:rounded-[1.5rem]"
             initial={{ opacity: 0, y: 40, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.98 }}
@@ -252,7 +256,8 @@ function ComboConfigurator({
           </motion.div>
         </>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   );
 }
 
@@ -296,7 +301,7 @@ function ComboGroupCard({
             <article
               key={option.slug}
               className={clsx(
-                'grid grid-cols-[44px_1fr_auto] items-center gap-3 rounded-xl border px-2.5 py-2 transition-colors',
+                'grid grid-cols-[44px_minmax(0,1fr)_auto] items-start gap-3 rounded-xl border px-2.5 py-2 transition-colors',
                 quantity > 0
                   ? 'border-serana-olive/35 bg-serana-olive/8'
                   : 'border-serana-forest/8 bg-white/60',
@@ -310,12 +315,12 @@ function ComboGroupCard({
                 referrerPolicy="no-referrer"
               />
               <div className="min-w-0">
-                <p className="truncate text-sm font-bold leading-tight text-serana-forest">{option.name}</p>
-                <p className="mt-0.5 line-clamp-1 text-[10px] leading-snug text-serana-forest/48">
+                <p className="text-sm font-bold leading-tight text-serana-forest">{option.name}</p>
+                <p className="mt-0.5 text-[10px] leading-snug text-serana-forest/48">
                   {option.description}
                 </p>
               </div>
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1 self-center">
                 <button
                   type="button"
                   onClick={() => onChange(option.slug, -1)}
