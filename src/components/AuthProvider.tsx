@@ -24,11 +24,8 @@ type AuthContextValue = {
   loading: boolean;
   accountLoading: boolean;
   authError: string | null;
-  passwordRecovery: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (input: { email: string; password: string; fullName: string; phone: string }) => Promise<{ needsEmailConfirmation: boolean; welcomeName: string }>;
-  requestPasswordReset: (email: string) => Promise<void>;
-  updatePassword: (password: string) => Promise<void>;
   signOut: () => Promise<void>;
   saveProfile: (input: CustomerProfileInput) => Promise<void>;
   refreshAccount: () => Promise<void>;
@@ -50,8 +47,6 @@ function normalizeAuthError(message: string) {
   if (/invalid_email/i.test(message)) return 'Escribe un correo válido.';
   if (/weak_password/i.test(message)) return 'La contraseña debe tener al menos 6 caracteres.';
   if (/rate_limited/i.test(message)) return 'Demasiados intentos. Intenta de nuevo en un minuto.';
-  if (/password_reset_failed/i.test(message)) return 'No pudimos enviar el enlace. Intenta de nuevo en un minuto.';
-  if (/not authenticated|auth session missing|session/i.test(message)) return 'El enlace expiró o no es válido. Solicita uno nuevo.';
   return message || 'No pudimos completar la acción.';
 }
 
@@ -66,7 +61,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [accountLoading, setAccountLoading] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
-  const [passwordRecovery, setPasswordRecovery] = useState(false);
 
   const refreshAccount = useCallback(async () => {
     if (!isSupabaseConfigured) {
@@ -106,17 +100,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (data.session) void refreshAccount();
     });
 
-    const { data: listener } = supabase.auth.onAuthStateChange((event, nextSession) => {
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, nextSession) => {
       setSession(nextSession);
       setAuthError(null);
-      if (event === 'PASSWORD_RECOVERY') {
-        setPasswordRecovery(true);
-      }
       if (nextSession) {
         void refreshAccount();
       } else {
         setAccount(null);
-        setPasswordRecovery(false);
       }
     });
 
@@ -186,31 +176,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const requestPasswordReset = useCallback(async (email: string) => {
-    setAuthError(null);
-    const resp = await fetch('/api/auth/password-reset', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: email.trim().toLowerCase() }),
-    });
-    if (!resp.ok) {
-      const msg = normalizeAuthError(await readApiError(resp));
-      setAuthError(msg);
-      throw new Error(msg);
-    }
-  }, []);
-
-  const updatePassword = useCallback(async (password: string) => {
-    setAuthError(null);
-    const { error } = await supabase.auth.updateUser({ password });
-    if (error) {
-      const msg = normalizeAuthError(error.message);
-      setAuthError(msg);
-      throw new Error(msg);
-    }
-    setPasswordRecovery(false);
-  }, []);
-
   const signOut = useCallback(async () => {
     setAuthError(null);
     await supabase.auth.signOut();
@@ -239,11 +204,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     loading,
     accountLoading,
     authError,
-    passwordRecovery,
     signIn,
     signUp,
-    requestPasswordReset,
-    updatePassword,
     signOut,
     saveProfile,
     refreshAccount,
@@ -253,11 +215,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     loading,
     accountLoading,
     authError,
-    passwordRecovery,
     signIn,
     signUp,
-    requestPasswordReset,
-    updatePassword,
     signOut,
     saveProfile,
     refreshAccount,

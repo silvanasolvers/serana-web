@@ -1,17 +1,17 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { ArrowLeft, ArrowRight, Eye, EyeOff, Loader2, Lock, Mail, Phone, UserRound } from 'lucide-react';
+import { ArrowLeft, Eye, EyeOff, Loader2, Lock, Mail, Phone, UserRound } from 'lucide-react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { useAuth } from '../components/AuthProvider';
 
-type Mode = 'login' | 'register' | 'forgot';
+type Mode = 'login' | 'register';
 
 export default function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, loading, signIn, signUp, requestPasswordReset, authError, configured } = useAuth();
+  const { user, loading, signIn, signUp, authError, configured } = useAuth();
   const [mode, setMode] = useState<Mode>('login');
   const [fullName, setFullName] = useState('');
   const [phone, setPhone] = useState('');
@@ -48,7 +48,7 @@ export default function LoginPage() {
           replace: true,
           state: redirectTo === '/cuenta' ? { welcomeToast: 'Qué gusto verte de nuevo en Serana.' } : undefined,
         });
-      } else if (mode === 'register') {
+      } else {
         const res = await signUp({ email, password, fullName, phone });
         if (res.needsEmailConfirmation) {
           setNotice('Te enviamos un correo de confirmación. Después de confirmarlo, vuelve a iniciar sesión.');
@@ -59,9 +59,6 @@ export default function LoginPage() {
             state: { welcomeToast: `¡Qué bueno tenerte en Serana, ${firstName}!` },
           });
         }
-      } else {
-        await requestPasswordReset(email);
-        setNotice('Te enviamos un enlace para restablecer tu contraseña. Revisa tu correo y vuelve desde ese enlace.');
       }
     } catch {
       // AuthProvider stores the readable error.
@@ -120,7 +117,7 @@ export default function LoginPage() {
             {([
               ['login', 'Entrar'],
               ['register', 'Crear cuenta'],
-            ] as Array<[Exclude<Mode, 'forgot'>, string]>).map(([value, label]) => (
+            ] as Array<[Mode, string]>).map(([value, label]) => (
               <button
                 key={value}
                 type="button"
@@ -142,15 +139,6 @@ export default function LoginPage() {
             </div>
           ) : (
             <form onSubmit={submit} className="space-y-4">
-              {mode === 'forgot' && (
-                <div className="rounded-2xl bg-serana-olive/10 border border-serana-olive/20 p-4">
-                  <p className="font-serif text-xl text-serana-forest mb-1">Restablece tu contraseña</p>
-                  <p className="text-sm text-serana-forest/65 leading-relaxed">
-                    Escribe el correo de tu cuenta y te enviaremos un enlace seguro para crear una nueva contraseña.
-                  </p>
-                </div>
-              )}
-
               {mode === 'register' && (
                 <>
                   <FieldIcon Icon={UserRound}>
@@ -186,15 +174,13 @@ export default function LoginPage() {
                 />
               </FieldIcon>
 
-              {mode !== 'forgot' && (
-                <PasswordField
-                  value={password}
-                  onChange={(value) => { setPassword(value); setLocalError(null); }}
-                  placeholder="Contraseña"
-                  visible={showPassword}
-                  onToggle={() => setShowPassword((visible) => !visible)}
-                />
-              )}
+              <PasswordField
+                value={password}
+                onChange={(value) => { setPassword(value); setLocalError(null); }}
+                placeholder="Contraseña"
+                visible={showPassword}
+                onToggle={() => setShowPassword((visible) => !visible)}
+              />
 
               {mode === 'register' && (
                 <PasswordField
@@ -204,18 +190,6 @@ export default function LoginPage() {
                   visible={showConfirmPassword}
                   onToggle={() => setShowConfirmPassword((visible) => !visible)}
                 />
-              )}
-
-              {mode === 'login' && (
-                <div className="flex justify-end">
-                  <button
-                    type="button"
-                    onClick={() => { setMode('forgot'); setNotice(null); setLocalError(null); }}
-                    className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-widest text-serana-terracotta hover:text-serana-forest transition-colors"
-                  >
-                    Olvidé mi contraseña <ArrowRight className="w-3 h-3" />
-                  </button>
-                </div>
               )}
 
               {(authError || notice || localError) && (
@@ -232,18 +206,7 @@ export default function LoginPage() {
                 {busy && <Loader2 className="w-4 h-4 animate-spin" />}
                 {mode === 'login' && 'Iniciar sesión'}
                 {mode === 'register' && 'Crear cuenta'}
-                {mode === 'forgot' && 'Enviar enlace'}
               </button>
-
-              {mode === 'forgot' && (
-                <button
-                  type="button"
-                  onClick={() => { setMode('login'); setNotice(null); setLocalError(null); }}
-                  className="w-full text-center text-[11px] font-bold uppercase tracking-widest text-serana-forest/55 hover:text-serana-forest transition-colors"
-                >
-                  Volver a entrar
-                </button>
-              )}
             </form>
           )}
         </motion.section>

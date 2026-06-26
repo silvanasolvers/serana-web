@@ -36,10 +36,8 @@ dotenv.config({ path: path.join(__dirname, '.env') });
 
 const PORT = Number(process.env.PORT) || 3000;
 const HOST = '0.0.0.0';
-const OFFICIAL_APP_URL = 'https://serana.food';
 const APP_URL = process.env.APP_URL
-  ?? (process.env.NODE_ENV === 'production' ? OFFICIAL_APP_URL : `http://localhost:${PORT}`);
-const PASSWORD_RESET_URL = `${OFFICIAL_APP_URL}/reset-password`;
+  ?? (process.env.NODE_ENV === 'production' ? 'https://serana.food' : `http://localhost:${PORT}`);
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL ?? process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const MP_ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN;
@@ -409,52 +407,12 @@ async function startServer() {
     }
   });
 
-  app.post('/api/auth/password-reset', authLimiter, async (req, res) => {
-    try {
-      if (!supabaseAdmin) return res.status(500).json({ error: 'supabase_not_configured' });
-
-      const email = cleanText((req.body as { email?: string } | undefined)?.email).toLowerCase();
-      if (!isLikelyEmail(email)) return res.status(400).json({ error: 'invalid_email' });
-
-      const { error } = await supabaseAdmin.auth.resetPasswordForEmail(email, {
-        redirectTo: PASSWORD_RESET_URL,
-      });
-      if (error) {
-        console.warn('[auth/password-reset] reset failed:', error.message);
-        return res.status(400).json({ error: 'password_reset_failed' });
-      }
-
-      return res.json({ ok: true });
-    } catch (err) {
-      console.error('[auth/password-reset] error:', err);
-      return res.status(500).json({ error: 'password_reset_failed' });
-    }
+  app.post('/api/auth/password-reset', (_req, res) => {
+    res.status(410).json({ error: 'password_reset_disabled' });
   });
 
-  // Some Supabase email templates can accidentally land on the app domain with
-  // the Auth API verify path. Forward that shape back to Supabase Auth so the
-  // recovery token is consumed by the service and then returns to our reset UI.
-  app.get('/auth/v1/verify', (req, res) => {
-    if (!SUPABASE_URL) {
-      return res.redirect('/reset-password');
-    }
-
-    const verifyUrl = new URL('/auth/v1/verify', SUPABASE_URL);
-    for (const [key, value] of Object.entries(req.query)) {
-      if (Array.isArray(value)) {
-        value.forEach((item) => {
-          if (typeof item === 'string') verifyUrl.searchParams.append(key, item);
-        });
-      } else if (typeof value === 'string') {
-        verifyUrl.searchParams.set(key, value);
-      }
-    }
-
-    if (verifyUrl.searchParams.get('type') === 'recovery') {
-      verifyUrl.searchParams.set('redirect_to', PASSWORD_RESET_URL);
-    }
-
-    return res.redirect(302, verifyUrl.toString());
+  app.get('/auth/v1/verify', (_req, res) => {
+    res.redirect(302, '/login');
   });
 
   // Build a Mercado Pago Preference for a Supabase order. Returns the

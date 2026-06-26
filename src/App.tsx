@@ -3,17 +3,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Suspense, lazy, useEffect } from 'react';
 import CustomCursor from './components/CustomCursor';
 import SerenaSplash from './components/SerenaSplash';
 import ScrollVine from './components/ScrollVine';
-import { AuthProvider, useAuth } from './components/AuthProvider';
-import {
-  PASSWORD_RESET_PATH,
-  getPasswordRecoveryRouteWithParams,
-  hasPasswordRecoveryReturn,
-} from './lib/authRecovery';
+import { AuthProvider } from './components/AuthProvider';
 
 // Eager: tiny pages that the user lands on most often.
 import HomePage from './pages/HomePage';
@@ -26,7 +21,6 @@ const CheckoutPage = lazy(() => import('./pages/CheckoutPage'));
 const CheckoutResultPage = lazy(() => import('./pages/CheckoutResultPage'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
 const AccountPage = lazy(() => import('./pages/AccountPage'));
-const ResetPasswordPage = lazy(() => import('./pages/ResetPasswordPage'));
 const PrivacidadPage = lazy(() => import('./pages/PrivacidadPage'));
 const TerminosPage = lazy(() => import('./pages/TerminosPage'));
 const DevolucionesPage = lazy(() => import('./pages/DevolucionesPage'));
@@ -41,23 +35,6 @@ function ScrollToTop() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
-  return null;
-}
-
-function RecoveryLinkRedirect() {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const { passwordRecovery } = useAuth();
-
-  useEffect(() => {
-    if (
-      location.pathname !== PASSWORD_RESET_PATH
-      && (passwordRecovery || hasPasswordRecoveryReturn())
-    ) {
-      navigate(getPasswordRecoveryRouteWithParams(), { replace: true });
-    }
-  }, [location.pathname, navigate, passwordRecovery]);
-
   return null;
 }
 
@@ -80,7 +57,6 @@ export default function App() {
         </Suspense>
         <ScrollVine />
         <ScrollToTop />
-        <RecoveryLinkRedirect />
         <Suspense fallback={null}>
           <ChatBot />
         </Suspense>
@@ -99,14 +75,14 @@ export default function App() {
             <Route path="/checkout/pending" element={<CheckoutResultPage variant="pending" />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/cuenta" element={<AccountPage />} />
-            <Route path="/reset-password" element={<ResetPasswordPage />} />
-            <Route path="/auth/callback" element={<ResetPasswordPage />} />
-            <Route path="/auth/confirm" element={<ResetPasswordPage />} />
-            <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
-            <Route path="/auth/verify" element={<ResetPasswordPage />} />
-            <Route path="/password-reset" element={<ResetPasswordPage />} />
-            <Route path="/recuperar-contrasena" element={<ResetPasswordPage />} />
-            <Route path="/restablecer-contrasena" element={<ResetPasswordPage />} />
+            <Route path="/reset-password" element={<Navigate to="/login" replace />} />
+            <Route path="/auth/callback" element={<Navigate to="/login" replace />} />
+            <Route path="/auth/confirm" element={<Navigate to="/login" replace />} />
+            <Route path="/auth/reset-password" element={<Navigate to="/login" replace />} />
+            <Route path="/auth/verify" element={<Navigate to="/login" replace />} />
+            <Route path="/password-reset" element={<Navigate to="/login" replace />} />
+            <Route path="/recuperar-contrasena" element={<Navigate to="/login" replace />} />
+            <Route path="/restablecer-contrasena" element={<Navigate to="/login" replace />} />
             <Route path="/privacidad" element={<PrivacidadPage />} />
             <Route path="/terminos" element={<TerminosPage />} />
             <Route path="/devoluciones" element={<DevolucionesPage />} />
