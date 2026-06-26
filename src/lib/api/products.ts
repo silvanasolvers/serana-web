@@ -9,6 +9,7 @@ type ProductRow = {
   description: string | null;
   price: number | string | null;
   image_url: string | null;
+  gallery_urls: string[] | null;
   active: boolean;
   category_code: string | null;
   category_name: string | null;
@@ -32,6 +33,7 @@ function rowToProduct(row: ProductRow): Product {
     return {
       ...staticMatch,
       image: row.image_url || staticMatch.image,
+      gallery: row.gallery_urls ?? staticMatch.gallery ?? [],
     };
   }
   return {
@@ -40,6 +42,7 @@ function rowToProduct(row: ProductRow): Product {
     price: Number(row.price ?? 0),
     description: row.description || '',
     image: row.image_url || staticMatch?.image || '',
+    gallery: row.gallery_urls ?? [],
     category: row.category_code ?? 'otros',
     benefits: FALLBACK_BENEFITS,
   };
@@ -49,7 +52,7 @@ export async function listProducts(): Promise<Product[]> {
   if (!isSupabaseConfigured) return [];
   const { data, error } = await supabase
     .from('products_public_view')
-    .select('id, slug, name, description, price, image_url, active, category_code, category_name')
+    .select('id, slug, name, description, price, image_url, gallery_urls, active, category_code, category_name')
     .eq('active', true)
     .order('name', { ascending: true });
   if (error) {

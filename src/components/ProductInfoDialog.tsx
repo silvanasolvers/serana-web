@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'motion/react';
-import { CheckCircle2, Info, Leaf, PackageCheck, Scissors, X } from 'lucide-react';
+import { CheckCircle2, ChevronLeft, ChevronRight, Info, Leaf, PackageCheck, Scissors, X } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { type Product } from '../store/useCartStore';
 import { normalizeSearch } from '../lib/search';
@@ -31,14 +31,29 @@ export default function ProductInfoDialog({
   const cutOptions = product ? getCutOptions(product) : [];
   const isCombo = product ? Boolean(getComboDefinition(product)) : false;
 
+  // Combine the primary photo + gallery (when present) into one ordered
+  // list so the aside can carousel through every available image without
+  // duplicating the hero shot.
+  const photos: string[] = product
+    ? [product.image, ...(product.gallery ?? [])].filter(Boolean)
+    : [];
+  const [activePhoto, setActivePhoto] = useState(0);
+
   useEffect(() => {
     if (!open) return;
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') onClose();
+      if (event.key === 'ArrowRight') setActivePhoto((i) => Math.min(i + 1, photos.length - 1));
+      if (event.key === 'ArrowLeft') setActivePhoto((i) => Math.max(i - 1, 0));
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [onClose, open]);
+  }, [onClose, open, photos.length]);
+
+  // Reset to first photo whenever a different product opens.
+  useEffect(() => {
+    setActivePhoto(0);
+  }, [product?.id]);
 
   if (!product || typeof document === 'undefined') return null;
 
@@ -68,19 +83,58 @@ export default function ProductInfoDialog({
             onClick={(event) => event.stopPropagation()}
           >
             <div className="grid max-h-[92vh] grid-rows-[1fr_auto] md:grid-cols-[340px_1fr] md:grid-rows-[1fr_auto]">
-              <aside className="relative hidden overflow-hidden md:row-span-2 md:block">
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="h-full w-full object-cover"
-                  referrerPolicy="no-referrer"
-                />
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-serana-forest/72 to-transparent p-6 text-serana-cream">
+              <aside className="relative hidden overflow-hidden md:row-span-2 md:block bg-serana-forest">
+                <AnimatePresence initial={false} mode="wait">
+                  <motion.img
+                    key={`${product.id}-${activePhoto}`}
+                    src={photos[activePhoto] ?? product.image}
+                    alt={`${product.name} — foto ${activePhoto + 1}`}
+                    initial={{ opacity: 0, scale: 1.02 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.98 }}
+                    transition={{ duration: 0.28 }}
+                    className="absolute inset-0 h-full w-full object-cover"
+                    referrerPolicy="no-referrer"
+                  />
+                </AnimatePresence>
+
+                {/* Carousel arrows */}
+                {photos.length > 1 && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => setActivePhoto((i) => Math.max(i - 1, 0))}
+                      disabled={activePhoto === 0}
+                      aria-label="Foto anterior"
+                      className="absolute left-3 top-1/2 -translate-y-1/2 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-white/85 text-serana-forest shadow-sm backdrop-blur-sm transition hover:bg-white disabled:opacity-30 disabled:cursor-not-allowed"
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setActivePhoto((i) => Math.min(i + 1, photos.length - 1))}
+                      disabled={activePhoto === photos.length - 1}
+                      aria-label="Foto siguiente"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-white/85 text-serana-forest shadow-sm backdrop-blur-sm transition hover:bg-white disabled:opacity-30 disabled:cursor-not-allowed"
+                    >
+                      <ChevronRight className="h-4 w-4" />
+                    </button>
+                  </>
+                )}
+
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-serana-forest/82 to-transparent p-6 pt-16 text-serana-cream">
                   <p className="mb-2 inline-flex rounded-full bg-serana-cream px-3 py-1 text-[10px] font-black uppercase tracking-[0.22em] text-serana-forest">
                     {formatCategory(product.category)}
                   </p>
                   <p className="text-sm leading-relaxed text-serana-cream/84">{product.description}</p>
                 </div>
+
+                {/* Photo counter pill */}
+                {photos.length > 1 && (
+                  <div className="absolute top-4 right-4 z-10 rounded-full bg-serana-forest/70 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-serana-cream backdrop-blur-sm">
+                    {activePhoto + 1} / {photos.length}
+                  </div>
+                )}
               </aside>
 
               <section className="min-h-0 overflow-y-auto md:col-start-2 md:row-start-1">
@@ -104,12 +158,47 @@ export default function ProductInfoDialog({
                 </div>
 
                 <div className="space-y-5 px-5 py-5 md:px-7">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="aspect-[16/9] w-full rounded-2xl object-cover md:hidden"
-                    referrerPolicy="no-referrer"
-                  />
+                  <div className="relative md:hidden">
+                    <AnimatePresence initial={false} mode="wait">
+                      <motion.img
+                        key={`mobile-${product.id}-${activePhoto}`}
+                        src={photos[activePhoto] ?? product.image}
+                        alt={`${product.name} — foto ${activePhoto + 1}`}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.22 }}
+                        className="aspect-[16/9] w-full rounded-2xl object-cover"
+                        referrerPolicy="no-referrer"
+                      />
+                    </AnimatePresence>
+                    {photos.length > 1 && (
+                      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 rounded-full bg-serana-forest/70 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-serana-cream backdrop-blur-sm">
+                        {activePhoto + 1} / {photos.length}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Thumbnail strip — desktop only, hidden on mobile to save space */}
+                  {photos.length > 1 && (
+                    <div className="hidden md:flex gap-2 overflow-x-auto pb-1">
+                      {photos.map((src, idx) => (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => setActivePhoto(idx)}
+                          aria-label={`Ir a foto ${idx + 1}`}
+                          className={`relative shrink-0 w-16 h-20 rounded-lg overflow-hidden border-2 transition ${
+                            idx === activePhoto
+                              ? 'border-serana-forest shadow-md scale-[1.03]'
+                              : 'border-transparent opacity-60 hover:opacity-100'
+                          }`}
+                        >
+                          <img src={src} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                        </button>
+                      ))}
+                    </div>
+                  )}
 
                   <div className="rounded-2xl border border-serana-forest/10 bg-white/70 p-4">
                     <p className="text-sm leading-relaxed text-serana-forest/74">

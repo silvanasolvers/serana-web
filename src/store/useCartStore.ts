@@ -7,6 +7,8 @@ export interface Product {
   price: number;
   description: string;
   image: string;
+  /** Additional product photos — used by the detail dialog's image gallery. */
+  gallery?: string[];
   category: string;
   benefits: string[];
   healthBenefit?: string;
