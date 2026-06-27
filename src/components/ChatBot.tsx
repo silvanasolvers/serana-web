@@ -668,7 +668,7 @@ export default function ChatBot() {
             initial={{ opacity: 0, y: 20, scale: 0.95, x: 20 }}
             animate={{ opacity: 1, y: 0, scale: 1, x: 0 }}
             exit={{ opacity: 0, y: 20, scale: 0.95, x: 20 }}
-            className="fixed inset-x-3 bottom-[calc(5.75rem+env(safe-area-inset-bottom))] top-[calc(8.5rem+env(safe-area-inset-top))] z-50 flex min-h-0 flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-2xl sm:inset-x-auto sm:right-6 sm:top-auto sm:h-[min(680px,calc(100svh-8rem))] sm:w-[420px]"
+            className="fixed inset-x-3 bottom-[calc(6rem+env(safe-area-inset-bottom))] z-50 flex h-[min(440px,calc(100svh-12rem))] min-h-0 flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-2xl sm:inset-x-auto sm:right-6 sm:h-[min(560px,calc(100svh-8rem))] sm:w-[420px]"
           >
             <div className="shrink-0 flex items-center gap-3 bg-serana-forest p-4">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10">
