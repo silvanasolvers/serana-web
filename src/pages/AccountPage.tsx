@@ -5,6 +5,7 @@ import {
   ArrowRight,
   CalendarDays,
   CheckCircle,
+  Gift,
   Loader2,
   LogOut,
   PackageCheck,
@@ -23,6 +24,11 @@ const COP = (n: number) =>
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   }).format(n);
+
+const POINTS_RATE_COP = 1000;
+
+const formatPoints = (n: number) =>
+  new Intl.NumberFormat('es-CO', { maximumFractionDigits: 0 }).format(Math.max(0, Math.floor(n)));
 
 export default function AccountPage() {
   const navigate = useNavigate();
@@ -69,6 +75,7 @@ export default function AccountPage() {
   }, [profile]);
 
   const hasProfile = Boolean(profile);
+  const loyaltyPoints = Number(profile?.loyalty_points ?? 0);
   const membershipLabel = useMemo(() => {
     if (!membership) return 'Sin membresía activa';
     if (membership.days_remaining <= 0) return 'Membresía vencida';
@@ -139,7 +146,7 @@ export default function AccountPage() {
               Hola{profile?.full_name ? `, ${profile.full_name.split(' ')[0]}` : ''}.
             </h1>
             <p className="text-serana-forest/65 mt-4 max-w-2xl">
-              Aquí quedan conectadas tus compras, tus datos de entrega y el estado de tu membresía.
+              Aquí quedan conectadas tus compras, tus puntos Serana, tus datos de entrega y el estado de tu membresía.
             </p>
           </div>
           <button
@@ -173,6 +180,22 @@ export default function AccountPage() {
               <p className="text-3xl font-serif text-serana-forest leading-tight">
                 {membershipLabel}
               </p>
+              <div className="mt-5 rounded-2xl border border-serana-forest/10 bg-serana-cream/40 p-4">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-serana-forest/45">
+                  Puntos acumulados
+                </p>
+                <div className="mt-2 flex items-end gap-2">
+                  <span className="font-serif text-4xl leading-none text-serana-forest">
+                    {formatPoints(loyaltyPoints)}
+                  </span>
+                  <span className="pb-1 text-xs font-bold uppercase tracking-widest text-serana-olive">
+                    pts
+                  </span>
+                </div>
+                <p className="mt-2 text-xs leading-relaxed text-serana-forest/55">
+                  Se actualizan con tus compras registradas.
+                </p>
+              </div>
               {membership ? (
                 <div className="mt-4 space-y-2 text-sm text-serana-forest/65">
                   <p className="font-bold text-serana-olive">{membership.plan_name}</p>
@@ -240,9 +263,10 @@ export default function AccountPage() {
           </section>
 
           <section className="space-y-6">
-            <div className="grid sm:grid-cols-3 gap-4">
+            <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
               <MetricCard Icon={PackageCheck} label="Compras" value={String(profile?.total_orders ?? orders.length)} />
               <MetricCard Icon={CheckCircle} label="Valor registrado" value={COP(Number(profile?.lifetime_value ?? 0))} />
+              <MetricCard Icon={Gift} label="Puntos Serana" value={`${formatPoints(loyaltyPoints)} pts`} />
               <MetricCard Icon={Phone} label="WhatsApp" value={profile?.phone ?? 'Pendiente'} />
             </div>
 
@@ -293,6 +317,9 @@ export default function AccountPage() {
                       </div>
                       <div className="flex md:flex-col items-center md:items-end gap-3 md:gap-1 shrink-0">
                         <span className="font-serif text-xl text-serana-forest">{COP(Number(order.total_amount))}</span>
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-serana-forest/45">
+                          +{formatPoints(Number(order.total_amount) / POINTS_RATE_COP)} pts
+                        </span>
                         <span className="px-3 py-1 rounded-full bg-serana-olive/10 text-serana-olive text-[10px] font-bold uppercase tracking-widest">
                           {order.status}
                         </span>
