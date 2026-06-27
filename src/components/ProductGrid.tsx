@@ -278,7 +278,7 @@ function GalleryCard({
     >
       <div className="relative flex h-full flex-col overflow-hidden rounded-[1.4rem] border border-serana-forest/8 bg-white shadow-[0_15px_40px_-25px_rgba(39,54,23,0.25)] transition-all duration-500 hover:-translate-y-0.5 hover:border-serana-olive/25 hover:shadow-[0_25px_60px_-25px_rgba(39,54,23,0.35)]">
         <button type="button" onClick={onOpen} className="block text-left">
-          <div className="relative aspect-[4/5] overflow-hidden">
+          <div className="relative aspect-[3/4] overflow-hidden bg-gradient-to-b from-serana-cream/30 to-serana-olive/10">
             <img
               src={product.image}
               alt={product.name}
