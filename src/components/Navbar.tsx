@@ -6,8 +6,9 @@ import { motion, AnimatePresence } from 'motion/react';
 import clsx from 'clsx';
 import { MarketBasket } from './SeranaIcons';
 import { useAuth } from './AuthProvider';
+import { buildWhatsAppUrl } from '../lib/contact';
 
-const WHATSAPP_URL = 'https://wa.me/573000000000';
+const WHATSAPP_URL = buildWhatsAppUrl('Hola, quiero recibir asesoría de Serana.');
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);

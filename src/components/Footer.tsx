@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { CreditCard, Lock, ShieldCheck, Phone, Send, Check, Loader2, Instagram, MessageCircle, Mail, MapPin, Clock } from 'lucide-react';
 import { captureLead } from '../lib/api/leads';
+import { buildWhatsAppUrl } from '../lib/contact';
 
 const LOGO_URL =
   'https://qlgjqvgjuscquhspjqdp.supabase.co/storage/v1/object/public/AETHERA-DOCS/LOGO%20PRINCIPAL-07.png';
@@ -134,7 +135,7 @@ export default function Footer() {
               >
                 <Instagram className="w-4 h-4" strokeWidth={1.5} />
               </SocialIcon>
-              <SocialIcon href="https://wa.me/573000000000" label="WhatsApp">
+              <SocialIcon href={buildWhatsAppUrl('Hola, quiero hablar con un asesor de Serana.')} label="WhatsApp">
                 <MessageCircle className="w-4 h-4" strokeWidth={1.5} />
               </SocialIcon>
               <SocialIcon href="mailto:contacto@serana.co" label="Email">

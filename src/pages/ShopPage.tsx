@@ -9,9 +9,10 @@ import SectionDivider from '../components/SectionDivider';
 import clsx from 'clsx';
 import { motion } from 'motion/react';
 import { AlertTriangle, ArrowRight, Clock, LayoutGrid, List as ListIcon, Scissors, Search, SlidersHorizontal } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { SerenaIcons, SerenaMark, type SerenaIconName } from '../components/SeranaIcons';
 import { normalizeSearch } from '../lib/search';
+import { buildWhatsAppUrl } from '../lib/contact';
 
 type Category =
   | 'all'
@@ -37,6 +38,10 @@ const CATEGORIES: Array<{ id: Category; label: string; icon: SerenaIconName }> =
   { id: 'verduras-picadas', label: 'Verduras picadas', icon: 'Sprout' },
   { id: 'mercado-fresco', label: 'Mercado fresco', icon: 'Seed' },
 ];
+
+function parseCategoryParam(value: string | null): Category {
+  return CATEGORIES.some((category) => category.id === value) ? (value as Category) : 'all';
+}
 
 type SuggestionId = 'lighter' | 'energy' | 'quick' | 'house';
 
@@ -101,7 +106,7 @@ function DispatchNotice() {
           </div>
         </div>
         <a
-          href="https://wa.me/573000000000"
+          href={buildWhatsAppUrl('Hola, quiero resolver una duda sobre el mercado Serana.')}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-serana-forest text-serana-cream hover:bg-serana-olive transition-colors text-[10px] uppercase tracking-[0.25em] font-bold"
@@ -169,11 +174,21 @@ function MenuGuidance({ activeCategory }: { activeCategory: Category }) {
 }
 
 export default function ShopPage() {
-  const [activeCategory, setActiveCategory] = useState<Category>('all');
-  const [search, setSearch] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [activeCategory, setActiveCategory] = useState<Category>(() =>
+    parseCategoryParam(searchParams.get('category') ?? searchParams.get('filter')),
+  );
+  const [search, setSearch] = useState(() => searchParams.get('search') ?? '');
   const [viewMode, setViewMode] = useState<ProductGridViewMode>('gallery');
   const productSectionRef = useRef<HTMLElement | null>(null);
   const { products } = useProducts();
+
+  useEffect(() => {
+    const nextCategory = parseCategoryParam(searchParams.get('category') ?? searchParams.get('filter'));
+    const nextSearch = searchParams.get('search') ?? '';
+    setActiveCategory(nextCategory);
+    setSearch(nextSearch);
+  }, [searchParams]);
 
   const filteredProducts = useMemo(() => {
     const base =
@@ -236,6 +251,13 @@ export default function ShopPage() {
 
   const selectCategory = (category: Category) => {
     setActiveCategory(category);
+    setSearchParams((current) => {
+      const next = new URLSearchParams(current);
+      if (category === 'all') next.delete('category');
+      else next.set('category', category);
+      if (!search.trim()) next.delete('search');
+      return next;
+    });
     scrollToProducts();
   };
 

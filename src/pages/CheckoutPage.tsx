@@ -19,6 +19,7 @@ import {
   getComboSummaryLines,
   stripComboPayloadMarker,
 } from '../data/comboCustomizations';
+import { clearCheckoutSource, readCheckoutSource } from '../lib/checkoutSource';
 
 const MP_PUBLIC_KEY = import.meta.env.VITE_MP_PUBLIC_KEY ?? '';
 
@@ -211,7 +212,7 @@ export default function CheckoutPage() {
       type: 'domicilio' as const,
       payment_method: form.paymentMethod,
       payment_status: 'pendiente' as const,
-      source_code: 'web' as const,
+      source_code: readCheckoutSource(),
       coupon_code: couponApplied?.valid ? couponApplied.code ?? undefined : undefined,
       items: items.map((item) => ({
         product_slug: item.productSlug ?? item.id,
@@ -244,6 +245,7 @@ export default function CheckoutPage() {
       }
       const mpData = (await mpResp.json()) as { preference_id?: string };
       if (!mpData.preference_id) throw new Error('Mercado Pago no devolvió la preferencia.');
+      clearCheckoutSource();
 
       setMpReady({
         order_id: result.order_id,
@@ -276,6 +278,7 @@ export default function CheckoutPage() {
         total: Number(result.total_amount),
         coupon: result.coupon_code ?? null,
       });
+      clearCheckoutSource();
       clearCart();
     } catch (err: any) {
       setError(err?.message || 'No pudimos confirmar tu pedido. Intenta nuevamente.');
@@ -295,6 +298,7 @@ export default function CheckoutPage() {
       total: mpReady.amount,
       coupon: mpReady.coupon,
     });
+    clearCheckoutSource();
     clearCart();
     void paymentId; // for future telemetry
   };
