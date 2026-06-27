@@ -350,8 +350,10 @@ function useSelectedVariant(product: Product | null) {
     ? {
         ...product,
         id: `${product.id}-${slugifyVariant(selectedVariant.label)}`,
+        productSlug: product.productSlug ?? product.id,
         name: `${product.name} - ${selectedVariant.label}`,
         price: selectedVariant.price,
+        variantLabel: selectedVariant.label,
       }
     : product;
 

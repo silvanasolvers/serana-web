@@ -214,13 +214,20 @@ export default function CheckoutPage() {
       payment_status: 'pendiente' as const,
       source_code: readCheckoutSource(),
       coupon_code: couponApplied?.valid ? couponApplied.code ?? undefined : undefined,
-      items: items.map((item) => ({
-        product_slug: item.productSlug ?? item.id,
-        quantity: item.quantity,
-        customizations: item.comboSelections
+      items: items.map((item) => {
+        const customizations = item.comboSelections
           ? buildComboCustomizationText(item.comboSelections)
-          : item.customizations,
-      })),
+          : [item.variantLabel ? `Presentación: ${item.variantLabel}` : null, item.customizations]
+              .filter(Boolean)
+              .join('\n') || undefined;
+
+        return {
+          product_slug: item.productSlug ?? item.id,
+          quantity: item.quantity,
+          variant_label: item.variantLabel,
+          customizations,
+        };
+      }),
     };
   };
 

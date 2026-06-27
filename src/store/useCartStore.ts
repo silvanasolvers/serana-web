@@ -19,6 +19,7 @@ export interface Product {
     label: string;
     price: number;
   }>;
+  variantLabel?: string;
   isSubscription?: boolean;
   customizations?: string;
   comboSelections?: ComboSelectionPayload;

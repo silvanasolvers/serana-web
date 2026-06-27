@@ -1,6 +1,6 @@
 import { Product } from '../store/useCartStore';
 
-export const products: Product[] = [
+const baseProducts: Product[] = [
   // Ensaladas Gourmet
   {
     id: 'ensalada-almendras',
@@ -1736,3 +1736,33 @@ export const products: Product[] = [
     ingredients: ['5 ensaladas tradicionales a elección']
   }
 ];
+
+export const products: Product[] = baseProducts.map(addProduceWeightVariants);
+
+function addProduceWeightVariants(product: Product): Product {
+  if (product.variants?.length) return product;
+  if (!['frutas-picadas', 'verduras-picadas', 'mercado-fresco'].includes(product.category)) return product;
+
+  const normalizedName = product.name.toLowerCase();
+  if (normalizedName.includes('(libra)')) {
+    return {
+      ...product,
+      variants: [
+        { label: '500 gr', price: product.price },
+        { label: '250 gr', price: Math.round(product.price / 2) },
+      ],
+    };
+  }
+
+  if (normalizedName.includes('(250g)') || normalizedName.includes('(250 g)')) {
+    return {
+      ...product,
+      variants: [
+        { label: '250 gr', price: product.price },
+        { label: '500 gr', price: product.price * 2 },
+      ],
+    };
+  }
+
+  return product;
+}

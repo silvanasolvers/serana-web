@@ -339,7 +339,7 @@ function GalleryCard({
 
         <div className="mt-auto border-t border-serana-forest/8 px-3 py-3 md:px-4">
           <div className="mb-3 flex items-center justify-between gap-2">
-            <span className="text-sm font-black text-serana-terracotta md:text-base">{COP(product.price)}</span>
+            <span className="text-sm font-black text-serana-terracotta md:text-base">{formatDisplayPrice(product)}</span>
             <button
               type="button"
               onClick={onOpen}
@@ -409,7 +409,7 @@ function ListRow({
         </div>
       </button>
       <div className="flex items-center justify-between gap-3 border-t border-serana-forest/8 pt-3 md:flex-col md:items-end md:justify-center md:border-t-0 md:pt-0">
-        <span className="whitespace-nowrap font-bold tabular-nums text-serana-terracotta">{COP(product.price)}</span>
+        <span className="whitespace-nowrap font-bold tabular-nums text-serana-terracotta">{formatDisplayPrice(product)}</span>
         {requiresDetailChoice ? (
           <button
             type="button"
@@ -446,6 +446,12 @@ function ensureSentence(value: string) {
   const clean = value.trim().replace(/\s*[.]+$/, '');
   if (!clean) return '';
   return /[!?]$/.test(clean) ? clean : `${clean}.`;
+}
+
+function formatDisplayPrice(product: Product) {
+  if (!product.variants?.length) return COP(product.price);
+  const lowestVariantPrice = Math.min(...product.variants.map((variant) => variant.price));
+  return `Desde ${COP(lowestVariantPrice)}`;
 }
 
 function productSearchText(product: Product) {
