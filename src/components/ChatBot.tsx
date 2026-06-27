@@ -668,9 +668,9 @@ export default function ChatBot() {
             initial={{ opacity: 0, y: 20, scale: 0.95, x: 20 }}
             animate={{ opacity: 1, y: 0, scale: 1, x: 0 }}
             exit={{ opacity: 0, y: 20, scale: 0.95, x: 20 }}
-            className="fixed inset-x-3 bottom-24 z-50 flex h-[min(680px,calc(100svh-120px))] flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-2xl sm:inset-x-auto sm:right-6 sm:w-[420px]"
+            className="fixed inset-x-3 bottom-[calc(5.75rem+env(safe-area-inset-bottom))] top-[calc(8.5rem+env(safe-area-inset-top))] z-50 flex min-h-0 flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-2xl sm:inset-x-auto sm:right-6 sm:top-auto sm:h-[min(680px,calc(100svh-8rem))] sm:w-[420px]"
           >
-            <div className="flex items-center gap-3 bg-serana-forest p-4">
+            <div className="shrink-0 flex items-center gap-3 bg-serana-forest p-4">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10">
                 <ShoppingBag className="text-white" size={20} />
               </div>
@@ -690,7 +690,7 @@ export default function ChatBot() {
               </button>
             </div>
 
-            <div className="flex-1 space-y-4 overflow-y-auto bg-gray-50 p-4">
+            <div className="min-h-0 flex-1 space-y-4 overflow-y-auto bg-gray-50 p-4">
               {messages.map((msg) => (
                 <div key={msg.id} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
                   <div className={`max-w-[88%] ${msg.sender === 'user' ? 'order-2' : ''}`}>
@@ -746,7 +746,7 @@ export default function ChatBot() {
               <div ref={messagesEndRef} />
             </div>
 
-            <div className="border-t border-gray-100 bg-white p-4">
+            <div className="shrink-0 border-t border-gray-100 bg-white p-4">
               <form
                 onSubmit={(e: FormEvent<HTMLFormElement>) => {
                   e.preventDefault();
@@ -759,7 +759,7 @@ export default function ChatBot() {
                   value={inputText}
                   onChange={(e) => setInputText(e.target.value)}
                   placeholder="Pregunta por producto, ingrediente o compra..."
-                  className="flex-1 rounded-full border border-gray-200 bg-gray-50 px-4 py-2 text-sm text-serana-forest transition-all placeholder:text-serana-forest/40 focus:border-serana-forest/50 focus:outline-none focus:ring-1 focus:ring-serana-forest/30"
+                  className="min-w-0 flex-1 rounded-full border border-gray-200 bg-gray-50 px-4 py-2 text-sm text-serana-forest transition-all placeholder:text-serana-forest/40 focus:border-serana-forest/50 focus:outline-none focus:ring-1 focus:ring-serana-forest/30"
                 />
                 <button
                   type="submit"
