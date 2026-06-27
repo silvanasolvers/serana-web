@@ -16,6 +16,7 @@ export type ComboGroupDefinition = {
   min?: number;
   unitLabel?: string;
   maxPerOption?: number;
+  perOptionMax?: Record<string, number>;
   source: ComboOptionSource;
 };
 
@@ -31,6 +32,7 @@ export type ResolvedComboOption = {
   image: string;
   description: string;
   category: string;
+  maxQuantity: number;
 };
 
 export type ResolvedComboGroup = ComboGroupDefinition & {
@@ -57,6 +59,10 @@ const FRUIT_GROUP: ComboGroupDefinition = {
   max: 3,
   unitLabel: 'lb',
   source: { categories: ['frutas-picadas'] },
+};
+
+const BERRY_MIX_LIMIT = {
+  'baby-bowl-berry': 1,
 };
 
 const VEGETABLE_GROUP: ComboGroupDefinition = {
@@ -180,6 +186,16 @@ function withLimit(group: ComboGroupDefinition, max: number): ComboGroupDefiniti
   };
 }
 
+function withPerOptionLimit(group: ComboGroupDefinition, perOptionMax: Record<string, number>): ComboGroupDefinition {
+  return {
+    ...group,
+    perOptionMax: {
+      ...(group.perOptionMax ?? {}),
+      ...perOptionMax,
+    },
+  };
+}
+
 function oneEach(group: ComboGroupDefinition, max = 1): ComboGroupDefinition {
   return {
     ...group,
@@ -194,7 +210,7 @@ export const COMBO_DEFINITIONS: ComboDefinition[] = [
     slug: 'combo-1-2',
     groups: [
       withLimit(SOUP_GROUP, 3),
-      withLimit(FRUIT_GROUP, 3),
+      withPerOptionLimit(withLimit(FRUIT_GROUP, 3), BERRY_MIX_LIMIT),
       withLimit(VEGETABLE_GROUP, 3),
       oneEach(GOURMET_SALAD_GROUP),
       oneEach(TRADITIONAL_SALAD_GROUP),
@@ -218,7 +234,7 @@ export const COMBO_DEFINITIONS: ComboDefinition[] = [
     slug: 'combo-familiar',
     groups: [
       withLimit(SOUP_GROUP, 5),
-      withLimit(FRUIT_GROUP, 6),
+      withPerOptionLimit(withLimit(FRUIT_GROUP, 6), BERRY_MIX_LIMIT),
       withLimit(VEGETABLE_GROUP, 6),
       oneEach(GOURMET_SALAD_GROUP, 2),
       oneEach(TRADITIONAL_SALAD_GROUP, 2),
@@ -336,6 +352,7 @@ export function resolveComboGroups(definition: ComboDefinition, products: Produc
         image: product.image,
         description: product.description,
         category: product.category,
+        maxQuantity: group.perOptionMax?.[product.id] ?? group.maxPerOption ?? group.max,
       }));
 
     return {

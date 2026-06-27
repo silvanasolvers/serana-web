@@ -296,7 +296,9 @@ function ComboGroupCard({
         {group.options.map((option) => {
           const quantity = selections[option.slug] ?? 0;
           const atGroupLimit = total >= group.max && quantity === 0;
-          const atOptionLimit = quantity >= group.maxPerOption;
+          const optionMax = option.maxQuantity ?? group.maxPerOption;
+          const atOptionLimit = quantity >= optionMax;
+          const hasSpecialLimit = optionMax < group.maxPerOption;
           return (
             <article
               key={option.slug}
@@ -319,6 +321,11 @@ function ComboGroupCard({
                 <p className="mt-0.5 text-[10px] leading-snug text-serana-forest/48">
                   {option.description}
                 </p>
+                {hasSpecialLimit && (
+                  <p className="mt-1 inline-flex rounded-full bg-serana-terracotta/10 px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.12em] text-serana-terracotta">
+                    Máx. {optionMax} por combo
+                  </p>
+                )}
               </div>
               <div className="flex items-center gap-1 self-center">
                 <button
@@ -368,9 +375,10 @@ function updateSelection(
   const groupSelections = current[group.id] ?? {};
   const currentQty = groupSelections[optionSlug] ?? 0;
   const groupTotal = Object.values(groupSelections).reduce((sum, qty) => sum + qty, 0);
+  const optionMax = group.options.find((option) => option.slug === optionSlug)?.maxQuantity ?? group.maxPerOption;
 
   if (delta > 0 && groupTotal >= group.max) return current;
-  if (delta > 0 && currentQty >= group.maxPerOption) return current;
+  if (delta > 0 && currentQty >= optionMax) return current;
 
   const nextQty = Math.max(0, currentQty + delta);
   const nextGroup = { ...groupSelections };
