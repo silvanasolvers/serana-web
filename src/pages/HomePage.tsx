@@ -9,7 +9,6 @@ import CartDrawer from '../components/CartDrawer';
 import Footer from '../components/Footer';
 import VideoSection from '../components/VideoSection';
 import SectionDivider from '../components/SectionDivider';
-import ScrollStory from '../components/ScrollStory';
 import ProteinCountdownBanner from '../components/ProteinCountdownBanner';
 import TestimonialsSection from '../components/TestimonialsSection';
 import TrustCredentialsSection from '../components/TrustCredentialsSection';
@@ -34,11 +33,6 @@ export default function HomePage() {
         <ValueProposition />
 
         <SectionDivider variant="brush" />
-
-        {/* Panel 2.5 — El recorrido (scroll-driven storytelling) */}
-        <ScrollStory />
-
-        <SectionDivider />
 
         {/* Panel 3 — Experiencia / Calidad real (Confío) */}
         <VideoSection />
