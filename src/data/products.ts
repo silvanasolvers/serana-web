@@ -1708,7 +1708,47 @@ const baseProducts: Product[] = [
       '5 barritas de granola'
     ]
   },
+  {
+    id: 'combo-mascotas',
+    name: 'Combo Mascotas',
+    price: 169000,
+    description: 'Opciones balanceadas y testeadas para tu peludito, con productos aptos para consumo animal.',
+    image: 'https://picsum.photos/seed/combo-mascotas/400/300',
+    category: 'combos',
+    benefits: ['Mascotas', 'Digestivo'],
+    healthBenefit: 'Pensado en el bienestar y la salud digestiva de tu peludito.',
+    portions: 34,
+    observation: 'Todo viene predeterminado en este combo.',
+    ingredients: [
+      '2 baby bowls de mango maduro x 200 gr',
+      '2 mini bowls de zanahoria x 200 gr',
+      '2 mini bowls de apio x 200 gr',
+      '1 baby bowl de pepino sin semilla y sin cáscara x 250 gr',
+      '1 baby bowl de calabaza cocida x 250 gr',
+      '1 baby bowl de zucchini sin semilla y sin cáscara',
+      '2 mini bowls de arándanos x 125 gr',
+      '1 litro de kéfir natural sin azúcar'
+    ]
+  },
 
+  {
+    id: 'kit-jugos-saludables-18-und',
+    name: 'Kit Jugos Saludables (18 und)',
+    price: 95900,
+    description: 'Un kit completo de jugos saludables que te brindan nutrientes esenciales para el día a día.',
+    image: 'https://picsum.photos/seed/kit-jugos-saludables/400/300',
+    category: 'combos',
+    benefits: ['Funcional', 'Energía diaria'],
+    healthBenefit: 'Reúne jugos funcionales pensados para sumar nutrientes, frescura y practicidad a tu rutina.',
+    portions: 18,
+    observation: 'Incluye las opciones de jugos funcionales de Serana y jugo de naranja recién exprimido.',
+    ingredients: [
+      '5 jugos verde detox x 150 gr',
+      '5 batidos circulación x 150 gr',
+      '5 batidos detox anti estrés x 150 gr',
+      '3 jugos de naranja x 250 ml'
+    ]
+  },
   {
     id: 'kit-jugos',
     name: 'Kit Jugos de Fruta (18 und)',
@@ -1723,6 +1763,19 @@ const baseProducts: Product[] = [
     ingredients: ['3 packs de batidos de fruta x 5 und de 150 gr', 'jugo de naranja x 3']
   },
   {
+    id: 'kit-ensaladas-gourmet-5-und',
+    name: 'Kit Ensaladas Gourmet (5 und)',
+    price: 190000,
+    description: 'Un kit de ensaladas deliciosas y más elaboradas para darle un toque gourmet a tu semana.',
+    image: 'https://picsum.photos/seed/kit-ensaladas-gourmet/400/300',
+    category: 'combos',
+    benefits: ['Gourmet', 'Semanal'],
+    healthBenefit: 'Una forma práctica de tener ensaladas gourmet listas para varios momentos de la semana.',
+    portions: 15,
+    observation: 'Opción desplegable de todas las ensaladas gourmet para escoger máximo 5 unidades.',
+    ingredients: ['5 ensaladas gourmet a elección']
+  },
+  {
     id: 'kit-ensaladas',
     name: 'Kit Ensaladas Tradicional (5 und)',
     price: 110000,
@@ -1734,6 +1787,32 @@ const baseProducts: Product[] = [
     portions: 15,
     observation: 'Ensaladas tradicionales a elección.',
     ingredients: ['5 ensaladas tradicionales a elección']
+  },
+  {
+    id: 'kit-sopas-prelistas-5-und',
+    name: 'Kit Sopas Prelistas (5 und)',
+    price: 95900,
+    description: 'El kit de sopas que te saca de apuros mientras complementas tus almuerzos.',
+    image: 'https://picsum.photos/seed/kit-sopas-prelistas/400/300',
+    category: 'combos',
+    benefits: ['Práctico', 'Reconfortante'],
+    healthBenefit: 'Pensado para tener sopas listas, nutritivas y fáciles de sumar a tus comidas.',
+    portions: 15,
+    observation: 'Opción desplegable de todas las sopas prelistas para escoger máximo 5 unidades.',
+    ingredients: ['5 sopas prelistas a elección']
+  },
+  {
+    id: 'kit-vinagretas-3-und',
+    name: 'Kit Vinagretas (3 und)',
+    price: 75900,
+    description: '¿Qué sería de una ensalada sin su vinagreta? Con este kit realzas el sabor de tus comidas.',
+    image: 'https://picsum.photos/seed/kit-vinagretas/400/300',
+    category: 'combos',
+    benefits: ['Sabor', 'Complemento'],
+    healthBenefit: 'Un kit para elevar ensaladas y comidas con salsas o vinagretas listas para servir.',
+    portions: 20,
+    observation: 'Opción desplegable de todas las salsas y vinagretas para escoger máximo 3 unidades.',
+    ingredients: ['3 vinagretas o salsas a elección']
   }
 ];
 
