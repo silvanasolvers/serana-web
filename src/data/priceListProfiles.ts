@@ -1766,7 +1766,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "limon-libra": {
-    "name": "Limón (libra)",
+    "name": "Limón",
     "price": 4900,
     "description": "Es alto en vitamina C, perfecta para proteger el sistema inmune.",
     "category": "mercado-fresco",
@@ -1781,7 +1781,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "granadilla": {
-    "name": "Granadilla (libra)",
+    "name": "Granadilla",
     "price": 12900,
     "description": "Rica en fibra, mejora la digestion y es un relajante natural.",
     "category": "mercado-fresco",
@@ -1796,7 +1796,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "mango-libra": {
-    "name": "Mango (libra)",
+    "name": "Mango",
     "price": 3500,
     "description": "Alto en vitamina A y C, mejora el sistema inmune y la piel.",
     "category": "mercado-fresco",
@@ -1811,7 +1811,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "coco-libra": {
-    "name": "Coco und",
+    "name": "Coco",
     "price": 11500,
     "description": "Son grasas saludables, hidratante y mejora el metabolismo.",
     "category": "mercado-fresco",
@@ -1825,7 +1825,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "lulo": {
-    "name": "Lulo (libra)",
+    "name": "Lulo",
     "price": 5900,
     "description": "Muy alto en vitamina C, es antioxidante y refuerza el sistema inmune.",
     "category": "mercado-fresco",
@@ -1841,7 +1841,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "kiwi-libra": {
-    "name": "Kiwi (libra)",
+    "name": "Kiwi",
     "price": 18000,
     "description": "Altisimo en vitamina C, refuerza las defensas y mejora la digestion.",
     "category": "mercado-fresco",
@@ -1856,7 +1856,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "durazno": {
-    "name": "Durazno (libra)",
+    "name": "Durazno",
     "price": 8900,
     "description": "Es gidratante, y rico en antioxidantes.",
     "category": "mercado-fresco",
@@ -1870,7 +1870,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "pitahaya": {
-    "name": "Pitahaya (libra)",
+    "name": "Pitahaya",
     "price": 14900,
     "description": "Rica en fibra, regula la digestion y es antioxidante.",
     "category": "mercado-fresco",
@@ -1886,7 +1886,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "mandarina": {
-    "name": "Mandarina (libra)",
+    "name": "Mandarina",
     "price": 7400,
     "description": "Contiene vitamina C, es hidratante y mejora el sistema inmune",
     "category": "mercado-fresco",
@@ -1902,7 +1902,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "fresa-libra": {
-    "name": "Fresa (libra)",
+    "name": "Fresa",
     "price": 17900,
     "description": "Es un potente antioxidante, mejora la piel y es antiinflamatoria.",
     "category": "mercado-fresco",
@@ -1917,7 +1917,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "guayaba-pera": {
-    "name": "Guayaba pera (libra)",
+    "name": "Guayaba pera",
     "price": 4200,
     "description": "Es muy alta en vitamina C, mejora el sistema inmune y contiene fibra.",
     "category": "mercado-fresco",
@@ -1933,7 +1933,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "guayaba-manzana-libra": {
-    "name": "Guayaba manzana (libra)",
+    "name": "Guayaba manzana",
     "price": 6900,
     "description": "Es rica en antioxidantes, mejora la digestion y apoya al sistema inmune.",
     "category": "mercado-fresco",
@@ -1949,7 +1949,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "aguacate-hass": {
-    "name": "Aguacate hass (libra)",
+    "name": "Aguacate hass",
     "price": 7900,
     "description": "Contiene grasas saludables, mejora la salud cardiovascular y aumenta la saciedad.",
     "category": "mercado-fresco",
@@ -1979,7 +1979,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "tomate-arbol": {
-    "name": "Tomate de árbol (libra)",
+    "name": "Tomate de árbol",
     "price": 5900,
     "description": "Es alto en antioxidantes, mejora la salud cardiovascular y regula el colesterol.",
     "category": "mercado-fresco",
@@ -2132,7 +2132,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "aguacate-papelillo": {
-    "name": "Aguacate papelillo (libra)",
+    "name": "Aguacate papelillo",
     "price": 14500,
     "description": "Es una grasa saludable, te aporta energia sostenida y apoya la salud cardiovascular.",
     "category": "mercado-fresco",
@@ -2146,7 +2146,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "papa-capira": {
-    "name": "Papa capira (libra)",
+    "name": "papa capira",
     "price": 3500,
     "description": "Contiene carbohidratos complejos y es fuente de energia, aporta potasio y te genera saciedad.",
     "category": "mercado-fresco",
@@ -2161,7 +2161,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "papa-criolla": {
-    "name": "Papa criolla (libra)",
+    "name": "papa criolla",
     "price": 5900,
     "description": "Es rica en antioxidantes, contiene energia aun mas limpia y es mas ligera, recomendado para dietas",
     "category": "mercado-fresco",
@@ -2176,7 +2176,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "papa-nevada": {
-    "name": "Papa nevada (libra)",
+    "name": "papa nevada",
     "price": 4900,
     "description": "Contiene carbohidratos complejos y es fuente de energia, aporta potasio y te genera saciedad.",
     "category": "mercado-fresco",
@@ -2191,7 +2191,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "frijol-rojo": {
-    "name": "Frijol rojo (libra)",
+    "name": "frijol rojo",
     "price": 12900,
     "description": "Es proteina vegetal, alta en fibra y regula el azucar en sangre.",
     "category": "mercado-fresco",
@@ -2206,7 +2206,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "guineo": {
-    "name": "Guineo (libra)",
+    "name": "guineo",
     "price": 3000,
     "description": "Es fuente de potasio para el mejoramiento de la funcion muscular. es energia rapida y mejora la digestion.",
     "category": "mercado-fresco",
@@ -2221,7 +2221,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "platano": {
-    "name": "Plátano (libra)",
+    "name": "platano",
     "price": 3800,
     "description": "Es energia sostenida, rico en fibra y mejora la digestion.",
     "category": "mercado-fresco",
@@ -2238,7 +2238,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "yuca-libra": {
-    "name": "Yuca (libra)",
+    "name": "yuca",
     "price": 3900,
     "description": "Es libre de gluten, contiene energia limpia y es de facil digestion.",
     "category": "mercado-fresco",
@@ -2269,7 +2269,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "champinon": {
-    "name": "Champiñón (libra)",
+    "name": "champiñon",
     "price": 31000,
     "description": "Es bajo en calorias, Es fuente de proteina vegetal y refuerza el sistema inmune.",
     "category": "mercado-fresco",
@@ -2285,7 +2285,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "orellana": {
-    "name": "Orellana (libra)",
+    "name": "orellana",
     "price": 34900,
     "description": "Es proteina vegetal, reduce el colesterol y es antiinflamatoria.",
     "category": "mercado-fresco",
@@ -2301,7 +2301,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "tomate-aliño": {
-    "name": "Tomate de aliño (libra)",
+    "name": "tomate de aliño",
     "price": 6800,
     "description": "Es antioxidante, antiinflamatorio y protege el corazon",
     "category": "mercado-fresco",
@@ -2317,7 +2317,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "tomate-san-marzano": {
-    "name": "Tomate san marzano (libra)",
+    "name": "tomate san marzano",
     "price": 8600,
     "description": "Contiene mayor concentracion de antioxidantes, mejora la salud celular y refuerza las defensas",
     "category": "mercado-fresco",
@@ -2332,7 +2332,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "cebolla-blanca": {
-    "name": "Cebolla blanca (libra)",
+    "name": "cebolla blanca",
     "price": 3000,
     "description": "Es antibacteriana, mejora la digestion y apoya al sistema inmune",
     "category": "mercado-fresco",
@@ -2348,7 +2348,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "cebolla-morada": {
-    "name": "Cebolla morada (libra)",
+    "name": "cebolla morada",
     "price": 5900,
     "description": "Es antiinflamatoria, mejora la circulacion y contiene mayor concentracion de antioxidantes.",
     "category": "mercado-fresco",
@@ -2364,7 +2364,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "cebolla-larga-libra": {
-    "name": "Cebolla larga (libra)",
+    "name": "Cebolla larga",
     "price": 5900,
     "description": "Mejora la digestion, refuerza el sistema inmune y es rica en vitamina K",
     "category": "mercado-fresco",
@@ -2396,7 +2396,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "cebolla-puerro-libra": {
-    "name": "Cebolla puerro (libra)",
+    "name": "cebolla puerro (und libra)",
     "price": 7900,
     "description": "Contiene fibra prebiotica, mejora la microbiota y apoya la digestion.",
     "category": "mercado-fresco",
@@ -2411,7 +2411,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "cebolla-chalota": {
-    "name": "Cebolla chalota (libra)",
+    "name": "cebolla chalota",
     "price": 8900,
     "description": "Es rica en antioxidantes, mejora la circulacion y es antiinflamatoria.",
     "category": "mercado-fresco",
@@ -2440,7 +2440,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "brocoli-libra": {
-    "name": "Brócoli (libra)",
+    "name": "brocoli",
     "price": 6900,
     "description": "Es anticancerigeno, contiene gran cantidad de fibra y refuerza el sistema inmune, es considerado superalimento.",
     "category": "mercado-fresco",
@@ -2455,7 +2455,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "coliflor-libra": {
-    "name": "Coliflor (libra)",
+    "name": "coliflor",
     "price": 7300,
     "description": "Es un desintoxicante hepatico, contiene fibra y regula las hormonas.",
     "category": "mercado-fresco",
@@ -2469,7 +2469,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "pimenton": {
-    "name": "Pimentón (libra)",
+    "name": "pimenton",
     "price": 6800,
     "description": "Es altisima en vitamina C, antioxidante y mejora el sistema inmune",
     "category": "mercado-fresco",
@@ -2485,7 +2485,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "zanahoria-libra": {
-    "name": "Zanahoria (libra)",
+    "name": "zanahoria",
     "price": 3000,
     "description": "Contiene betacarotenas especial para la piel y la vision. ademas es antioxidante.",
     "category": "mercado-fresco",
@@ -2499,7 +2499,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "habichuela-libra": {
-    "name": "Habichuela (libra)",
+    "name": "habichuela",
     "price": 4800,
     "description": "Contiene fibra, regula el azucar en sangre y mejora la digestion.",
     "category": "mercado-fresco",
@@ -2740,7 +2740,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "berenjena": {
-    "name": "Berenjena (libra)",
+    "name": "berenjena",
     "price": 4600,
     "description": "Es antioxidante, reduce el colesterol y mejora la salud cardiovascular.",
     "category": "mercado-fresco",
@@ -2783,7 +2783,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "pepino-libra": {
-    "name": "Pepino (libra)",
+    "name": "pepino",
     "price": 4500,
     "description": "Es altamente hidratante, desinflama y mejora la piel",
     "category": "mercado-fresco",
@@ -2797,7 +2797,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "remolacha-libra": {
-    "name": "Remolacha (libra)",
+    "name": "remolacha",
     "price": 4500,
     "description": "Mejora la circulacion, aumenta el rendimiento fisico y es un detox hepatico.",
     "category": "mercado-fresco",
@@ -2826,7 +2826,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "espinaca": {
-    "name": "Espinaca (libra)",
+    "name": "espinaca",
     "price": 6500,
     "description": "Es otro superalimento, rica en herro, mejora la energia y es antioxidante.",
     "category": "mercado-fresco",
@@ -2856,7 +2856,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "acelga": {
-    "name": "Acelga (libra)",
+    "name": "acelga",
     "price": 4600,
     "description": "Rica en minerales, mejora la digestion y es antioxidante",
     "category": "mercado-fresco",
@@ -2871,7 +2871,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "col-china": {
-    "name": "Col china (libra)",
+    "name": "col china",
     "price": 3500,
     "description": "Es ligera, digestiva y rica en antioxidantes.",
     "category": "mercado-fresco",
@@ -2989,7 +2989,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "rabano-libra": {
-    "name": "Rábano (libra)",
+    "name": "rabano",
     "price": 5900,
     "description": "Es un desintoxicante hepatico, mejora la digestion y estimula la bilis",
     "category": "mercado-fresco",
