@@ -1,6 +1,7 @@
 import { supabase, isSupabaseConfigured } from '../supabase';
 import type { Product } from '../../store/useCartStore';
 import { products as staticProducts } from '../../data/products';
+import { PRICE_LIST_PROFILES } from '../../data/priceListProfiles';
 
 type ProductRow = {
   id: string;
@@ -48,22 +49,25 @@ function rowToProduct(row: ProductRow): Product {
   // Falls back to UUID for catalogue rows that don't have a slug yet.
   const id = row.slug ?? row.id;
   const staticMatch = STATIC_BY_ID.get(id);
-  if (staticMatch) {
-    return {
-      ...staticMatch,
-      image: row.image_url || staticMatch.image,
-      gallery: row.gallery_urls ?? staticMatch.gallery ?? [],
-    };
-  }
+  const profile = PRICE_LIST_PROFILES[id];
+  const hasProfile = Boolean(profile);
+
   return {
+    ...(staticMatch ?? {}),
+    ...(profile ?? {}),
     id,
-    name: normalizeUnitLabel(row.name || ''),
-    price: Number(row.price ?? 0),
-    description: row.description || '',
+    name: profile?.name ?? normalizeUnitLabel(row.name || staticMatch?.name || ''),
+    price: Number(profile?.price ?? row.price ?? staticMatch?.price ?? 0),
+    description: profile?.description ?? row.description ?? staticMatch?.description ?? '',
     image: row.image_url || staticMatch?.image || '',
-    gallery: row.gallery_urls ?? [],
-    category: inferStorefrontCategory(row),
-    benefits: FALLBACK_BENEFITS,
+    gallery: row.gallery_urls ?? staticMatch?.gallery ?? [],
+    category: profile?.category ?? inferStorefrontCategory(row) ?? staticMatch?.category ?? 'otros',
+    benefits: profile?.benefits ?? staticMatch?.benefits ?? FALLBACK_BENEFITS,
+    healthBenefit: profile?.healthBenefit ?? staticMatch?.healthBenefit,
+    observation: profile?.observation ?? staticMatch?.observation,
+    portions: profile?.portions ?? staticMatch?.portions,
+    ingredients: profile?.ingredients ?? staticMatch?.ingredients,
+    variants: hasProfile ? profile?.variants : staticMatch?.variants,
   };
 }
 

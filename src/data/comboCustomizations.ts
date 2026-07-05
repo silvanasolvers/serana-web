@@ -72,34 +72,7 @@ const VEGETABLE_GROUP: ComboGroupDefinition = {
   helper: 'Verduras listas para cocinar o servir',
   max: 3,
   unitLabel: 'opciones',
-  source: {
-    categories: ['verduras-picadas'],
-    slugs: [
-      'zanahoria',
-      'pepino',
-      'apio',
-      'brocoli',
-      'coliflor',
-      'habichuela',
-      'repollo',
-      'remolacha',
-      'tomate-aliño',
-      'tomate-cherry',
-      'tomate-uvalina',
-      'cebolla-puerro',
-      'cebolla-larga',
-      'cebolla-morada',
-      'cebolla-chalota',
-      'aji-dulce',
-      'champinon',
-      'espinaca',
-      'kale',
-      'acelga',
-      'col-china',
-      'hinojo',
-      'esparragos',
-    ],
-  },
+  source: { categories: ['verduras-picadas'] },
 };
 
 const GOURMET_SALAD_GROUP: ComboGroupDefinition = {
@@ -136,7 +109,7 @@ const HAND_FRUIT_GROUP: ComboGroupDefinition = {
       'granadilla',
       'mandarina',
       'durazno',
-      'banano-libra',
+      'banano-x-1-5-kg',
       'kiwi-libra',
       'mangostino',
       'rambutan',
@@ -165,8 +138,8 @@ const JUICE_FRUIT_GROUP: ComboGroupDefinition = {
   source: {
     slugs: [
       'mango-libra',
-      'pina-picada',
-      'melon-libra',
+      'pina',
+      'melon-und-1-5-kg',
       'sandia-baby-libra',
       'maracuya',
       'mora',
@@ -308,8 +281,36 @@ export const COMBO_DEFINITIONS: ComboDefinition[] = [
     fixedItems: ['Jugo de naranja x 3'],
   },
   {
+    slug: 'kit-jugos-saludables-18-und',
+    groups: [oneEach(DRINK_GROUP, 3)],
+    fixedItems: ['Jugo de naranja x 3'],
+  },
+  {
     slug: 'kit-ensaladas',
     groups: [oneEach(TRADITIONAL_SALAD_GROUP, 5)],
+  },
+  {
+    slug: 'kit-ensaladas-gourmet-5-und',
+    groups: [oneEach(GOURMET_SALAD_GROUP, 5)],
+  },
+  {
+    slug: 'kit-sopas-prelistas-5-und',
+    groups: [oneEach(SOUP_GROUP, 5)],
+  },
+  {
+    slug: 'kit-vinagretas-3-und',
+    groups: [
+      {
+        id: 'sauces',
+        label: 'Salsas y vinagretas',
+        shortLabel: 'Vinagretas',
+        helper: 'Opciones para acompañar ensaladas',
+        max: 3,
+        min: 3,
+        maxPerOption: 1,
+        source: { categories: ['salsas'] },
+      },
+    ],
   },
 ];
 
