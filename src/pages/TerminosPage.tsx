@@ -34,6 +34,11 @@ export default function TerminosPage() {
         valor del domicilio se calcula en el checkout según la zona de entrega. Podemos modificar
         precios sin aviso previo, pero el precio que verás al pagar es el que se cobra.
       </p>
+      <p>
+        La compra mínima en la tienda es de <strong>$50.000 COP</strong>, sin incluir el domicilio.
+        Si tu canasta está por debajo de ese valor, el checkout te pedirá agregar más productos antes
+        de finalizar el pedido.
+      </p>
 
       <h2>4. Métodos de pago</h2>
       <p>

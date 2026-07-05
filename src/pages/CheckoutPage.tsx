@@ -20,6 +20,7 @@ import {
   stripComboPayloadMarker,
 } from '../data/comboCustomizations';
 import { clearCheckoutSource, readCheckoutSource } from '../lib/checkoutSource';
+import { getMinimumOrderMissing, meetsMinimumOrder, MINIMUM_ORDER_TOTAL_COP } from '../lib/purchaseRules';
 
 const MP_PUBLIC_KEY = import.meta.env.VITE_MP_PUBLIC_KEY ?? '';
 
@@ -152,6 +153,8 @@ export default function CheckoutPage() {
 
   const discount = couponApplied?.valid ? couponApplied.discount_amount : 0;
   const totalToPay = Math.max(subtotal - discount, 0);
+  const minimumOrderMet = meetsMinimumOrder(totalToPay);
+  const minimumOrderMissing = getMinimumOrderMissing(totalToPay);
 
   // Re-validate the coupon if subtotal changes (cart edit) so a stale "applied"
   // doesn't survive a min_subtotal violation or an expiration mid-flow.
@@ -236,6 +239,10 @@ export default function CheckoutPage() {
   // edits the cart or contact, we tear it down and re-prepare.
   const prepareMpBrick = async () => {
     if (mpPreparing || mpReady) return;
+    if (!minimumOrderMet) {
+      setError(`La compra mínima es de ${COP(MINIMUM_ORDER_TOTAL_COP)}. Agrega ${COP(minimumOrderMissing)} más para finalizar tu pedido.`);
+      return;
+    }
     setMpPreparing(true);
     setMpRejection(null);
     setError(null);
@@ -273,6 +280,10 @@ export default function CheckoutPage() {
   // Confirm a non-MP order (cash / transfer).
   const handleSubmit = async () => {
     if (!step2Valid || submitting) return;
+    if (!minimumOrderMet) {
+      setError(`La compra mínima es de ${COP(MINIMUM_ORDER_TOTAL_COP)}. Agrega ${COP(minimumOrderMissing)} más para confirmar tu pedido.`);
+      return;
+    }
     if (form.paymentMethod === 'mercado_pago') return; // brick handles it
     setSubmitting(true);
     setError(null);
@@ -329,6 +340,7 @@ export default function CheckoutPage() {
       stepIndex === STEPS.length - 1 &&
       form.paymentMethod === 'mercado_pago' &&
       step2Valid &&
+      minimumOrderMet &&
       !mpReady &&
       !mpPreparing &&
       MP_PUBLIC_KEY
@@ -336,10 +348,15 @@ export default function CheckoutPage() {
       void prepareMpBrick();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [stepIndex, form.paymentMethod, step2Valid]);
+  }, [stepIndex, form.paymentMethod, step2Valid, minimumOrderMet]);
 
   const goNext = () => {
+    if (stepIndex === 0 && !minimumOrderMet) {
+      setError(`La compra mínima es de ${COP(MINIMUM_ORDER_TOTAL_COP)}. Agrega ${COP(minimumOrderMissing)} más para continuar.`);
+      return;
+    }
     if (stepIndex === 1 && !step2Valid) return;
+    setError(null);
     setStepIndex((i) => Math.min(i + 1, STEPS.length - 1));
   };
   const goBack = () => setStepIndex((i) => Math.max(i - 1, 0));
@@ -468,7 +485,12 @@ export default function CheckoutPage() {
             className="order-2 lg:order-1"
           >
             {stepIndex === 0 && (
-              <Step1Cart items={items} subtotal={subtotal} />
+              <Step1Cart
+                items={items}
+                subtotal={subtotal}
+                minimumOrderMet={minimumOrderMet}
+                minimumOrderMissing={minimumOrderMissing}
+              />
             )}
 
             {stepIndex === 1 && (
@@ -496,7 +518,9 @@ export default function CheckoutPage() {
 
                 {form.paymentMethod === 'mercado_pago' && (
                   <div className="mt-6">
-                    {!MP_PUBLIC_KEY ? (
+                    {!minimumOrderMet ? (
+                      <MinimumOrderNotice missing={minimumOrderMissing} />
+                    ) : !MP_PUBLIC_KEY ? (
                       <div className="flex items-start gap-3 p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-800">
                         <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
                         <p className="text-sm">
@@ -558,7 +582,7 @@ export default function CheckoutPage() {
                 <button
                   type="button"
                   onClick={goNext}
-                  disabled={stepIndex === 1 && !step2Valid}
+                  disabled={(stepIndex === 0 && !minimumOrderMet) || (stepIndex === 1 && !step2Valid)}
                   className="inline-flex items-center gap-2 bg-serana-forest text-serana-cream px-8 py-3.5 rounded-full font-bold tracking-widest uppercase text-xs hover:bg-serana-olive transition disabled:opacity-50"
                 >
                   Continuar <ArrowRight size={14} />
@@ -571,7 +595,7 @@ export default function CheckoutPage() {
                 <button
                   type="button"
                   onClick={() => void handleSubmit()}
-                  disabled={!step2Valid || submitting || items.length === 0}
+                  disabled={!step2Valid || !minimumOrderMet || submitting || items.length === 0}
                   className="inline-flex items-center gap-2 bg-serana-forest text-serana-cream px-8 py-4 rounded-full font-bold tracking-widest uppercase text-xs hover:bg-serana-olive transition disabled:opacity-60"
                 >
                   {submitting ? (
@@ -674,6 +698,12 @@ export default function CheckoutPage() {
                   <span>Total</span>
                   <span>{COP(totalToPay)}</span>
                 </div>
+                {!minimumOrderMet && (
+                  <div className="mt-4 rounded-xl border border-serana-terracotta/25 bg-serana-terracotta/10 px-4 py-3 text-[12px] leading-relaxed text-serana-forest">
+                    <p className="font-bold">Compra mínima: {COP(MINIMUM_ORDER_TOTAL_COP)}</p>
+                    <p className="text-serana-forest/65">Agrega {COP(minimumOrderMissing)} más para activar el checkout.</p>
+                  </div>
+                )}
               </div>
             </div>
           </aside>
@@ -724,13 +754,36 @@ function CheckoutAccountPrompt({ loggedIn }: { loggedIn: boolean }) {
   );
 }
 
-function Step1Cart({ items, subtotal }: { items: CartItem[]; subtotal: number }) {
+function MinimumOrderNotice({ missing }: { missing: number }) {
+  return (
+    <div className="flex items-start gap-3 rounded-xl border border-serana-terracotta/25 bg-serana-terracotta/10 p-4 text-serana-forest">
+      <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-serana-terracotta" />
+      <div className="text-sm leading-relaxed">
+        <p className="font-bold">La compra mínima en Serana es de {COP(MINIMUM_ORDER_TOTAL_COP)}.</p>
+        <p className="mt-1 text-serana-forest/65">Agrega {COP(missing)} más a tu canasta para continuar con entrega y pago.</p>
+      </div>
+    </div>
+  );
+}
+
+function Step1Cart({
+  items,
+  subtotal,
+  minimumOrderMet,
+  minimumOrderMissing,
+}: {
+  items: CartItem[];
+  subtotal: number;
+  minimumOrderMet: boolean;
+  minimumOrderMissing: number;
+}) {
   return (
     <div className="space-y-6">
       <p className="text-gray-600 leading-relaxed">
         {items.length === 1 ? '1 producto' : `${items.length} productos`} en tu canasta.
         Te confirmamos cada paso por WhatsApp.
       </p>
+      {!minimumOrderMet && <MinimumOrderNotice missing={minimumOrderMissing} />}
       <div className="bg-white/70 rounded-2xl border border-serana-forest/5 divide-y divide-serana-forest/5">
         {items.map((it) => (
           <div key={it.id} className="flex items-center gap-4 p-4">
@@ -747,7 +800,7 @@ function Step1Cart({ items, subtotal }: { items: CartItem[]; subtotal: number })
         ))}
       </div>
       <p className="text-[12px] text-serana-forest/55 italic">
-        Subtotal calculado · {COP(subtotal)}. Si quieres cambiar cantidades, ábrelo desde la cesta.
+        Subtotal calculado · {COP(subtotal)}. La compra mínima es de {COP(MINIMUM_ORDER_TOTAL_COP)}.
       </p>
     </div>
   );

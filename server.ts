@@ -42,6 +42,7 @@ const SUPABASE_URL = process.env.VITE_SUPABASE_URL ?? process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const MP_ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN;
 const MP_WEBHOOK_SECRET = process.env.MP_WEBHOOK_SECRET;
+const MINIMUM_ORDER_TOTAL_COP = 50000;
 
 if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
   console.warn(
@@ -439,6 +440,13 @@ async function startServer() {
       // the user saw at checkout.
       const orderDiscount = Number(order.discount_amount ?? 0);
       const orderTotal = Number(order.total_amount ?? 0);
+      if (orderTotal < MINIMUM_ORDER_TOTAL_COP) {
+        return res.status(422).json({
+          error: 'minimum_order_not_met',
+          minimum_amount: MINIMUM_ORDER_TOTAL_COP,
+          missing_amount: Math.max(MINIMUM_ORDER_TOTAL_COP - orderTotal, 0),
+        });
+      }
 
       const mpItems = orderDiscount > 0 || items.length === 0
         ? [
@@ -547,13 +555,21 @@ async function startServer() {
       if (order.payment_status === 'pagado') {
         return res.status(409).json({ error: 'order_already_paid' });
       }
+      const orderTotal = Number(order.total_amount ?? 0);
+      if (orderTotal < MINIMUM_ORDER_TOTAL_COP) {
+        return res.status(422).json({
+          error: 'minimum_order_not_met',
+          minimum_amount: MINIMUM_ORDER_TOTAL_COP,
+          missing_amount: Math.max(MINIMUM_ORDER_TOTAL_COP - orderTotal, 0),
+        });
+      }
 
       const idempotencyKey = `serana-${orderId}-${Date.now()}`;
       const paymentBody: Record<string, unknown> = {
         ...formData,
         // Force the amount + reference to match our order regardless of
         // what the brick sent — the client is untrusted.
-        transaction_amount: Number(order.total_amount),
+        transaction_amount: orderTotal,
         external_reference: orderId,
         description: `Pedido Serana #${order.order_number}`,
         statement_descriptor: 'SERANA',

@@ -4,9 +4,21 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { MarketBasket } from './SeranaIcons';
 import { getComboSummaryLines, stripComboPayloadMarker } from '../data/comboCustomizations';
+import { getMinimumOrderMissing, meetsMinimumOrder, MINIMUM_ORDER_TOTAL_COP } from '../lib/purchaseRules';
+
+const COP = (value: number) =>
+  new Intl.NumberFormat('es-CO', {
+    style: 'currency',
+    currency: 'COP',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(value);
 
 export default function CartDrawer() {
   const { isOpen, items, toggleCart, removeItem, updateQuantity, total } = useCartStore();
+  const subtotal = total();
+  const minimumMet = meetsMinimumOrder(subtotal);
+  const missingMinimum = getMinimumOrderMissing(subtotal);
 
   return (
     <AnimatePresence>
@@ -50,7 +62,7 @@ export default function CartDrawer() {
                       <div>
                         <h3 className="font-serif text-serana-forest leading-tight">{item.name}</h3>
                         <p className="text-sm text-serana-olive font-medium mt-1">
-                          {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(item.price)}
+                          {COP(item.price)}
                         </p>
                         <CartItemCustomizations item={item} />
                       </div>
@@ -88,16 +100,32 @@ export default function CartDrawer() {
                 <div className="flex justify-between items-center mb-4">
                   <span className="text-serana-forest/60">Subtotal</span>
                   <span className="text-xl font-serif font-bold text-serana-forest">
-                    {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(total())}
+                    {COP(subtotal)}
                   </span>
                 </div>
-                <Link 
-                  to="/checkout"
-                  onClick={toggleCart}
-                  className="block w-full text-center bg-serana-forest text-serana-cream py-4 rounded-xl font-medium tracking-wide hover:bg-serana-olive transition-colors shadow-lg shadow-serana-forest/20"
-                >
-                  Proceder al Pago
-                </Link>
+                {!minimumMet && (
+                  <div className="mb-4 rounded-xl border border-serana-terracotta/25 bg-serana-terracotta/10 px-4 py-3 text-sm text-serana-forest">
+                    <p className="font-semibold">Compra mínima: {COP(MINIMUM_ORDER_TOTAL_COP)}</p>
+                    <p className="mt-1 text-serana-forest/65">Agrega {COP(missingMinimum)} más para poder finalizar tu pedido.</p>
+                  </div>
+                )}
+                {minimumMet ? (
+                  <Link
+                    to="/checkout"
+                    onClick={toggleCart}
+                    className="block w-full text-center bg-serana-forest text-serana-cream py-4 rounded-xl font-medium tracking-wide hover:bg-serana-olive transition-colors shadow-lg shadow-serana-forest/20"
+                  >
+                    Proceder al Pago
+                  </Link>
+                ) : (
+                  <button
+                    type="button"
+                    disabled
+                    className="block w-full cursor-not-allowed rounded-xl bg-serana-forest/35 py-4 text-center font-medium tracking-wide text-serana-cream"
+                  >
+                    Compra mínima {COP(MINIMUM_ORDER_TOTAL_COP)}
+                  </button>
+                )}
                 <p className="text-center text-xs text-serana-forest/40 mt-4">
                   Envío calculado en el siguiente paso.
                 </p>
