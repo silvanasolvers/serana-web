@@ -9,7 +9,7 @@ import { useAuth } from './AuthProvider';
 import { buildWhatsAppUrl } from '../lib/contact';
 
 const WHATSAPP_URL = buildWhatsAppUrl('Hola, quiero recibir asesoría de Serana.');
-const EXPERIENCES_URL = 'https://serana-experiencias.vercel.app/#propuesta';
+const EXPERIENCES_URL = 'https://serana.social/#propuesta';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);

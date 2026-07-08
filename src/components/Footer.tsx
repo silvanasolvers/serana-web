@@ -6,7 +6,7 @@ import { buildWhatsAppUrl } from '../lib/contact';
 
 const LOGO_URL =
   'https://qlgjqvgjuscquhspjqdp.supabase.co/storage/v1/object/public/AETHERA-DOCS/LOGO%20PRINCIPAL-07.png';
-const EXPERIENCES_URL = 'https://serana-experiencias.vercel.app/#propuesta';
+const EXPERIENCES_URL = 'https://serana.social/#propuesta';
 
 const today = new Date();
 
