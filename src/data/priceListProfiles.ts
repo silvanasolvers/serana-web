@@ -3044,7 +3044,6 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
       "Fresco"
     ],
     "healthBenefit": "Un mercado saludable para compartir entre familia y amigos",
-    "observation": "Cada combo familiar debe tener todas las opciones desplegables es decir: poner todas las opciones de sopas prelistas para que escoja un maximo de 5, opcion de todas las frutas picadas x 250 gr para que escoja un maximo de 6, opcion de todas las verduras picadas para que escoja un maximo de 6, 2 opciones de ensalada gourmet, 2 opciones de ensalada tradicional, 1 opcion de todos los jugos saludables x5 o escojer jugo de naranja x 6. el resto del mercado viene ya predeterminado y seleccionado rigurosamente por nosotros. pd: la persona puede escoger entre frutos secos mix premium, semillas de calabaza, almendras, semillas de chia. en las frutas de mano (maximo 8) darle la opcion de escoger entre las siguientes frutas: granadilla, manzana, peras, mandarina, durazno (poner ese pliego de opciones tambien.",
     "portions": 118,
     "ingredients": [
       "5 und sopas o cremas",
