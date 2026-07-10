@@ -74,6 +74,10 @@ const BERRY_MIX_LIMIT = {
   'baby-bowl-berry': 1,
 };
 
+const SOUP_HONGOS_LIMIT = {
+  'crema-hongos': 1,
+};
+
 const VEGETABLE_GROUP: ComboGroupDefinition = {
   id: 'chopped_vegetables',
   label: 'Verduras picadas',
@@ -229,7 +233,7 @@ export const COMBO_DEFINITIONS: ComboDefinition[] = [
   {
     slug: 'combo-familiar',
     groups: [
-      withLimit(SOUP_GROUP, 5),
+      withPerOptionLimit(withLimit(SOUP_GROUP, 5), SOUP_HONGOS_LIMIT),
       withPerOptionLimit(withLimit(FRUIT_GROUP, 6), BERRY_MIX_LIMIT),
       withLimit(VEGETABLE_GROUP, 6),
       oneEach(GOURMET_SALAD_GROUP, 2),
