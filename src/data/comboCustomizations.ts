@@ -62,7 +62,7 @@ const FRUIT_GROUP: ComboGroupDefinition = {
   source: { categories: ['frutas-picadas'] },
 };
 
-const FRUIT_GROUP_TARDES: ComboGroupDefinition = {
+const FRUIT_GROUP_RESTRICTED: ComboGroupDefinition = {
   ...FRUIT_GROUP,
   source: {
     categories: FRUIT_GROUP.source.categories,
@@ -252,7 +252,7 @@ export const COMBO_DEFINITIONS: ComboDefinition[] = [
   },
   {
     slug: 'combo-tardes',
-    groups: [withLimit(FRUIT_GROUP_TARDES, 1)],
+    groups: [withLimit(FRUIT_GROUP_RESTRICTED, 1)],
     fixedItems: [
       'Yogurt griego',
       'Berry mix',
@@ -269,7 +269,7 @@ export const COMBO_DEFINITIONS: ComboDefinition[] = [
   {
     slug: 'combo-lonchera',
     groups: [
-      withLimit(FRUIT_GROUP, 2),
+      withLimit(FRUIT_GROUP_RESTRICTED, 2),
       oneEach(TRADITIONAL_SALAD_GROUP),
       oneEach(GOURMET_SALAD_GROUP),
       withLimit(HAND_FRUIT_GROUP, 5),
@@ -285,7 +285,7 @@ export const COMBO_DEFINITIONS: ComboDefinition[] = [
   {
     slug: 'combo-oficina',
     groups: [
-      withLimit(FRUIT_GROUP, 2),
+      withLimit(FRUIT_GROUP_RESTRICTED, 2),
       oneEach(TRADITIONAL_SALAD_GROUP),
       oneEach(GOURMET_SALAD_GROUP),
       withLimit(HAND_FRUIT_GROUP, 6),
