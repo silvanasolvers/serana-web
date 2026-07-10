@@ -57,7 +57,7 @@ const FRUIT_GROUP: ComboGroupDefinition = {
   shortLabel: 'Frutas',
   helper: 'Baby bowls o libras de fruta',
   max: 3,
-  unitLabel: 'lb',
+  unitLabel: 'opciones',
   source: { categories: ['frutas-picadas'] },
 };
 
@@ -82,6 +82,7 @@ const GOURMET_SALAD_GROUP: ComboGroupDefinition = {
   helper: 'Bowls gourmet disponibles',
   max: 1,
   maxPerOption: 1,
+  unitLabel: 'opciones',
   source: { categories: ['ensaladas-gourmet'] },
 };
 
