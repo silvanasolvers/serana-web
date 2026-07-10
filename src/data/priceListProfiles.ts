@@ -3102,7 +3102,6 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
       "Fresco"
     ],
     "healthBenefit": "Pensado en porciones exactas para niños",
-    "observation": "En este combo hay que darle varias opciones despegables como son: listado de frutas para escoger maximo dos frutas picadas x 200 gr, 1 ensalada tradicional x 250 gr y 1 ensalada premium x 250 gr, (darle todas las opciones de cada linea). en las frutas de mano (maximo 5) darle la opcion de escoger entre las siguientes frutas: granadilla, manzana, peras, mandarina, durazno el resto del combo es predeterminado y creado por nosotros",
     "portions": 19,
     "ingredients": [
       "2 mini bowl fruta picada x 200 gr (TODOS LOS ELEGILES menos berry mix y frutos amarillos, el kiwi y la uva importada max:1)",
