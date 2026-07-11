@@ -209,7 +209,7 @@ export const COMBO_DEFINITIONS: ComboDefinition[] = [
   {
     slug: 'combo-1-2',
     groups: [
-      withLimit(SOUP_GROUP, 3),
+      withPerOptionLimit(withLimit(SOUP_GROUP, 3), SOUP_HONGOS_LIMIT),
       withPerOptionLimit(withLimit(FRUIT_GROUP, 3), BERRY_MIX_LIMIT),
       withLimit(VEGETABLE_GROUP, 3),
       oneEach(GOURMET_SALAD_GROUP),
