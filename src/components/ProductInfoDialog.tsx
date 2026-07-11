@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'motion/react';
-import { CheckCircle2, ChevronLeft, ChevronRight, Info, Leaf, PackageCheck, Scissors, X } from 'lucide-react';
+import { Apple, CheckCircle2, ChevronLeft, ChevronRight, Info, Leaf, PackageCheck, Scissors, X } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { type Product } from '../store/useCartStore';
 import { normalizeSearch } from '../lib/search';
@@ -27,7 +27,7 @@ export default function ProductInfoDialog({
   open: boolean;
   onClose: () => void;
 }) {
-  const { selectedVariant, setSelectedVariantLabel, productForCart } = useSelectedVariant(product);
+  const { selectedVariant, setSelectedVariantLabel, selectedCut, setSelectedCut, selectedRipeness, setSelectedRipeness, productForCart } = useSelectedVariant(product);
   const cutOptions = product ? getCutOptions(product) : [];
   const isCombo = product ? Boolean(getComboDefinition(product)) : false;
 
@@ -242,20 +242,54 @@ export default function ProductInfoDialog({
                     </section>
                   ) : null}
 
-                  {cutOptions.length > 0 && (
-                    <section className="rounded-2xl border border-serana-forest/10 bg-white/70 p-4">
-                      <SectionTitle icon={Scissors} title="Cortes disponibles" />
-                      <div className="mt-3 flex flex-wrap gap-2">
-                        {cutOptions.map((option) => (
-                          <span
-                            key={option}
-                            className="rounded-full bg-serana-cream px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-serana-forest/70"
-                          >
-                            {option}
-                          </span>
-                        ))}
-                      </div>
-                    </section>
+                  {!isCombo && (
+                    <>
+                      <section className="rounded-2xl border border-serana-forest/10 bg-white/70 p-4">
+                        <SectionTitle icon={Scissors} title="Tipo de corte" />
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          {cutOptions.map((option) => {
+                            const active = selectedCut === option;
+                            return (
+                              <button
+                                key={option}
+                                type="button"
+                                onClick={() => setSelectedCut(option)}
+                                className={`rounded-full border px-3 py-2 text-[10px] font-black uppercase tracking-[0.14em] transition-colors ${
+                                  active
+                                    ? 'border-serana-forest bg-serana-forest text-serana-cream'
+                                    : 'border-serana-forest/12 bg-serana-cream/70 text-serana-forest/68 hover:border-serana-forest/35'
+                                }`}
+                              >
+                                {option}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </section>
+
+                      <section className="rounded-2xl border border-serana-forest/10 bg-white/70 p-4">
+                        <SectionTitle icon={Apple} title="Maduración" />
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          {(product.maduracion ?? []).map((option) => {
+                            const active = selectedRipeness === option;
+                            return (
+                              <button
+                                key={option}
+                                type="button"
+                                onClick={() => setSelectedRipeness(option)}
+                                className={`rounded-full border px-3 py-2 text-[10px] font-black uppercase tracking-[0.14em] transition-colors ${
+                                  active
+                                    ? 'border-serana-forest bg-serana-forest text-serana-cream'
+                                    : 'border-serana-forest/12 bg-serana-cream/70 text-serana-forest/68 hover:border-serana-forest/35'
+                                }`}
+                              >
+                                {option}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </section>
+                    </>
                   )}
 
                   {hasProductNotes && (
@@ -334,17 +368,37 @@ function SectionTitle({ icon: Icon, title }: { icon: LucideIcon; title: string }
 
 function useSelectedVariant(product: Product | null) {
   const [selectedVariantLabel, setSelectedVariantLabel] = useState(product?.variants?.[0]?.label ?? '');
+  const [selectedCut, setSelectedCut] = useState<string | null>(null);
+  const [selectedRipeness, setSelectedRipeness] = useState<string | null>(null);
 
   useEffect(() => {
     setSelectedVariantLabel(product?.variants?.[0]?.label ?? '');
+    setSelectedCut(null);
+    setSelectedRipeness(null);
   }, [product?.id, product?.variants]);
 
   if (!product) {
-    return { selectedVariant: null, setSelectedVariantLabel, productForCart: {} as Product };
+    return {
+      selectedVariant: null,
+      setSelectedVariantLabel,
+      selectedCut,
+      setSelectedCut,
+      selectedRipeness,
+      setSelectedRipeness,
+      productForCart: {} as Product,
+    };
   }
 
   const selectedVariant =
     product.variants?.find((variant) => variant.label === selectedVariantLabel) ?? product.variants?.[0] ?? null;
+
+  // Build customizations text from selected cut + ripeness (if any).
+  // Only emitted for non-combo individual products (mango, fresa picada, etc.)
+  // — combo personalizations flow through comboSelections instead.
+  const customizationsParts: string[] = [];
+  if (selectedCut) customizationsParts.push(`Corte: ${selectedCut}`);
+  if (selectedRipeness) customizationsParts.push(`Maduración: ${selectedRipeness}`);
+  const customizationsText = customizationsParts.length > 0 ? customizationsParts.join('\n') : undefined;
 
   const productForCart = selectedVariant
     ? {
@@ -354,10 +408,19 @@ function useSelectedVariant(product: Product | null) {
         name: `${product.name} - ${selectedVariant.label}`,
         price: selectedVariant.price,
         variantLabel: selectedVariant.label,
+        customizations: customizationsText,
       }
-    : product;
+    : { ...product, customizations: customizationsText };
 
-  return { selectedVariant, setSelectedVariantLabel, productForCart };
+  return {
+    selectedVariant,
+    setSelectedVariantLabel,
+    selectedCut,
+    setSelectedCut,
+    selectedRipeness,
+    setSelectedRipeness,
+    productForCart,
+  };
 }
 
 function slugifyVariant(label: string) {
@@ -372,6 +435,10 @@ function formatCategory(category: string) {
 }
 
 function getCutOptions(product: Product) {
+  // Data-driven wins: if the product declares its own `cortes`, use those.
+  if (product.cortes && product.cortes.length > 0) return product.cortes;
+  // Legacy fallback: infer cuts from the product name (kept for products
+  // that haven't been migrated to the new data model yet).
   const text = normalizeSearch(product.name);
   if (text.includes('zanahoria')) return ['Rayada', 'Julianas', 'Bastones', 'Cubos', 'Rodajas'];
   if (text.includes('pepino')) return ['Cubos', 'Rodajas'];

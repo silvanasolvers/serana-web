@@ -10,6 +10,8 @@ export type PriceListProfile = Partial<Pick<Product,
   | 'observation'
   | 'portions'
   | 'ingredients'
+  | 'cortes'
+  | 'maduracion'
   | 'variants'
 >>;
 
@@ -830,7 +832,8 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
       "Sistema inmune"
     ],
     "healthBenefit": "Ayuda al sistema inmune por su alto contenido de vitamina C y apoya la salud digestiva.",
-    "observation": "añadir 3 opciones de maduracion (verde/pinton/maduro) el cliente tambien tiene la opcion de que corte le gustaria en esta fruta especifica (cubos o bastones) AÑADIR BOTONES ELEGIBLES DE CADA GRUPO DE OPCIONES: presentacion, maduracion, tipo de corte",
+    "cortes": ["cubos", "bastones"],
+    "maduracion": ["verde", "pintón", "maduro"],
     "portions": 4,
     "variants": [
       {

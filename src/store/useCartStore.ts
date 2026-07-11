@@ -15,6 +15,8 @@ export interface Product {
   observation?: string;
   portions?: string | number;
   ingredients?: string[];
+  cortes?: string[];
+  maduracion?: string[];
   variants?: Array<{
     label: string;
     price: number;
