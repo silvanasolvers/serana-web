@@ -1845,11 +1845,18 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
       "Sistema inmune"
     ],
     "healthBenefit": "Alto en vitamina A y C, mejora el sistema inmune y la piel.",
-    "observation": "añadir 3 opciones de maduracion (verde/pinton/maduro)",
+    "observation": "",
     "portions": 1,
     "ingredients": [
       "presentacion LIBRA"
-    ]
+    ],
+    "variantes": {
+      "maduracion": [
+        "verde",
+        "pintón",
+        "maduro"
+      ]
+    }
   },
   "coco-libra": {
     "name": "Coco",
