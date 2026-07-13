@@ -2279,11 +2279,18 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
       "Energía"
     ],
     "healthBenefit": "Es energia sostenida, rico en fibra y mejora la digestion.",
-    "observation": "añadir 3 opciones de maduracion (verde/pinton/maduro)",
+    "observation": "",
     "portions": 2,
     "ingredients": [
       "presentacion LIBRA"
-    ]
+    ],
+    "variantes": {
+      "maduracion": [
+        "verde",
+        "pintón",
+        "maduro"
+      ]
+    }
   },
   "yuca-libra": {
     "name": "yuca",
