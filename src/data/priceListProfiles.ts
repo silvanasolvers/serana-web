@@ -1329,7 +1329,11 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
       "Fibra"
     ],
     "healthBenefit": "Regula el transito intestinal, es rica en fibra y ayuda a controlar el azucar en sangre.",
-    "observation": "el cliente tiene la opcion de escojer el corte dales la opciones (finamente picado, en bastones)",
+    "observation": "",
+    "cortes": [
+      "finamente picados",
+      "en bastones"
+    ],
     "portions": 4,
     "variants": [
       {
