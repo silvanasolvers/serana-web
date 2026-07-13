@@ -1509,7 +1509,12 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
       "Detox"
     ],
     "healthBenefit": "Es un diuretico natural, refuerza el sistema inmune y es alto en fibra, funciona como DETOX",
-    "observation": "el cliente tiene la opcion de escojer el corte dales la opciones (julianas, bastones, cubos)",
+    "observation": "",
+    "cortes": [
+      "media lunas",
+      "bastones",
+      "cubos"
+    ],
     "portions": 4,
     "variants": [
       {
