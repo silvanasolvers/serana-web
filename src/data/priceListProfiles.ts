@@ -1647,7 +1647,14 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
       "Sistema inmune"
     ],
     "healthBenefit": "Contiene betacarotenos: Salud de la piel y vision. es antioxidante y mejora el sistema inmune.",
-    "observation": "el cliente tiene la opcion de escojer el corte dales la opciones (rodajas, cubos, julianas, bastones, rayada)",
+    "observation": "",
+    "cortes": [
+      "rodajas",
+      "cubos",
+      "julianas",
+      "bastones",
+      "rayada"
+    ],
     "portions": 4,
     "variants": [
       {
