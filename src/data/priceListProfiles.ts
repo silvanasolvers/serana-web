@@ -1770,11 +1770,17 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
       "Digestiva"
     ],
     "healthBenefit": "Es rica en fibra, favorece la salud intestinal y mejordigestion. ademas es perfecta para el control de peso.",
-    "observation": "Añadir opciones de color Verde/Roja",
+    "observation": "",
     "portions": 1,
     "ingredients": [
       "presentacion und"
-    ]
+    ],
+    "variantes": {
+      "tipo": [
+        "Verde",
+        "Roja"
+      ]
+    }
   },
   "pera-libra": {
     "name": "Pera und",
