@@ -2050,7 +2050,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
       "Antiinflamatoria"
     ],
     "healthBenefit": "Contiene enzimas digestivas (papaina) mejora la digestion y es antiinflamatoria.",
-    "observation": "añadir 3 opciones de maduracion (verde/pinton/maduro)",
+    "observation": "",
     "portions": 1,
     "ingredients": [
       "presentacion und x 1,5 kg"
