@@ -10,8 +10,6 @@ export type PriceListProfile = Partial<Pick<Product,
   | 'observation'
   | 'portions'
   | 'ingredients'
-  | 'cortes'
-  | 'maduracion'
   | 'variantes'
   | 'variants'
 >>;
@@ -834,8 +832,10 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ],
     "observation": "",
     "healthBenefit": "Ayuda al sistema inmune por su alto contenido de vitamina C y apoya la salud digestiva.",
-    "cortes": ["cubos", "bastones"],
-    "maduracion": ["verde", "pintón", "maduro"],
+    "variantes": {
+      "corte": ["cubos", "bastones"],
+      "maduracion": ["verde", "pintón", "maduro"]
+    },
     "portions": 4,
     "variants": [
       {
@@ -903,7 +903,9 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
       "Vitamina C"
     ],
     "healthBenefit": "Contiene vitamina C (colageno) ademas de ser una fruta con alto contenido de agua y es un antioxidante natural.",
-    "cortes": ["cuartos", "tajadas", "mitades", "enteras"],
+    "variantes": {
+      "corte": ["cuartos", "tajadas", "mitades", "enteras"]
+    },
     "portions": 4,
     "variants": [
       {
@@ -1169,7 +1171,9 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
       "Hidratante"
     ],
     "healthBenefit": "Aporta hidratacion celular, bajo en calorias asi que es ideal para etapa de definicion o bajar de peso.",
-    "cortes": ["julianas", "rodajas", "cubos", "bastones"],
+    "variantes": {
+      "corte": ["julianas", "rodajas", "cubos", "bastones"]
+    },
     "portions": 4,
     "variants": [
       {
@@ -1191,7 +1195,9 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
       "Hidratante"
     ],
     "healthBenefit": "Aporta hidratacion celular, bajo en calorias asi que es ideal para etapa de definicion o bajar de peso.",
-    "cortes": ["julianas", "rodajas", "cubos", "bastones"],
+    "variantes": {
+      "corte": ["julianas", "rodajas", "cubos", "bastones"]
+    },
     "portions": 4,
     "variants": [
       {
@@ -1214,7 +1220,9 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
       "Sistema inmune"
     ],
     "healthBenefit": "Es el alimento con mayor contenido de vitamina C, poderoso para el sistema inmune y la piel.",
-    "cortes": ["julianas", "rodajas", "cubos", "bastones"],
+    "variantes": {
+      "corte": ["julianas", "rodajas", "cubos", "bastones"]
+    },
     "portions": 4,
     "variants": [
       {
@@ -1236,7 +1244,9 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
       "Sistema inmune"
     ],
     "healthBenefit": "Antibacteriana natural, mejora la salud intestinal y proteje el sistema inmune.",
-    "cortes": ["julianas", "rodajas", "cubos"],
+    "variantes": {
+      "corte": ["julianas", "rodajas", "cubos"]
+    },
     "portions": 4,
     "variants": [
       {
@@ -1259,7 +1269,9 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
       "Antiinflamatoria"
     ],
     "healthBenefit": "Contiene mas antioxidantes que la cebolla blanca, mejora la salud cardiovascular y es antiinflamatoria.",
-    "cortes": ["julianas", "rodajas", "cubos"],
+    "variantes": {
+      "corte": ["julianas", "rodajas", "cubos"]
+    },
     "portions": 4,
     "variants": [
       {
@@ -1283,10 +1295,9 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ],
     "healthBenefit": "Rica en fibra probiotica, mejora la bicrobiota intestinal y apoya a sistema inmune",
     "observation": "",
-    "cortes": [
-      "media lunas",
-      "julianas"
-    ],
+    "variantes": {
+      "corte": ["media lunas", "julianas"]
+    },
     "portions": 4,
     "variants": [
       {
@@ -1332,10 +1343,9 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ],
     "healthBenefit": "Regula el transito intestinal, es rica en fibra y ayuda a controlar el azucar en sangre.",
     "observation": "",
-    "cortes": [
-      "finamente picados",
-      "en bastones"
-    ],
+    "variantes": {
+      "corte": ["finamente picados", "en bastones"]
+    },
     "portions": 4,
     "variants": [
       {
@@ -1495,7 +1505,11 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
       "Antioxidante"
     ],
     "healthBenefit": "Es un desintoxicante natural del higado, es alto en fibra y rico en antioxidantes (sobretodo el morado).",
-    "observation": "el cliente tiene la opcion de escojer el corte dales la opciones (julianas finas, rayada) y tiene la opcion de elegir el color (blanco/morado)",
+    "observation": "",
+    "variantes": {
+      "corte": ["juliana finas", "rayada"],
+      "tipo": ["blanco", "morado"]
+    },
     "portions": 4,
     "variants": [
       {
@@ -1520,11 +1534,9 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ],
     "healthBenefit": "Es un diuretico natural, refuerza el sistema inmune y es alto en fibra, funciona como DETOX",
     "observation": "",
-    "cortes": [
-      "media lunas",
-      "bastones",
-      "cubos"
-    ],
+    "variantes": {
+      "corte": ["media lunas", "bastones", "cubos"]
+    },
     "portions": 4,
     "variants": [
       {
@@ -1650,13 +1662,9 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ],
     "healthBenefit": "Contiene betacarotenos: Salud de la piel y vision. es antioxidante y mejora el sistema inmune.",
     "observation": "",
-    "cortes": [
-      "rodajas",
-      "cubos",
-      "julianas",
-      "bastones",
-      "rayada"
-    ],
+    "variantes": {
+      "corte": ["rodajas", "cubos", "julianas", "bastones", "rayada"]
+    },
     "portions": 4,
     "variants": [
       {
@@ -2287,7 +2295,10 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
       "Antioxidante"
     ],
     "healthBenefit": "Es un desintoxicante hepatico, contiene fibra asi que mejora el intestino y el morado contiene mas antioxidantes",
-    "observation": "tiene la opcion de elegir el color (blanco/morado)",
+    "observation": "",
+    "variantes": {
+      "tipo": ["blanco", "morado"]
+    },
     "portions": 1,
     "ingredients": [
       "presentacion UND POR KILO"
@@ -2335,7 +2346,9 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
       "Antiinflamatoria"
     ],
     "healthBenefit": "Es antioxidante, antiinflamatorio y protege el corazon",
-    "maduracion": ["verde", "pintón", "maduro"],
+    "variantes": {
+      "maduracion": ["verde", "pintón", "maduro"]
+    },
     "portions": 3,
     "ingredients": [
       "presentacion LIBRA"

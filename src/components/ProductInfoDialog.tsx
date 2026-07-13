@@ -406,17 +406,13 @@ function useSelectedVariant(product: Product | null) {
 
 /**
  * Returns the effective list of variant groups for a product.
- * Reads from `product.variantes` if present, otherwise falls back to legacy
- * `product.cortes` and `product.maduracion` mapped to their canonical keys.
+ * Reads from `product.variantes` (e.g. { corte: [...], tipo: [...] }).
  */
 function getEffectiveVariants(product: Product): Array<[string, string[]]> {
-  if (product.variantes && Object.keys(product.variantes).length > 0) {
-    return Object.entries(product.variantes).filter(([, opts]) => Array.isArray(opts) && opts.length > 0);
-  }
-  const legacy: Array<[string, string[]]> = [];
-  if (product.cortes && product.cortes.length > 0) legacy.push(['corte', product.cortes]);
-  if (product.maduracion && product.maduracion.length > 0) legacy.push(['maduracion', product.maduracion]);
-  return legacy;
+  if (!product.variantes) return [];
+  return Object.entries(product.variantes).filter(
+    ([, opts]) => Array.isArray(opts) && opts.length > 0,
+  );
 }
 
 /** Human-readable label for a variant key. */
@@ -454,16 +450,4 @@ function formatCategory(category: string) {
     .split('-')
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
     .join(' ');
-}
-
-function getCutOptions(product: Product) {
-  // Data-driven: this helper is no longer used by the dialog UI (Cortes block
-  // reads from product.cortes directly), but kept exported for any other
-  // call-site that may still depend on the legacy inference rules.
-  if (product.cortes && product.cortes.length > 0) return product.cortes;
-  const text = normalizeSearch(product.name);
-  if (text.includes('zanahoria')) return ['Rayada', 'Julianas', 'Bastones', 'Cubos', 'Rodajas'];
-  if (text.includes('pepino')) return ['Cubos', 'Rodajas'];
-  if (text.includes('fresa') && text.includes('picada')) return ['Rodajas', 'Cubos', 'Cuartos'];
-  return [];
 }
