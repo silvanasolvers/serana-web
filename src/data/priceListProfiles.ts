@@ -1436,7 +1436,11 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
       "Antiinflamatoria"
     ],
     "healthBenefit": "Contiene licopeno (potente antioxidante) protege el corazon y es antiinflamatorio",
-    "observation": "el cliente tiene la opcion de escojer el corte dales la opciones (rodajas, cubos) y su nivel de maduracion (verde, pinton, maduro)",
+    "observation": "",
+    "variantes": {
+      "corte": ["rodajas", "cubos"],
+      "maduracion": ["verde", "pintón", "maduro"]
+    },
     "portions": 4,
     "variants": [
       {
