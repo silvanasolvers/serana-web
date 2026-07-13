@@ -29,9 +29,9 @@ export default function ProductInfoDialog({
 }) {
   const { selectedVariant, setSelectedVariantLabel, selectedCut, setSelectedCut, selectedRipeness, setSelectedRipeness, productForCart } = useSelectedVariant(product);
   const isCombo = product ? Boolean(getComboDefinition(product)) : false;
-  if (product && product.id === 'fresa-picada') {
+  if (product) {
     // eslint-disable-next-line no-console
-    console.log('[fresa debug]', { id: product.id, name: product.name, cortes: product.cortes, maduracion: product.maduracion, variants: product.variants, observation: product.observation, healthBenefit: product.healthBenefit, portions: product.portions });
+    console.log('[modal-product]', { id: product.id, name: product.name, cortes: product.cortes, hasCortes: Boolean(product.cortes && product.cortes.length), isCombo });
   }
 
   // Combine the primary photo + gallery (when present) into one ordered
