@@ -56,7 +56,7 @@ const FRUIT_GROUP: ComboGroupDefinition = {
   id: 'chopped_fruits',
   label: 'Frutas picadas',
   shortLabel: 'Frutas',
-  helper: 'Baby bowls o libras de fruta',
+  helper: 'Baby bowls de fruta',
   max: 3,
   unitLabel: 'opciones',
   source: { categories: ['frutas-picadas'] },
