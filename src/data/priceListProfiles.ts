@@ -1150,7 +1150,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
       "Antioxidante"
     ],
     "healthBenefit": "Alta carga antioxidante, apoyo antienvejecimiento, y bajo idice glucemico.",
-    "observation": "vienen enteros y muy frescos",
+    "observation": "",
     "portions": 2
   },
   "espinaca-criolla-deshojada-x300-gr": {
