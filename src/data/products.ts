@@ -709,7 +709,7 @@ const baseProducts: Product[] = [
   },
   {
     id: 'baby-bowl-amarillos',
-    name: 'Baby Bowl Frutos Amarillos (250g)',
+    name: 'Bowl Frutos Amarillos',
     price: 9000,
     description: 'Una combinación de mango con piña deliciosa.',
     image: 'https://picsum.photos/seed/baby-bowl-amarillos/400/300',
@@ -718,7 +718,11 @@ const baseProducts: Product[] = [
     healthBenefit: 'Es alta en vitamina C y apoya el sistema inmune. Es un desayuno perfecto o snack energético.',
     portions: 2,
     observation: 'Viene en cubos.',
-    ingredients: ['mango', 'piña']
+    ingredients: ['mango', 'piña'],
+    variants: [
+      { label: '500GR', price: 15000 },
+      { label: '250GR', price: 9000 }
+    ]
   },
   // Verduras picadas y mercado fresco
   {
