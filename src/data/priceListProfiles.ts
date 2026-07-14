@@ -1142,7 +1142,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "baby-bowl-berry": {
-    "name": "Mini bowl berry mix 250 gr",
+    "name": "Bowl Berry Mix",
     "price": 33000,
     "description": "Alta carga antioxidante, apoyo antienvejecimiento, y bajo idice glucemico.",
     "category": "frutas-picadas",
@@ -1151,7 +1151,11 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ],
     "healthBenefit": "Alta carga antioxidante, apoyo antienvejecimiento, y bajo idice glucemico.",
     "observation": "",
-    "portions": 2
+    "portions": 2,
+    "variants": [
+      { "label": "500GR", "price": 53900 },
+      { "label": "250GR", "price": 33000 }
+    ]
   },
   "espinaca-criolla-deshojada-x300-gr": {
     "name": "Espinaca criolla deshojada x300 gr",
