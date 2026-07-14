@@ -1125,7 +1125,7 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
     ]
   },
   "baby-bowl-amarillos": {
-    "name": "Baby bowl Frutos amarillos",
+    "name": "Bowl Frutos Amarillos",
     "price": 9000,
     "description": "Es alta en vitamina C y apoya el sistema inmune. es un desayuno perfecto o snack energetico.",
     "category": "frutas-picadas",
@@ -1134,8 +1134,12 @@ export const PRICE_LIST_PROFILES: Record<string, PriceListProfile> = {
       "Sistema inmune"
     ],
     "healthBenefit": "Es alta en vitamina C y apoya el sistema inmune. es un desayuno perfecto o snack energetico.",
-    "observation": "viene en cubos predeterminadamente",
-    "portions": 2
+    "observation": "",
+    "portions": 2,
+    "variants": [
+      { "label": "500GR", "price": 13500 },
+      { "label": "250GR", "price": 8500 }
+    ]
   },
   "baby-bowl-berry": {
     "name": "Mini bowl berry mix 250 gr",
