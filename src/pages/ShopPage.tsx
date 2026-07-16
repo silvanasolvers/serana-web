@@ -28,8 +28,8 @@ type Category =
 
 const CATEGORIES: Array<{ id: Category; label: string; icon: SerenaIconName }> = [
   { id: 'ensaladas-gourmet', label: 'Ensaladas gourmet', icon: 'Bowl' },
-  { id: 'frutas-picadas', label: 'Frutas picadas', icon: 'Seed' },
   { id: 'ensaladas-tradicionales', label: 'Ensaladas tradicionales', icon: 'Leaf' },
+  { id: 'frutas-picadas', label: 'Frutas picadas', icon: 'Seed' },
   { id: 'verduras-picadas', label: 'Verduras picadas', icon: 'Sprout' },
   { id: 'salsas', label: 'Salsas y complementos', icon: 'Citrus' },
   { id: 'bebidas', label: 'Bebidas y shots', icon: 'Drop' },
