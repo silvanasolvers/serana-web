@@ -92,16 +92,16 @@ function CategoryIcon({ name, className }: { name: SerenaIconName; className?: s
 
 function DispatchNotice() {
   return (
-    <section className="mb-8 rounded-2xl border border-serana-forest/10 bg-white/70 p-4 md:p-5">
-      <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-center">
-        <div className="flex items-start gap-3">
-          <span className="w-10 h-10 rounded-xl bg-serana-forest text-serana-ochre flex items-center justify-center shrink-0">
-            <Clock className="w-5 h-5" strokeWidth={1.7} />
+    <section className="mb-8 rounded-2xl border border-serana-forest/15 bg-white/80 p-5 md:p-7 shadow-sm">
+      <div className="grid gap-5 md:grid-cols-[1fr_auto] md:items-center">
+        <div className="flex items-start gap-4">
+          <span className="w-12 h-12 rounded-2xl bg-serana-forest text-serana-ochre flex items-center justify-center shrink-0 shadow-sm">
+            <Clock className="w-6 h-6" strokeWidth={2} />
           </span>
           <div>
-            <p className="text-[10px] uppercase tracking-[0.3em] text-serana-terracotta font-bold mb-1">Despachos</p>
-            <p className="text-sm text-serana-forest/70 leading-relaxed">
-              Pides cuando quieras, de 8 a.m. a 8 p.m., todos los días. Te entregamos de martes a viernes, con un día de anticipación, en tres franjas: 11 a.m. – 1 p.m., 1 – 3 p.m. o 6 – 8 p.m.. Confirmamos contigo por WhatsApp antes de cada despacho.
+            <p className="text-[11px] uppercase tracking-[0.3em] text-serana-terracotta font-extrabold mb-1.5">Despachos</p>
+            <p className="text-sm text-serana-forest/80 leading-relaxed">
+              Pides cuando quieras, de 8 a.m. a 8 p.m., todos los días. Te entregamos de martes a viernes, con un día de anticipación, en tres franjas: 11 a.m. – 1 p.m., 1 – 3 p.m. o 6 – 8 p.m.. Coordinamos por WhatsApp.
             </p>
           </div>
         </div>
