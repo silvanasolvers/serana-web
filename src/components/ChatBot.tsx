@@ -21,6 +21,7 @@ import { useCartStore, type Product } from '../store/useCartStore';
 import { getComboDefinition, resolveComboGroups } from '../data/comboCustomizations';
 import { buildWhatsAppUrl, WHATSAPP_DISPLAY } from '../lib/contact';
 import { markCheckoutFromBot } from '../lib/checkoutSource';
+import { askSeranaAi, type AiChatMessage } from '../lib/api/chat';
 
 type ChatAction =
   | { kind: 'message'; label: string; value: string }
@@ -178,7 +179,7 @@ export default function ChatBot() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const sessionIdRef = useRef<string>('');
   const leadCapturedRef = useRef(false);
-  const isCompactFlow = pathname === '/menu' || pathname === '/shop' || pathname === '/login' || pathname === '/cuenta';
+  const isCompactFlow = pathname === '/login' || pathname === '/cuenta' || pathname.startsWith('/checkout');
 
   const indexedProducts = useMemo<IndexedProduct[]>(
     () =>
@@ -259,7 +260,6 @@ export default function ChatBot() {
     captureFirstLead(trimmed);
 
     try {
-      await wait(420);
       const response = await buildBotResponse(trimmed);
       addBotMessage(response);
     } catch {
@@ -422,8 +422,45 @@ export default function ChatBot() {
     }
 
     const recommendations = recommendProducts(normalized);
-    if (recommendations.products.length > 0) {
-      return productRecommendationResponse(recommendations.headline, recommendations.products, text);
+    try {
+      const contextProducts = recommendations.products.length
+        ? [
+            ...recommendations.products,
+            ...products.filter((product) => !recommendations.products.some((match) => match.id === product.id)),
+          ]
+        : products;
+      const history: AiChatMessage[] = messages.slice(-8).map((message) => ({
+        role: message.sender === 'bot' ? 'assistant' : 'user',
+        content: message.text,
+      }));
+      const answer = await askSeranaAi({
+        message: text,
+        history,
+        products: contextProducts,
+        pathname,
+        cart: { itemCount: cartItems.length, total: cartTotal() },
+      });
+
+      if (recommendations.products.length > 0) {
+        return {
+          text: answer,
+          products: recommendations.products,
+          actions: productActions(recommendations.products, text),
+        };
+      }
+
+      return {
+        text: answer,
+        actions: [
+          { kind: 'link', label: 'Ver menú', href: '/shop' },
+          { kind: 'message', label: 'Recomiéndame', value: 'Recomiéndame algo según lo que necesito' },
+          { kind: 'whatsapp', label: 'Asesor humano', message: `Hola, tengo esta duda en Serana: ${text}` },
+        ],
+      };
+    } catch {
+      if (recommendations.products.length > 0) {
+        return productRecommendationResponse(recommendations.headline, recommendations.products, text);
+      }
     }
 
     return unknownResponse(text);
@@ -675,9 +712,9 @@ export default function ChatBot() {
                 <ShoppingBag className="text-white" size={20} />
               </div>
               <div className="min-w-0 flex-1">
-                <h3 className="font-serif text-xl leading-tight text-white">Serana Bot</h3>
+                <h3 className="font-serif text-xl leading-tight text-white">Serana IA</h3>
                 <p className="text-xs text-white/70">
-                  {loading ? 'Cargando catálogo…' : `${products.length} productos conectados`}
+                  {loading ? 'Cargando catálogo…' : `Asistente IA · ${products.length} productos`}
                 </p>
               </div>
               <button
@@ -771,7 +808,7 @@ export default function ChatBot() {
                 </button>
               </form>
               <p className="mt-2 text-[10px] leading-snug text-serana-forest/42">
-                Si no tengo certeza, te derivo a WhatsApp: {WHATSAPP_DISPLAY}.
+                La IA puede equivocarse. Para alergias o datos críticos, confirma por WhatsApp: {WHATSAPP_DISPLAY}.
               </p>
             </div>
           </motion.div>
@@ -815,10 +852,6 @@ function ProductSuggestionCard({ product, products }: { product: Product; produc
       </div>
     </article>
   );
-}
-
-function wait(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 function searchTerms(value: string) {

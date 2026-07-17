@@ -9,6 +9,7 @@ import CustomCursor from './components/CustomCursor';
 import SerenaSplash from './components/SerenaSplash';
 import ScrollVine from './components/ScrollVine';
 import { AuthProvider } from './components/AuthProvider';
+import ChatBot from './components/ChatBot';
 
 // Eager: tiny pages that the user lands on most often.
 import HomePage from './pages/HomePage';
@@ -85,6 +86,7 @@ export default function App() {
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </Suspense>
+        <ChatBot />
       </Router>
     </AuthProvider>
   );
