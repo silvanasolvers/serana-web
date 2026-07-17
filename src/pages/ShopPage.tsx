@@ -127,7 +127,7 @@ export default function ShopPage() {
   const [search, setSearch] = useState(() => searchParams.get('search') ?? '');
   const [viewMode, setViewMode] = useState<ProductGridViewMode>('gallery');
   const productSectionRef = useRef<HTMLElement | null>(null);
-  const { products } = useProducts();
+  const { products, loading, error } = useProducts();
 
   useEffect(() => {
     const nextCategory = parseCategoryParam(searchParams.get('category') ?? searchParams.get('filter'));
@@ -378,20 +378,29 @@ export default function ShopPage() {
         </div>
 
         {/* ── Featured strip (only when "Todos" + no search) ─────────────── */}
-        {featured.length > 0 && <FeaturedStrip products={featured} allProducts={products} />}
+        {!loading && featured.length > 0 && <FeaturedStrip products={featured} allProducts={products} />}
 
         {/* ── Product grid ───────────────────────────────────────────────── */}
         <section ref={productSectionRef} className="scroll-mt-48">
-          <ProductGrid
-            products={filteredProducts}
-            allProducts={products}
-            externalSearch
-            searchTerm={search}
-            onSearchChange={setSearch}
-            viewMode={viewMode}
-            onViewModeChange={setViewMode}
-            pageSize={24}
-          />
+          {loading ? (
+            <CatalogSkeleton />
+          ) : error ? (
+            <div className="rounded-3xl border border-serana-forest/10 bg-white/70 px-6 py-12 text-center">
+              <p className="font-serif text-2xl text-serana-forest">Estamos actualizando el mercado</p>
+              <p className="mt-2 text-sm text-serana-forest/60">Intenta nuevamente en unos minutos.</p>
+            </div>
+          ) : (
+            <ProductGrid
+              products={filteredProducts}
+              allProducts={products}
+              externalSearch
+              searchTerm={search}
+              onSearchChange={setSearch}
+              viewMode={viewMode}
+              onViewModeChange={setViewMode}
+              pageSize={24}
+            />
+          )}
         </section>
 
         <SectionDivider label="Cómo elegir" />
@@ -569,6 +578,23 @@ export default function ShopPage() {
       </div>
 
       <Footer />
+    </div>
+  );
+}
+
+function CatalogSkeleton() {
+  return (
+    <div aria-label="Cargando catálogo" aria-busy="true" className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
+      {Array.from({ length: 8 }, (_, index) => (
+        <div key={index} className="overflow-hidden rounded-[1.4rem] border border-serana-forest/8 bg-white">
+          <div className="aspect-[3/4] animate-pulse bg-serana-olive/10" />
+          <div className="space-y-3 p-4">
+            <div className="h-5 w-3/4 animate-pulse rounded bg-serana-forest/10" />
+            <div className="h-3 w-full animate-pulse rounded bg-serana-forest/8" />
+            <div className="h-3 w-2/3 animate-pulse rounded bg-serana-forest/8" />
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

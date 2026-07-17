@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Product } from '../store/useCartStore';
 import { listProducts } from './api/products';
-import { products as staticProducts } from '../data/products';
 
 type State = {
   products: Product[];
@@ -11,14 +10,12 @@ type State = {
 };
 
 /**
- * Returns the product catalog. Renders the bundled static catalog instantly so
- * the page never flashes empty, then upgrades to the DB-backed list once the
- * Supabase fetch lands. Falls back silently to the static list if the network
- * call fails (no Supabase configured, offline, RLS issue, etc).
+ * Returns the Supabase-backed product catalog. The initial list stays empty so
+ * stale bundled images are never painted while the current catalog is loading.
  */
 export function useProducts(): State {
   const [state, setState] = useState<State>({
-    products: staticProducts,
+    products: [],
     loading: true,
     source: 'static',
     error: null,
@@ -31,14 +28,14 @@ export function useProducts(): State {
       .then((rows) => {
         if (aborted.current) return;
         if (rows.length === 0) {
-          setState((prev) => ({ ...prev, loading: false }));
+          setState({ products: [], loading: false, source: 'db', error: 'El catálogo no está disponible.' });
           return;
         }
         setState({ products: rows, loading: false, source: 'db', error: null });
       })
       .catch((err) => {
         if (aborted.current) return;
-        setState((prev) => ({ ...prev, loading: false, error: String(err?.message ?? err) }));
+        setState({ products: [], loading: false, source: 'db', error: String(err?.message ?? err) });
       });
     return () => {
       aborted.current = true;

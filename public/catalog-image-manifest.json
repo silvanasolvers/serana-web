@@ -1,0 +1,1584 @@
+{
+  "version": 1,
+  "generatedAt": "2026-07-17T15:49:56.931Z",
+  "products": {
+    "aguacate-hass": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783448878834-ripe-hass-avocados-on-table-202607071242.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/aguacate-hass-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/aguacate-hass-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/aguacate-hass-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "aji-rocoto": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783449156125-fresh-red-rocoto-peppers-2k-202607071249.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/aji-rocoto-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/aji-rocoto-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/aji-rocoto-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "ajo": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783449091029-three-organic-garlic-bulbs-2k-202607071248.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/ajo-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/ajo-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/ajo-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "acelga": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783448852486-fresh-swiss-chard-bundle-2k-202607071250.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/acelga-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/acelga-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/acelga-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "aji-dulce": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783449042528-sweet-peppers-on-surface-2k-202607071249.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/aji-dulce-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/aji-dulce-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/aji-dulce-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "aguacate-papelillo": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783449291319-avocado-on-wood-table-2k-202607071244.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/aguacate-papelillo-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/aguacate-papelillo-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/aguacate-papelillo-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "albahaca": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783449111239-fresh-organic-basil-leaves-2k-202607071250.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/albahaca-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/albahaca-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/albahaca-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "apio-und-1-5-kg": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783449347895-fresh-organic-celery-on-table-202607071248.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/apio-und-1-5-kg-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/apio-und-1-5-kg-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/apio-und-1-5-kg-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "arracacha": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783449386113-arracacha-roots-on-beige-surface-202607071248.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/arracacha-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/arracacha-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/arracacha-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "apio": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1782709514616-apio.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/apio-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/apio-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/apio-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "arandanos": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783449374050-blueberries-on-wood-surface-2k-202607071242.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/arandanos-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/arandanos-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/arandanos-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "auyama": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1782709551932-gemini-generated-image-ynvgghynvgghynvg.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/auyama-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/auyama-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/auyama-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "auyama-sacata": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783449407213-auyama-sacata-on-surface-2k-202607071248.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/auyama-sacata-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/auyama-sacata-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/auyama-sacata-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "mazorca": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783449618282-corn-on-cob-on-surface-202607071249.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/mazorca-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/mazorca-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/mazorca-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "banano-x-1-5-kg": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783449603527-banano-racimo-1-5-kg-surface-202607071240.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/banano-x-1-5-kg-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/banano-x-1-5-kg-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/banano-x-1-5-kg-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "baby-bowl-amarillos": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1782706384269-babybowlfrutosamarillos-jpg-202606262227.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/baby-bowl-amarillos-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/baby-bowl-amarillos-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/baby-bowl-amarillos-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "berenjena": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783449642728-fresh-organic-purple-eggplant-2k-202607071249.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/berenjena-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/berenjena-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/berenjena-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "brocoli-libra": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783449665059-broccoli-on-wood-table-2k-202607071247.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/brocoli-libra-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/brocoli-libra-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/brocoli-libra-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "cebolla-blanca": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783449698726-white-onions-on-beige-surface-202607071247.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/cebolla-blanca-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/cebolla-blanca-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/cebolla-blanca-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "brocoli": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1782709591971-brocoli.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/brocoli-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/brocoli-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/brocoli-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "cebolla-blanca-picada": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783452565742-chatgpt-image-7-jul-2026-01-28-20-p-m.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/cebolla-blanca-picada-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/cebolla-blanca-picada-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/cebolla-blanca-picada-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "batido-circulacion": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/shots/batido-circulacion-linea-desktop.webp",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/batido-circulacion-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/batido-circulacion-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/batido-circulacion-hero.webp",
+      "gallerySources": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/shots/batido-circulacion-info-desktop.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/shots/batido-circulacion-frente-desktop.webp"
+      ],
+      "gallery": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/batido-circulacion-01.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/batido-circulacion-02.webp"
+      ]
+    },
+    "cebolla-larga": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1782709655552-cebolla-larga.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/cebolla-larga-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/cebolla-larga-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/cebolla-larga-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "cebolla-chalota": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783449939725-shallots-on-wood-surface-2k-202607071248.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/cebolla-chalota-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/cebolla-chalota-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/cebolla-chalota-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "cebolla-larga-libra": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783449965015-green-scallions-on-beige-surface-202607071247.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/cebolla-larga-libra-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/cebolla-larga-libra-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/cebolla-larga-libra-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "cebolla-morada": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783450032208-purple-onions-on-wood-table-202607071247.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/cebolla-morada-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/cebolla-morada-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/cebolla-morada-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "cebolla-puerro-libra": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783450090721-leeks-on-beige-surface-2k-202607071247.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/cebolla-puerro-libra-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/cebolla-puerro-libra-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/cebolla-puerro-libra-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "cebolla-puerro": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1782709686873-puerro.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/cebolla-puerro-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/cebolla-puerro-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/cebolla-puerro-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "batido-detox": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/shots/batido-detox-linea-desktop.webp",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/batido-detox-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/batido-detox-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/batido-detox-hero.webp",
+      "gallerySources": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/shots/batido-detox-info-desktop.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/shots/batido-detox-frente-desktop.webp"
+      ],
+      "gallery": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/batido-detox-01.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/batido-detox-02.webp"
+      ]
+    },
+    "cebolla-roja": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1782709731991-gemini-generated-image-ecf179ecf179ecf1.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/cebolla-roja-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/cebolla-roja-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/cebolla-roja-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "cebollin": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783450112393-green-chives-on-wood-2k-202607071247.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/cebollin-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/cebollin-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/cebollin-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "cilantro-lavado-x-200-gr": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1782709791551-cilantro-lavado.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/cilantro-lavado-x-200-gr-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/cilantro-lavado-x-200-gr-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/cilantro-lavado-x-200-gr-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "champinon": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783453197197-mushrooms-on-beige-surface-2k-202607071247.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/champinon-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/champinon-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/champinon-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "chimichurri": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783455138579-chimichurri.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/chimichurri-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/chimichurri-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/chimichurri-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "coco": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1782709434872-coco.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/coco-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/coco-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/coco-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "coco-libra": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783450351077-fresh-organic-coconut-on-surface-202607071241.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/coco-libra-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/coco-libra-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/coco-libra-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "col-china": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783450462630-bok-choy-on-wood-surface-202607071250.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/col-china-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/col-china-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/col-china-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "cogollo-europeo": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783450431534-lettuce-hearts-on-wood-2k-202607071248.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/cogollo-europeo-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/cogollo-europeo-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/cogollo-europeo-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "col-bruselas": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783453237952-brussels-sprouts-on-wood-table-202607071250.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/col-bruselas-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/col-bruselas-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/col-bruselas-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "ceviche-mango": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/ceviches/ceviche-mango-info-desktop.webp",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/ceviche-mango-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/ceviche-mango-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/ceviche-mango-hero.webp",
+      "gallerySources": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/ceviches/ceviche-mango-frente-desktop.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/ceviches/ceviche-mango-linea-desktop.webp"
+      ],
+      "gallery": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/ceviche-mango-01.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/ceviche-mango-02.webp"
+      ]
+    },
+    "coliflor-libra": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783456537644-chatgpt-image-7-jul-2026-03-35-25-p-m.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/coliflor-libra-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/coliflor-libra-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/coliflor-libra-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "coliflor": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1782709837651-coliflor.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/coliflor-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/coliflor-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/coliflor-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "combo-familiar": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783558967130-chatgpt-image-8-jul-2026-08-02-34-p-m.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/combo-familiar-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/combo-familiar-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/combo-familiar-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "combo-oficina": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783482946043-recreate-combo-with-whole-fruit-202607072255.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/combo-oficina-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/combo-oficina-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/combo-oficina-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "combo-lonchera": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783482910763-recreate-combo-with-whole-fruit-202607072255.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/combo-lonchera-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/combo-lonchera-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/combo-lonchera-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "combo-mascotas": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783481611634-gemini-generated-image-lhae90lhae90lhae.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/combo-mascotas-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/combo-mascotas-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/combo-mascotas-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "combo-1-2": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783563943491-chatgpt-image-8-jul-2026-09-25-36-p-m.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/combo-1-2-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/combo-1-2-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/combo-1-2-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "combo-tardes": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783481022236-gemini-generated-image-7yrahl7yrahl7yra.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/combo-tardes-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/combo-tardes-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/combo-tardes-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "durazno": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783450749846-fresh-peaches-on-wood-2k-202607071241.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/durazno-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/durazno-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/durazno-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "eneldo": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783450788127-fresh-dill-on-beige-surface-202607071250.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/eneldo-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/eneldo-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/eneldo-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "crema-hongos": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/sopas/crema-hongos-frente-desktop.webp",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/crema-hongos-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/crema-hongos-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/crema-hongos-hero.webp",
+      "gallerySources": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/sopas/crema-hongos-info-desktop.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/sopas/crema-hongos-linea-desktop.webp"
+      ],
+      "gallery": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/crema-hongos-01.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/crema-hongos-02.webp"
+      ]
+    },
+    "crema-tomate": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/sopas/crema-tomate-info-desktop.webp",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/crema-tomate-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/crema-tomate-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/crema-tomate-hero.webp",
+      "gallerySources": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/sopas/crema-tomate-linea-desktop.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/sopas/crema-tomate-frente-desktop.webp"
+      ],
+      "gallery": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/crema-tomate-01.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/crema-tomate-02.webp"
+      ]
+    },
+    "ensalada-baby": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/ensaladas/ensalada-baby-info-desktop.webp",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/ensalada-baby-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/ensalada-baby-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/ensalada-baby-hero.webp",
+      "gallerySources": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/ensaladas/ensalada-baby-linea-desktop.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/ensaladas/ensalada-baby-frente-desktop.webp"
+      ],
+      "gallery": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/ensalada-baby-01.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/ensalada-baby-02.webp"
+      ]
+    },
+    "crema-auyama": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/sopas/crema-auyama-info-desktop.webp",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/crema-auyama-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/crema-auyama-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/crema-auyama-hero.webp",
+      "gallerySources": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/sopas/crema-auyama-linea-desktop.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/sopas/crema-auyama-frente-desktop.webp"
+      ],
+      "gallery": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/crema-auyama-01.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/crema-auyama-02.webp"
+      ]
+    },
+    "ensalada-cesar": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/ensaladas/ensalada-cesar-frente-desktop.webp",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/ensalada-cesar-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/ensalada-cesar-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/ensalada-cesar-hero.webp",
+      "gallerySources": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/ensaladas/ensalada-cesar-info-desktop.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/ensaladas/ensalada-cesar-linea-desktop.webp"
+      ],
+      "gallery": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/ensalada-cesar-01.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/ensalada-cesar-02.webp"
+      ]
+    },
+    "ensalada-quinoa": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/ensaladas/ensalada-quinoa-frente-desktop.webp",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/ensalada-quinoa-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/ensalada-quinoa-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/ensalada-quinoa-hero.webp",
+      "gallerySources": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/ensaladas/ensalada-quinoa-linea-desktop.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/ensaladas/ensalada-quinoa-info-desktop.webp"
+      ],
+      "gallery": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/ensalada-quinoa-01.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/ensalada-quinoa-02.webp"
+      ]
+    },
+    "ensalada-almendras": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/ensaladas/ensalada-almendras-linea-desktop.webp",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/ensalada-almendras-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/ensalada-almendras-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/ensalada-almendras-hero.webp",
+      "gallerySources": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/ensaladas/ensalada-almendras-info-desktop.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/ensaladas/ensalada-almendras-frente-desktop.webp"
+      ],
+      "gallery": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/ensalada-almendras-01.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/ensalada-almendras-02.webp"
+      ]
+    },
+    "crema-verduras": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783476114256-chatgpt-image-7-jul-2026-09-01-34-p-m.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/crema-verduras-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/crema-verduras-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/crema-verduras-hero.webp",
+      "gallerySources": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/sopas/crema-verduras-info-desktop.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/sopas/crema-verduras-frente-desktop.webp"
+      ],
+      "gallery": []
+    },
+    "ensalada-italiana": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/ensaladas/ensalada-italiana-frente-desktop.webp",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/ensalada-italiana-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/ensalada-italiana-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/ensalada-italiana-hero.webp",
+      "gallerySources": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/ensaladas/ensalada-italiana-linea-desktop.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/ensaladas/ensalada-italiana-info-desktop.webp"
+      ],
+      "gallery": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/ensalada-italiana-01.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/ensalada-italiana-02.webp"
+      ]
+    },
+    "ensalada-sandia-feta": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/ensaladas/ensalada-sandia-feta-frente-desktop.webp",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/ensalada-sandia-feta-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/ensalada-sandia-feta-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/ensalada-sandia-feta-hero.webp",
+      "gallerySources": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/ensaladas/ensalada-sandia-feta-info-desktop.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/ensaladas/ensalada-sandia-feta-linea-desktop.webp"
+      ],
+      "gallery": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/ensalada-sandia-feta-01.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/ensalada-sandia-feta-02.webp"
+      ]
+    },
+    "esparragos": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783450829010-asparagus-bundle-on-beige-surface-202607071250.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/esparragos-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/esparragos-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/esparragos-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "espinaca": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783456157748-chatgpt-image-7-jul-2026-03-28-51-p-m.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/espinaca-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/espinaca-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/espinaca-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "ensalada-primavera": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/ensaladas/ensalada-primavera-linea-desktop.webp",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/ensalada-primavera-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/ensalada-primavera-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/ensalada-primavera-hero.webp",
+      "gallerySources": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/ensaladas/ensalada-primavera-info-desktop.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/ensaladas/ensalada-primavera-frente-desktop.webp"
+      ],
+      "gallery": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/ensalada-primavera-01.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/ensalada-primavera-02.webp"
+      ]
+    },
+    "frambuesa": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783450939203-raspberries-on-beige-surface-2k-202607071244.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/frambuesa-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/frambuesa-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/frambuesa-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "espinaca-criolla-deshojada-x300-gr": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783452593630-chatgpt-image-7-jul-2026-02-29-35-p-m.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/espinaca-criolla-deshojada-x300-gr-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/espinaca-criolla-deshojada-x300-gr-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/espinaca-criolla-deshojada-x300-gr-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "fresa": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1782706504604-fresas.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/fresa-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/fresa-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/fresa-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "fresa-libra": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783450964361-strawberries-on-beige-surface-2k-202607071241.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/fresa-libra-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/fresa-libra-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/fresa-libra-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "granadilla": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783451052048-granadilla-on-beige-surface-2k-202607071240.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/granadilla-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/granadilla-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/granadilla-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "frijol-rojo": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783450986874-raw-kidney-beans-on-table-202607071246.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/frijol-rojo-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/frijol-rojo-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/frijol-rojo-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "ensalada-serana": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/ensaladas/ensalada-serana-frente-desktop.webp",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/ensalada-serana-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/ensalada-serana-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/ensalada-serana-hero.webp",
+      "gallerySources": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/ensaladas/ensalada-serana-linea-desktop.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/ensaladas/ensalada-serana-info-desktop.webp"
+      ],
+      "gallery": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/ensalada-serana-01.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/ensalada-serana-02.webp"
+      ]
+    },
+    "guanabana-und-2-2-kg": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783451412849-fresh-organic-guanabana-on-surface-202607071242.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/guanabana-und-2-2-kg-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/guanabana-und-2-2-kg-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/guanabana-und-2-2-kg-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "guayaba-manzana-libra": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783474216235-chatgpt-image-7-jul-2026-08-29-33-p-m.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/guayaba-manzana-libra-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/guayaba-manzana-libra-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/guayaba-manzana-libra-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "guayaba-pera": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783451499696-guayaba-pera-on-wood-surface-202607071241.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/guayaba-pera-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/guayaba-pera-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/guayaba-pera-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "guayaba-pera-picada": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783473700860-guayaba-pera.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/guayaba-pera-picada-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/guayaba-pera-picada-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/guayaba-pera-picada-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "guineo": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783451533473-fresh-organic-guineo-bananas-2k-202607071246.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/guineo-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/guineo-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/guineo-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "habichuela": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1782709900949-gemini-generated-image-hmv9snhmv9snhmv9.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/habichuela-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/habichuela-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/habichuela-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "habichuela-libra": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783451553224-green-beans-on-wood-surface-202607071248.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/habichuela-libra-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/habichuela-libra-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/habichuela-libra-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "jalapeno": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783451634744-jalape-o-peppers-on-wood-surface-202607071249.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/jalapeno-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/jalapeno-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/jalapeno-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "jugo-verde": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/shots/jugo-verde-linea-desktop.webp",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/jugo-verde-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/jugo-verde-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/jugo-verde-hero.webp",
+      "gallerySources": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/shots/jugo-verde-info-desktop.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/shots/jugo-verde-frente-desktop.webp"
+      ],
+      "gallery": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/jugo-verde-01.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/jugo-verde-02.webp"
+      ]
+    },
+    "jugo-naranja": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/shots/jugo-naranja-info-desktop.webp",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/jugo-naranja-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/jugo-naranja-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/jugo-naranja-hero.webp",
+      "gallerySources": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/shots/jugo-naranja-linea-desktop.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/shots/jugo-naranja-linea-desktop.webp"
+      ],
+      "gallery": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/jugo-naranja-01.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/jugo-naranja-02.webp"
+      ]
+    },
+    "hummus": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783455149662-hummus.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/hummus-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/hummus-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/hummus-hero.webp",
+      "gallerySources": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/salsas/hummus-info-desktop.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/salsas/hummus-frente-desktop.webp"
+      ],
+      "gallery": []
+    },
+    "kale": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783453340129-kale-x-250-gr-2k-202607071250.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/kale-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/kale-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/kale-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "kit-ensaladas": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783480097798-gemini-generated-image-44okji44okji44ok.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/kit-ensaladas-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/kit-ensaladas-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/kit-ensaladas-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "frijoles": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/sopas/frijoles-linea-desktop.webp",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/frijoles-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/frijoles-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/frijoles-hero.webp",
+      "gallerySources": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/sopas/frijoles-info-desktop.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/sopas/frijoles-frente-desktop.webp"
+      ],
+      "gallery": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/frijoles-01.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/frijoles-02.webp"
+      ]
+    },
+    "guayaba-manzana": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1782706550004-guayaba-manzana.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/guayaba-manzana-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/guayaba-manzana-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/guayaba-manzana-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "kit-sopas-prelistas-5-und": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783478564461-chatgpt-image-7-jul-2026-09-42-37-p-m.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/kit-sopas-prelistas-5-und-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/kit-sopas-prelistas-5-und-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/kit-sopas-prelistas-5-und-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "kit-vinagretas-3-und": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783478908681-chatgpt-image-7-jul-2026-09-48-15-p-m.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/kit-vinagretas-3-und-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/kit-vinagretas-3-und-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/kit-vinagretas-3-und-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "kiwi-libra": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783453367055-kiwi-on-beige-surface-2k-202607071241.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/kiwi-libra-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/kiwi-libra-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/kiwi-libra-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "kit-jugos-saludables-18-und": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783476081895-edit-this-photo-of-smoothie-202606262311.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/kit-jugos-saludables-18-und-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/kit-jugos-saludables-18-und-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/kit-jugos-saludables-18-und-hero.webp",
+      "gallerySources": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783478290009-jugos-sobre-tabla-roble-202606262320.jpeg"
+      ],
+      "gallery": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/kit-jugos-saludables-18-und-01.webp"
+      ]
+    },
+    "jengibre": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783453308529-fresh-ginger-roots-on-wood-202607071249.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/jengibre-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/jengibre-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/jengibre-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "kiwi": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1782707250993-kiwi.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/kiwi-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/kiwi-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/kiwi-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "lechuga-batavia-deshojada-x-300-gr": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1782710023227-lechuga-batavia.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/lechuga-batavia-deshojada-x-300-gr-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/lechuga-batavia-deshojada-x-300-gr-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/lechuga-batavia-deshojada-x-300-gr-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "lechuga-hidroponica": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783453411058-curly-hydroponic-lettuce-on-table-202607071248.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/lechuga-hidroponica-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/lechuga-hidroponica-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/lechuga-hidroponica-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "lechuga-hidroponica-deshojada-x-300-gr": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783452794912-chatgpt-image-7-jul-2026-02-32-59-p-m.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/lechuga-hidroponica-deshojada-x-300-gr-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/lechuga-hidroponica-deshojada-x-300-gr-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/lechuga-hidroponica-deshojada-x-300-gr-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "lechuga-romana": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783453456067-romaine-lettuce-on-beige-surface-202607071248.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/lechuga-romana-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/lechuga-romana-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/lechuga-romana-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "lulo": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783453515525-fresh-organic-lulos-on-wood-202607071240.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/lulo-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/lulo-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/lulo-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "kit-ensaladas-gourmet-5-und": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783480546296-gemini-generated-image-lwcbpmlwcbpmlwcb.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/kit-ensaladas-gourmet-5-und-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/kit-ensaladas-gourmet-5-und-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/kit-ensaladas-gourmet-5-und-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "mandarina": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783453540723-mandarins-on-wood-table-2k-202607071241.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/mandarina-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/mandarina-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/mandarina-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "mango-picado": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1782708946061-mango.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/mango-picado-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/mango-picado-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/mango-picado-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "mango-libra": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783453555825-mango-on-wood-surface-2k-202607071240.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/mango-libra-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/mango-libra-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/mango-libra-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "mangostino": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783453585321-mangosteens-on-wood-surface-2k-202607071242.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/mangostino-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/mangostino-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/mangostino-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "kit-jugos": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783478221205-chatgpt-image-7-jul-2026-09-36-29-p-m.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/kit-jugos-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/kit-jugos-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/kit-jugos-hero.webp",
+      "gallerySources": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783478280257-jugos-sobre-tabla-roble-202606262320.jpeg"
+      ],
+      "gallery": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/kit-jugos-01.webp"
+      ]
+    },
+    "mayonesa-griega": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783455170029-mayogriegaajo.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/mayonesa-griega-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/mayonesa-griega-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/mayonesa-griega-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "melon": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1782708989040-melon.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/melon-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/melon-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/melon-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "lechuga-batavia": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783455505900-chatgpt-image-7-jul-2026-03-17-53-p-m.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/lechuga-batavia-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/lechuga-batavia-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/lechuga-batavia-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "melon-und-1-5-kg": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783453675743-melon-in-kraft-paper-bag-202607071242.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/melon-und-1-5-kg-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/melon-und-1-5-kg-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/melon-und-1-5-kg-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "menta": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783455771786-chatgpt-image-7-jul-2026-03-22-19-p-m.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/menta-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/menta-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/menta-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "limon-libra": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783453473686-fresh-organic-green-lemons-2k-202607071240.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/limon-libra-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/limon-libra-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/limon-libra-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "naranja-libra": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783453726740-oranges-on-beige-surface-2k-202607071243.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/naranja-libra-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/naranja-libra-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/naranja-libra-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "orellana": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783453773948-fresh-orellana-mushrooms-on-wood-202607071246.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/orellana-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/orellana-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/orellana-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "papa-capira": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783453824949-papa-capira-potatoes-on-surface-202607071244.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/papa-capira-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/papa-capira-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/papa-capira-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "manzana-libra": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783453607378-organic-apples-on-beige-surface-202607071240.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/manzana-libra-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/manzana-libra-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/manzana-libra-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "papa-nevada": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783456005957-papa-nevada-potatoes-on-surface-202607071244.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/papa-nevada-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/papa-nevada-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/papa-nevada-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "maracuya": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783453652986-passion-fruits-on-wood-surface-202607071244.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/maracuya-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/maracuya-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/maracuya-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "mezclum": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1782710105367-mezclum.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/mezclum-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/mezclum-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/mezclum-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "baby-bowl-berry": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1782706322545-baby-bowl-berry-mix.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/baby-bowl-berry-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/baby-bowl-berry-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/baby-bowl-berry-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "penca-sabila-und-1-kg": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783455913973-chatgpt-image-7-jul-2026-03-25-04-p-m.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/penca-sabila-und-1-kg-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/penca-sabila-und-1-kg-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/penca-sabila-und-1-kg-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "pepino-libra": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783456190954-chatgpt-image-7-jul-2026-03-27-29-p-m.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/pepino-libra-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/pepino-libra-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/pepino-libra-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "mora": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1782709049501-gemini-generated-image-eh7nekeh7nekeh7n-1.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/mora-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/mora-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/mora-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "papa-criolla": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783453844651-papa-criolla-on-wood-table-202607071244.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/papa-criolla-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/papa-criolla-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/papa-criolla-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "penca-sabila": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1782710134835-penca-sabila.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/penca-sabila-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/penca-sabila-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/penca-sabila-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "papaya-maradol": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783453878330-papaya-on-beige-surface-2k-202607071242.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/papaya-maradol-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/papaya-maradol-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/papaya-maradol-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "perejil-x-200-gr": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1782710197645-peregil.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/perejil-x-200-gr-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/perejil-x-200-gr-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/perejil-x-200-gr-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "pesto": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783455180675-pesto.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/pesto-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/pesto-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/pesto-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "papaya-picada": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1782709083579-papaya.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/papaya-picada-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/papaya-picada-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/papaya-picada-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "pimenton-picado": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1782710225850-pimenton-rojo.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/pimenton-picado-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/pimenton-picado-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/pimenton-picado-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "pico-de-gallo": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/ceviches/pico-de-gallo-frente-desktop.webp",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/pico-de-gallo-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/pico-de-gallo-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/pico-de-gallo-hero.webp",
+      "gallerySources": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/ceviches/pico-de-gallo-info-desktop.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/ceviches/pico-de-gallo-linea-desktop.webp"
+      ],
+      "gallery": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/pico-de-gallo-01.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/pico-de-gallo-02.webp"
+      ]
+    },
+    "pera-libra": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783456406556-chatgpt-image-7-jul-2026-03-33-12-p-m.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/pera-libra-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/pera-libra-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/pera-libra-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "pina-oro-miel-und-1-5-kg": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783991208491-whatsapp-image-2026-07-13-at-8-00-53-pm.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/pina-oro-miel-und-1-5-kg-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/pina-oro-miel-und-1-5-kg-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/pina-oro-miel-und-1-5-kg-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "pitahaya": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783991900233-whatsapp-image-2026-07-13-at-8-08-16-pm.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/pitahaya-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/pitahaya-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/pitahaya-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "pepino": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1782710163299-pepino.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/pepino-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/pepino-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/pepino-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "rabano-libra": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783454109586-radishes-on-beige-surface-2k-202607071250.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/rabano-libra-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/rabano-libra-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/rabano-libra-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "platano": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783454081521-plantains-on-wood-surface-2k-202607071246.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/platano-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/platano-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/platano-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "rambutan": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783454152348-rambutans-on-beige-surface-2k-202607071242.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/rambutan-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/rambutan-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/rambutan-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "remolacha-libra": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783454165911-beetroots-on-beige-surface-2k-202607071250.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/remolacha-libra-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/remolacha-libra-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/remolacha-libra-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "pimenton": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783454035152-bell-peppers-on-wood-surface-202607071248.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/pimenton-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/pimenton-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/pimenton-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "remolacha": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1782710660642-gemini-generated-image-96jg0596jg0596jg.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/remolacha-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/remolacha-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/remolacha-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "repollo-blanco-morado": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1782710810585-repollo.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/repollo-blanco-morado-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/repollo-blanco-morado-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/repollo-blanco-morado-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "repollo": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783454187875-white-purple-cabbage-on-table-202607071246.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/repollo-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/repollo-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/repollo-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "romero": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783454213815-rosemary-sprigs-on-beige-surface-202607071250.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/romero-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/romero-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/romero-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "salsa-cesar": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783455191985-cesar.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/salsa-cesar-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/salsa-cesar-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/salsa-cesar-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "perejil-lavado-x-200-gr": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783454019662-fresh-parsley-on-wood-surface-202607071249.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/perejil-lavado-x-200-gr-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/perejil-lavado-x-200-gr-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/perejil-lavado-x-200-gr-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "sandia-baby-libra": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783454226258-baby-watermelon-on-surface-2k-202607071242.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/sandia-baby-libra-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/sandia-baby-libra-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/sandia-baby-libra-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "sandia-baby": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783475724372-sandia.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/sandia-baby-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/sandia-baby-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/sandia-baby-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "rabano": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/serana-products/rabano-picado.webp",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/rabano-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/rabano-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/rabano-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "pina": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1782709130641-pi-a.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/pina-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/pina-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/pina-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "sancocho": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/sopas/sancocho-linea-desktop.webp",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/sancocho-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/sancocho-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/sancocho-hero.webp",
+      "gallerySources": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/sopas/sancocho-info-desktop.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/sopas/sancocho-frente-desktop.webp"
+      ],
+      "gallery": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/sancocho-01.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/sancocho-02.webp"
+      ]
+    },
+    "shot-antiinflamatorio": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/shots/shot-antiinflamatorio-linea-desktop.webp",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/shot-antiinflamatorio-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/shot-antiinflamatorio-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/shot-antiinflamatorio-hero.webp",
+      "gallerySources": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/shots/shot-antiinflamatorio-info-desktop.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/shots/shot-antiinflamatorio-frente-desktop.webp"
+      ],
+      "gallery": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/shot-antiinflamatorio-01.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/shot-antiinflamatorio-02.webp"
+      ]
+    },
+    "shot-piel": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/shots/shot-piel-linea-desktop.webp",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/shot-piel-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/shot-piel-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/shot-piel-hero.webp",
+      "gallerySources": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/shots/shot-piel-info-desktop.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/shots/shot-piel-frente-desktop.webp"
+      ],
+      "gallery": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/shot-piel-01.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/shot-piel-02.webp"
+      ]
+    },
+    "shot-metabolico": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/shots/shot-metabolico-linea-desktop.webp",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/shot-metabolico-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/shot-metabolico-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/shot-metabolico-hero.webp",
+      "gallerySources": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/shots/shot-metabolico-info-desktop.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/shots/shot-metabolico-frente-desktop.webp"
+      ],
+      "gallery": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/shot-metabolico-01.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/shot-metabolico-02.webp"
+      ]
+    },
+    "shot-muscular": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/shots/shot-muscular-linea-desktop.webp",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/shot-muscular-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/shot-muscular-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/shot-muscular-hero.webp",
+      "gallerySources": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/shots/shot-muscular-info-desktop.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/shots/shot-muscular-mano-desktop.webp"
+      ],
+      "gallery": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/shot-muscular-01.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/shot-muscular-02.webp"
+      ]
+    },
+    "tomate-cherry": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783453136366-chatgpt-image-7-jul-2026-02-35-31-p-m.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/tomate-cherry-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/tomate-cherry-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/tomate-cherry-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "tomate-aliño": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783454250440-tomatoes-on-beige-surface-2k-202607071247.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/tomate-alino-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/tomate-alino-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/tomate-alino-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "shot-serenidad": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/shots/shot-serenidad-linea-desktop.webp",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/shot-serenidad-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/shot-serenidad-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/shot-serenidad-hero.webp",
+      "gallerySources": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/shots/shot-serenidad-info-desktop.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/shots/shot-serenidad-frente-desktop.webp"
+      ],
+      "gallery": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/shot-serenidad-01.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/shot-serenidad-02.webp"
+      ]
+    },
+    "tomate-de-alino": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/serana-products/tomate-de-alino-picado.webp",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/tomate-de-alino-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/tomate-de-alino-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/tomate-de-alino-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "tomate-arbol": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783454270194-tree-tomatoes-on-wood-table-202607071241.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/tomate-arbol-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/tomate-arbol-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/tomate-arbol-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "tomate-san-marzano": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783454286328-tomatoes-on-wood-surface-2k-202607071247.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/tomate-san-marzano-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/tomate-san-marzano-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/tomate-san-marzano-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "shot-concentracion": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/shots/shot-concentracion-linea-desktop.webp",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/shot-concentracion-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/shot-concentracion-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/shot-concentracion-hero.webp",
+      "gallerySources": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/shots/shot-concentracion-info-desktop.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/shots/shot-concentracion-frente-desktop.webp"
+      ],
+      "gallery": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/shot-concentracion-01.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/shot-concentracion-02.webp"
+      ]
+    },
+    "tomate-uvalina": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783452545358-chatgpt-image-7-jul-2026-02-18-34-p-m.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/tomate-uvalina-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/tomate-uvalina-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/tomate-uvalina-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "uchuva": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1782709193936-uchuva.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/uchuva-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/uchuva-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/uchuva-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "tomillo": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783454301441-fresh-thyme-bunch-on-wood-202607071250.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/tomillo-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/tomillo-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/tomillo-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "uva-importada": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1782709220563-uva-importada.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/uva-importada-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/uva-importada-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/uva-importada-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "vinagreta-miel-balsamico": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783455213474-mielybalsamico.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/vinagreta-miel-balsamico-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/vinagreta-miel-balsamico-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/vinagreta-miel-balsamico-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "vinagreta-mostaza-miel": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783455225385-mielmostaza.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/vinagreta-mostaza-miel-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/vinagreta-mostaza-miel-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/vinagreta-mostaza-miel-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "yerbabuena": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783454331559-fresh-mint-leaves-on-wood-202607071250.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/yerbabuena-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/yerbabuena-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/yerbabuena-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "yuca-pelada-desvenada": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1782711365768-yuca.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/yuca-pelada-desvenada-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/yuca-pelada-desvenada-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/yuca-pelada-desvenada-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "yuca-libra": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783454364883-fresh-yuca-roots-on-surface-202607071246.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/yuca-libra-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/yuca-libra-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/yuca-libra-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "zanahoria-libra": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783454377169-carrots-on-beige-surface-2k-202607071248.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/zanahoria-libra-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/zanahoria-libra-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/zanahoria-libra-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "verduras-saltear": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/ensaladas/verduras-saltear-info-desktop.webp",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/verduras-saltear-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/verduras-saltear-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/verduras-saltear-hero.webp",
+      "gallerySources": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/ensaladas/verduras-saltear-linea-desktop.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/products/ensaladas/verduras-saltear-frente-desktop.webp"
+      ],
+      "gallery": [
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/verduras-saltear-01.webp",
+        "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/gallery/verduras-saltear-02.webp"
+      ]
+    },
+    "zanahoria": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783453108187-chatgpt-image-7-jul-2026-02-38-14-p-m.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/zanahoria-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/zanahoria-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/zanahoria-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "zuchini": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1782711549033-gemini-generated-image-3rdqpz3rdqpz3rdq.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/zuchini-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/zuchini-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/zuchini-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "zucchini-picado": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1782711496729-zuquini.png",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/zucchini-picado-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/zucchini-picado-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/zucchini-picado-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "zuquini-amarillo": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783454400764-yellow-zucchinis-on-wood-table-202607071248.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/zuquini-amarillo-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/zuquini-amarillo-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/zuquini-amarillo-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "zuquini-verde": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783454419785-zucchini-verde-on-beige-surface-202607071248.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/zuquini-verde-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/zuquini-verde-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/zuquini-verde-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "vinagreta-naranja-cilantro": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783455241757-naranjaycilantro.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/vinagreta-naranja-cilantro-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/vinagreta-naranja-cilantro-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/vinagreta-naranja-cilantro-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    },
+    "vinagreta-fresa-menta": {
+      "source": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/menu-digital/1783455201993-fresaymenta.jpeg",
+      "mobile": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/vinagreta-fresa-menta-mobile.webp",
+      "desktop": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/vinagreta-fresa-menta-desktop.webp",
+      "hero": "https://tjjrnpwwfvmsukfrfchr.supabase.co/storage/v1/object/public/productos/cdn/catalog/vinagreta-fresa-menta-hero.webp",
+      "gallerySources": [],
+      "gallery": []
+    }
+  }
+}

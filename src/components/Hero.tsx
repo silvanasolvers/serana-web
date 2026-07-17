@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { SITE_IMAGES } from '../lib/images';
 
 export default function Hero() {
   return (
@@ -95,12 +96,18 @@ export default function Hero() {
                 className="relative w-full aspect-[4/5] overflow-hidden shadow-xl border-[3px] border-white/50"
                 style={{ borderRadius: '40% 60% 65% 35% / 40% 35% 65% 60%' }}
               >
-                <img
-                  src="/assets/serana-banner-bowl.png"
-                  alt="Healthy Bowl"
-                  className="w-full h-full object-cover"
-                  loading="eager"
-                />
+                <picture>
+                  <source media="(min-width: 768px)" srcSet={SITE_IMAGES.heroDesktop} />
+                  <img
+                    src={SITE_IMAGES.heroMobile}
+                    alt="Bowl saludable Serana"
+                    width="480"
+                    height="600"
+                    className="w-full h-full object-cover"
+                    loading="eager"
+                    fetchPriority="high"
+                  />
+                </picture>
                 <div className="absolute inset-0 bg-gradient-to-t from-[#273617]/25 to-transparent pointer-events-none" />
               </div>
 

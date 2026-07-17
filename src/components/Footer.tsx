@@ -3,9 +3,8 @@ import { useState } from 'react';
 import { CreditCard, Lock, ShieldCheck, Phone, Send, Check, Loader2, Instagram, MessageCircle, Mail, MapPin, Clock } from 'lucide-react';
 import { captureLead } from '../lib/api/leads';
 import { buildWhatsAppUrl } from '../lib/contact';
+import { SerenaMark } from './SeranaIcons';
 
-const LOGO_URL =
-  'https://qlgjqvgjuscquhspjqdp.supabase.co/storage/v1/object/public/AETHERA-DOCS/LOGO%20PRINCIPAL-07.png';
 const EXPERIENCES_URL = 'https://serana.social/#propuesta';
 
 const today = new Date();
@@ -34,13 +33,8 @@ export default function Footer() {
   return (
     <footer className="bg-serana-forest text-serana-cream pt-0 pb-8 px-6 overflow-hidden relative">
       {/* Decorative background — subtle botanical element */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-[0.07] pointer-events-none select-none flex items-center justify-center">
-        <img
-          src="https://qlgjqvgjuscquhspjqdp.supabase.co/storage/v1/object/public/AETHERA-DOCS/ELEMENTOS.png"
-          alt=""
-          className="w-[130%] max-w-none object-cover mix-blend-overlay rotate-180"
-          aria-hidden
-        />
+      <div className="absolute inset-0 overflow-hidden opacity-[0.05] pointer-events-none select-none flex items-center justify-center" aria-hidden>
+        <SerenaMark className="h-[60rem] w-[60rem] max-w-none rotate-12 text-serana-cream" />
       </div>
 
       {/* Top ochre rule — clean separator from page */}
@@ -84,11 +78,7 @@ export default function Footer() {
               {/* Soft inner halo so the logo pops over the dark bg */}
               <span className="absolute inset-6 rounded-full bg-serana-ochre/[0.06] blur-xl" aria-hidden />
               {/* Logo in the middle */}
-              <img
-                src={LOGO_URL}
-                alt="Serana"
-                className="relative w-24 h-24 md:w-28 md:h-28 object-contain brightness-0 invert group-hover:scale-[1.03] transition-transform duration-500"
-              />
+              <SerenaMark className="relative h-20 w-20 text-serana-cream transition-transform duration-500 group-hover:scale-[1.03] md:h-24 md:w-24" />
             </div>
           </Link>
 

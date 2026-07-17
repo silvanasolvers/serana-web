@@ -2,6 +2,11 @@ import { supabase, isSupabaseConfigured } from '../supabase';
 import type { Product } from '../../store/useCartStore';
 import { products as staticProducts } from '../../data/products';
 import { PRICE_LIST_PROFILES } from '../../data/priceListProfiles';
+import {
+  CATALOG_IMAGE_MANIFEST_URL,
+  type CatalogImageManifest,
+  type CatalogImageManifestEntry,
+} from '../images';
 
 type ProductRow = {
   id: string;
@@ -44,13 +49,40 @@ function inferStorefrontCategory(row: ProductRow) {
   return code;
 }
 
-function rowToProduct(row: ProductRow): Product {
+function arraysEqual(left: string[], right: string[]) {
+  return left.length === right.length && left.every((value, index) => value === right[index]);
+}
+
+function getCurrentImageEntry(row: ProductRow, manifest: CatalogImageManifest | null) {
+  const id = row.slug ?? row.id;
+  const entry: CatalogImageManifestEntry | undefined = manifest?.products[id];
+  if (!entry || !row.image_url || entry.source !== row.image_url) return null;
+  return entry;
+}
+
+async function loadImageManifest(): Promise<CatalogImageManifest | null> {
+  try {
+    const response = await fetch(CATALOG_IMAGE_MANIFEST_URL);
+    if (!response.ok) return null;
+    const manifest = (await response.json()) as CatalogImageManifest;
+    return manifest?.version === 1 && manifest.products ? manifest : null;
+  } catch {
+    return null;
+  }
+}
+
+function rowToProduct(row: ProductRow, manifest: CatalogImageManifest | null): Product {
   // The cart store uses slug as id so cart entries survive when the UUID changes.
   // Falls back to UUID for catalogue rows that don't have a slug yet.
   const id = row.slug ?? row.id;
   const staticMatch = STATIC_BY_ID.get(id);
   const profile = PRICE_LIST_PROFILES[id];
   const hasProfile = Boolean(profile);
+  const imageEntry = getCurrentImageEntry(row, manifest);
+  const databaseGallery = row.gallery_urls ?? [];
+  const optimizedGallery = imageEntry && arraysEqual(imageEntry.gallerySources, databaseGallery)
+    ? imageEntry.gallery
+    : databaseGallery;
 
   return {
     ...(staticMatch ?? {}),
@@ -59,8 +91,8 @@ function rowToProduct(row: ProductRow): Product {
     name: profile?.name ?? normalizeUnitLabel(row.name || staticMatch?.name || ''),
     price: Number(profile?.price ?? row.price ?? staticMatch?.price ?? 0),
     description: profile?.description ?? row.description ?? staticMatch?.description ?? '',
-    image: row.image_url || staticMatch?.image || '',
-    gallery: row.gallery_urls ?? staticMatch?.gallery ?? [],
+    image: imageEntry?.desktop ?? row.image_url ?? '',
+    gallery: optimizedGallery,
     category: profile?.category ?? inferStorefrontCategory(row) ?? staticMatch?.category ?? 'otros',
     benefits: profile?.benefits ?? staticMatch?.benefits ?? FALLBACK_BENEFITS,
     healthBenefit: profile?.healthBenefit ?? staticMatch?.healthBenefit,
@@ -73,14 +105,17 @@ function rowToProduct(row: ProductRow): Product {
 
 export async function listProducts(): Promise<Product[]> {
   if (!isSupabaseConfigured) return [];
-  const { data, error } = await supabase
-    .from('products_public_view')
-    .select('id, slug, name, description, price, image_url, gallery_urls, active, category_code, category_name')
-    .eq('active', true)
-    .order('name', { ascending: true });
+  const [{ data, error }, manifest] = await Promise.all([
+    supabase
+      .from('products_public_view')
+      .select('id, slug, name, description, price, image_url, gallery_urls, active, category_code, category_name')
+      .eq('active', true)
+      .order('name', { ascending: true }),
+    loadImageManifest(),
+  ]);
   if (error) {
     console.warn('[serana-web] listProducts failed:', error.message);
     return [];
   }
-  return (data ?? []).map((row) => rowToProduct(row as ProductRow));
+  return (data ?? []).map((row) => rowToProduct(row as ProductRow, manifest));
 }

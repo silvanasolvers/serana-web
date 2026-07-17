@@ -4,12 +4,21 @@ import { useState, useEffect, useRef } from 'react';
 import { useCartStore } from '../store/useCartStore';
 import { motion, AnimatePresence } from 'motion/react';
 import clsx from 'clsx';
-import { MarketBasket } from './SeranaIcons';
+import { MarketBasket, SerenaMark } from './SeranaIcons';
 import { useAuth } from './AuthProvider';
 import { buildWhatsAppUrl } from '../lib/contact';
 
 const WHATSAPP_URL = buildWhatsAppUrl('Hola, quiero recibir asesoría de Serana.');
 const EXPERIENCES_URL = 'https://serana.social/#propuesta';
+
+function BrandLogo({ compact = false }: { compact?: boolean }) {
+  return (
+    <span className="inline-flex items-center gap-2 text-serana-forest">
+      <SerenaMark className={compact ? 'h-9 w-9' : 'h-11 w-11 md:h-13 md:w-13'} />
+      <span className="font-serif text-2xl font-semibold tracking-[0.12em] md:text-3xl">SERANA</span>
+    </span>
+  );
+}
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -66,14 +75,7 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <Link to="/" className="relative group block z-50">
-          <img 
-            src="https://qlgjqvgjuscquhspjqdp.supabase.co/storage/v1/object/public/AETHERA-DOCS/LOGO%20PRINCIPAL-07.png" 
-            alt="Serana Logo" 
-            className={clsx(
-              "w-auto object-contain transition-all duration-500",
-              isScrolled ? "h-18 md:h-22" : "h-28 md:h-32"
-            )} 
-          />
+          <BrandLogo compact={isScrolled} />
         </Link>
 
         {/* Desktop Nav */}
@@ -205,11 +207,7 @@ export default function Navbar() {
             style={{ backgroundColor: '#FEFADF' }}
           >
             <div className="flex justify-between items-center mb-16">
-              <img 
-                src="https://qlgjqvgjuscquhspjqdp.supabase.co/storage/v1/object/public/AETHERA-DOCS/LOGO%20PRINCIPAL-07.png" 
-                alt="Serana Logo" 
-                className="h-12 w-auto object-contain" 
-              />
+              <BrandLogo compact />
               <button onClick={() => setIsMobileMenuOpen(false)} className="p-2">
                 <X size={28} className="text-serana-forest" strokeWidth={1.5} />
               </button>

@@ -15,6 +15,7 @@ import TrustCredentialsSection from '../components/TrustCredentialsSection';
 import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { SITE_IMAGES } from '../lib/images';
 
 export default function HomePage() {
   return (
@@ -76,7 +77,7 @@ export default function HomePage() {
             <div className="w-full md:w-1/2 h-[40vh] md:h-auto relative order-2 md:order-1">
               <div className="absolute inset-0 bg-serana-forest/20 mix-blend-multiply z-10" />
               <img loading="lazy" 
-                src="https://qlgjqvgjuscquhspjqdp.supabase.co/storage/v1/object/public/AETHERA-DOCS/serana%20campo.png" 
+                src={SITE_IMAGES.experience}
                 alt="Campo colombiano" 
                 className="absolute inset-0 w-full h-full object-cover"
                 referrerPolicy="no-referrer"
