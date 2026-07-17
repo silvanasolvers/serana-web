@@ -34,7 +34,7 @@ export async function askSeranaAi(input: AskSeranaAiInput) {
       history: input.history.slice(-8),
       pathname: input.pathname,
       cart: input.cart,
-      products: input.products.slice(0, 80).map((product) => ({
+      products: input.products.slice(0, 200).map((product) => ({
         id: product.id,
         name: product.name,
         price: product.price,
