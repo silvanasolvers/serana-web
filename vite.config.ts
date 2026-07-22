@@ -5,6 +5,20 @@ import { defineConfig, loadEnv } from 'vite';
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, '.', '');
+
+  if (mode === 'production') {
+    const supabaseUrl = env.VITE_SUPABASE_URL?.trim();
+    const supabaseAnonKey = env.VITE_SUPABASE_ANON_KEY?.trim();
+    const invalidUrl = !supabaseUrl || !/^https:\/\/[a-z0-9]+\.supabase\.co\/?$/.test(supabaseUrl);
+    const invalidAnonKey = !supabaseAnonKey || supabaseAnonKey === 'your-anon-key-here';
+
+    if (invalidUrl || invalidAnonKey) {
+      throw new Error(
+        'Production build requires valid VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY values.',
+      );
+    }
+  }
+
   return {
     plugins: [react(), tailwindcss()],
     define: {
