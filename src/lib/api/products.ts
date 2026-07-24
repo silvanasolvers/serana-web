@@ -21,6 +21,19 @@ type ProductRow = {
   category_name: string | null;
 };
 
+type CheckoutPriceRow = {
+  product_slug: string;
+  variant_label: string | null;
+  price: number | string;
+  is_default: boolean;
+  sort_order: number;
+};
+
+type CheckoutPriceProfile = {
+  defaultPrice?: number;
+  variants: Array<{ label: string; price: number }>;
+};
+
 const FALLBACK_BENEFITS = ['Fresco', 'Natural', 'Sin conservantes'];
 const STATIC_BY_ID = new Map(staticProducts.map((product) => [product.id, product]));
 
@@ -71,7 +84,11 @@ async function loadImageManifest(): Promise<CatalogImageManifest | null> {
   }
 }
 
-function rowToProduct(row: ProductRow, manifest: CatalogImageManifest | null): Product {
+function rowToProduct(
+  row: ProductRow,
+  manifest: CatalogImageManifest | null,
+  checkoutPrice?: CheckoutPriceProfile,
+): Product {
   // The cart store uses slug as id so cart entries survive when the UUID changes.
   // Falls back to UUID for catalogue rows that don't have a slug yet.
   const id = row.slug ?? row.id;
@@ -89,7 +106,7 @@ function rowToProduct(row: ProductRow, manifest: CatalogImageManifest | null): P
     ...(profile ?? {}),
     id,
     name: profile?.name ?? normalizeUnitLabel(row.name || staticMatch?.name || ''),
-    price: Number(profile?.price ?? row.price ?? staticMatch?.price ?? 0),
+    price: Number(checkoutPrice?.defaultPrice ?? profile?.price ?? row.price ?? staticMatch?.price ?? 0),
     description: profile?.description ?? row.description ?? staticMatch?.description ?? '',
     image: imageEntry?.desktop ?? row.image_url ?? '',
     gallery: optimizedGallery,
@@ -99,23 +116,46 @@ function rowToProduct(row: ProductRow, manifest: CatalogImageManifest | null): P
     observation: profile?.observation ?? staticMatch?.observation,
     portions: profile?.portions ?? staticMatch?.portions,
     ingredients: profile?.ingredients ?? staticMatch?.ingredients,
-    variants: hasProfile ? profile?.variants : staticMatch?.variants,
+    variants: checkoutPrice?.variants.length
+      ? checkoutPrice.variants
+      : hasProfile ? profile?.variants : staticMatch?.variants,
   };
 }
 
 export async function listProducts(): Promise<Product[]> {
   if (!isSupabaseConfigured) return [];
-  const [{ data, error }, manifest] = await Promise.all([
+  const [{ data, error }, { data: priceRows, error: priceError }, manifest] = await Promise.all([
     supabase
       .from('products_public_view')
       .select('id, slug, name, description, price, image_url, gallery_urls, active, category_code, category_name')
       .eq('active', true)
       .order('name', { ascending: true }),
+    supabase
+      .from('product_checkout_prices_view')
+      .select('product_slug, variant_label, price, is_default, sort_order')
+      .order('sort_order', { ascending: true }),
     loadImageManifest(),
   ]);
   if (error) {
     console.warn('[serana-web] listProducts failed:', error.message);
     return [];
   }
-  return (data ?? []).map((row) => rowToProduct(row as ProductRow, manifest));
+  if (priceError) {
+    console.warn('[serana-web] checkout prices unavailable; using catalog fallback:', priceError.message);
+  }
+
+  const pricesBySlug = new Map<string, CheckoutPriceProfile>();
+  for (const raw of (priceRows ?? []) as CheckoutPriceRow[]) {
+    const current = pricesBySlug.get(raw.product_slug) ?? { variants: [] };
+    if (raw.is_default) current.defaultPrice = Number(raw.price);
+    if (raw.variant_label) {
+      current.variants.push({ label: raw.variant_label, price: Number(raw.price) });
+    }
+    pricesBySlug.set(raw.product_slug, current);
+  }
+
+  return (data ?? []).map((row) => {
+    const product = row as ProductRow;
+    return rowToProduct(product, manifest, product.slug ? pricesBySlug.get(product.slug) : undefined);
+  });
 }

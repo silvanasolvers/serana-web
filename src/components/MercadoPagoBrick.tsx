@@ -78,19 +78,22 @@ type Props = {
   publicKey: string;
   preferenceId: string;
   amount: number;
-  orderId: string;
+  checkoutToken: string;
   payerEmail?: string;
-  onApproved: (paymentId: string) => void;
+  onApproved: (result: { paymentId: string; orderNumber: number }) => void;
+  onPending: (result: { paymentId: string }) => void;
   onRejected: (info: { status: string; status_detail: string; message?: string }) => void;
 };
 
 const CONTAINER_ID = 'mp-payment-brick';
 
 export default function MercadoPagoBrick({
-  publicKey, preferenceId, amount, orderId, payerEmail,
-  onApproved, onRejected,
+  publicKey, preferenceId, amount, checkoutToken, payerEmail,
+  onApproved, onPending, onRejected,
 }: Props) {
   const controllerRef = useRef<BrickController | null>(null);
+  const submittingRef = useRef(false);
+  const attemptIdRef = useRef<string | null>(null);
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
@@ -145,49 +148,78 @@ export default function MercadoPagoBrick({
               }
             },
             onSubmit: async ({ selectedPaymentMethod, formData }) => {
-              const resp = await fetch('/api/checkout/mp/process', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  order_id: orderId,
-                  selectedPaymentMethod,
-                  formData,
-                }),
-              });
-              const data = await resp.json().catch(() => ({}));
+              if (submittingRef.current) return;
+              submittingRef.current = true;
+              const attemptStorageKey = `serana:mp-attempt:${checkoutToken}`;
+              attemptIdRef.current ??= localStorage.getItem(attemptStorageKey) || crypto.randomUUID();
+              localStorage.setItem(attemptStorageKey, attemptIdRef.current);
+              try {
+                const resp = await fetch('/api/checkout/mp/process', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    checkout_token: checkoutToken,
+                    attempt_id: attemptIdRef.current,
+                    selectedPaymentMethod,
+                    formData,
+                  }),
+                });
+                const data = await resp.json().catch(() => ({}));
 
-              if (!resp.ok) {
+                if (!resp.ok) {
+                  // A rejected payment is a completed attempt; the next user
+                  // submit may intentionally create a new one. For ambiguous
+                  // gateway/network failures retain the same UUID so retrying
+                  // cannot create a second charge.
+                  if (data?.retryable !== true) {
+                    attemptIdRef.current = null;
+                    localStorage.removeItem(attemptStorageKey);
+                  }
+                  onRejected({
+                    status: data?.status ?? 'error',
+                    status_detail: data?.status_detail ?? 'unknown',
+                    message: data?.message ?? data?.error ?? 'No pudimos procesar el pago',
+                  });
+                  throw new Error(data?.message ?? 'mp_process_failed');
+                }
+
+                if (data.redirect_url) {
+                  window.location.href = data.redirect_url;
+                  return;
+                }
+
+                if (data.status === 'approved') {
+                  if (!data.order_number) throw new Error('approved_payment_missing_order');
+                  localStorage.removeItem(attemptStorageKey);
+                  onApproved({ paymentId: String(data.id), orderNumber: Number(data.order_number) });
+                  return;
+                }
+
+                if (data.status === 'in_process' || data.status === 'pending') {
+                  onPending({ paymentId: String(data.id) });
+                  return;
+                }
+
                 onRejected({
                   status: data?.status ?? 'rejected',
                   status_detail: data?.status_detail ?? 'unknown',
-                  message: data?.message ?? data?.error ?? 'No pudimos procesar el pago',
+                  message: data?.message,
                 });
+                attemptIdRef.current = null;
+                localStorage.removeItem(attemptStorageKey);
                 throw new Error(data?.message ?? 'mp_process_failed');
+              } catch (err) {
+                if (err instanceof TypeError) {
+                  onRejected({
+                    status: 'error',
+                    status_detail: 'network_error',
+                    message: 'La conexión se interrumpió. Puedes reintentar sin riesgo de duplicar el cobro.',
+                  });
+                }
+                throw err;
+              } finally {
+                submittingRef.current = false;
               }
-
-              if (data.redirect_url) {
-                // PSE / bank transfer: MP returns a URL to send the user to
-                window.location.href = data.redirect_url;
-                return;
-              }
-
-              if (data.status === 'approved') {
-                onApproved(String(data.id));
-                return;
-              }
-
-              if (data.status === 'in_process' || data.status === 'pending') {
-                // Card under review — treat as success-with-pending; webhook will finalize
-                onApproved(String(data.id));
-                return;
-              }
-
-              onRejected({
-                status: data.status ?? 'rejected',
-                status_detail: data.status_detail ?? 'unknown',
-                message: data.message,
-              });
-              throw new Error(data?.message ?? 'mp_payment_rejected');
             },
           },
         });

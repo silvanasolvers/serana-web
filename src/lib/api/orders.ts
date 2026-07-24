@@ -12,34 +12,47 @@ export type PaymentMethod =
 export type CreateOrderItem = {
   product_slug: string;
   quantity: number;
+  variant_label?: string;
   customizations?: string;
 };
 
-export type CreateOrderPayload = {
+export type CheckoutPayload = {
   customer_phone: string;
   customer_name?: string;
   customer_email?: string;
   delivery_address?: string;
-  delivery_fee?: number;
-  total_amount?: number;
+  notes?: string;
   type?: OrderType;
   payment_method?: PaymentMethod;
-  payment_status?: 'pendiente' | 'parcial' | 'pagado';
   source_code?: 'web' | 'whatsapp_bot' | 'presencial' | 'telefono';
-  station_code?: string;
   coupon_code?: string;
   items: CreateOrderItem[];
 };
 
-export type CreateOrderResult = {
-  order_id: string;
-  order_number: number;
+export type CheckoutSessionResult = {
+  checkout_id: string;
+  checkout_token: string;
+  status: 'draft' | 'payment_processing' | 'payment_pending' | 'payment_failed' | 'awaiting_transfer' | 'confirmed' | 'paid' | 'expired' | 'cancelled';
+  payment_method: PaymentMethod;
   total_amount: number;
-  subtotal?: number;
-  discount_amount?: number;
-  coupon_code?: string | null;
-  customer_id: string;
+  subtotal: number;
+  discount_amount: number;
+  delivery_fee: number;
+  coupon_code: string | null;
+  preference_id: string | null;
+  version: number;
+  expires_at: string;
+  order_id: string | null;
+  order_number: number | null;
+  order_status: string | null;
+  payment_status: string | null;
 };
+
+export type CheckoutPublicStatus = Pick<
+  CheckoutSessionResult,
+  'status' | 'payment_method' | 'payment_status' | 'order_status' | 'order_number' |
+  'subtotal' | 'discount_amount' | 'delivery_fee' | 'total_amount' | 'coupon_code' | 'expires_at'
+>;
 
 export type CouponValidation = {
   valid: boolean;
@@ -68,13 +81,36 @@ export async function validateCoupon(code: string, subtotal: number): Promise<Co
   };
 }
 
-export async function createOrderAnon(payload: CreateOrderPayload): Promise<CreateOrderResult> {
-  if (!isSupabaseConfigured) {
-    throw new Error('Supabase no está configurado en este entorno.');
+async function checkoutRequest<T>(url: string, init?: RequestInit): Promise<T> {
+  const response = await fetch(url, init);
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(data?.error ?? `checkout_request_${response.status}`);
   }
-  const { data, error } = await supabase.rpc('create_order_anon', { payload });
-  if (error) throw error;
-  return data as CreateOrderResult;
+  return data as T;
+}
+
+export function createOrUpdateCheckoutSession(
+  checkoutKey: string,
+  payload: CheckoutPayload,
+): Promise<CheckoutSessionResult> {
+  return checkoutRequest('/api/checkout/session', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ checkout_key: checkoutKey, payload }),
+  });
+}
+
+export function confirmOfflineCheckout(checkoutToken: string): Promise<CheckoutSessionResult> {
+  return checkoutRequest('/api/checkout/offline/confirm', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ checkout_token: checkoutToken }),
+  });
+}
+
+export function getCheckoutStatus(checkoutToken: string): Promise<CheckoutPublicStatus> {
+  return checkoutRequest(`/api/checkout/status/${encodeURIComponent(checkoutToken)}`);
 }
 
 export type TrackedOrder = {

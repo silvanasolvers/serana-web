@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { type CartItem, useCartStore } from '../store/useCartStore';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import {
-  createOrderAnon, validateCoupon,
+  confirmOfflineCheckout, createOrUpdateCheckoutSession, getCheckoutStatus, validateCoupon,
   type PaymentMethod, type CouponValidation,
 } from '../lib/api/orders';
 import MercadoPagoBrick from '../components/MercadoPagoBrick';
@@ -51,8 +51,22 @@ const initialForm: FormState = {
 };
 
 const STORAGE_KEY = 'serana:checkout:contact';
+const CHECKOUT_KEY_STORAGE = 'serana:checkout:key:v2';
 
 const DELIVERY_FEE_COP = 12500;
+
+function newCheckoutKey() {
+  if (typeof window === 'undefined') return crypto.randomUUID();
+  const saved = sessionStorage.getItem(CHECKOUT_KEY_STORAGE);
+  if (saved) return saved;
+  const key = crypto.randomUUID();
+  sessionStorage.setItem(CHECKOUT_KEY_STORAGE, key);
+  return key;
+}
+
+function clearCheckoutKey() {
+  if (typeof window !== 'undefined') sessionStorage.removeItem(CHECKOUT_KEY_STORAGE);
+}
 
 const STEPS = [
   { id: 1, label: 'Resumen', Icon: Tag },
@@ -79,10 +93,16 @@ export default function CheckoutPage() {
   const { items, total, clearCart } = useCartStore();
   const { user, account } = useAuth();
   const subtotal = total();
+  const checkoutKeyRef = useRef<string>(newCheckoutKey());
+  const mpPreparingRef = useRef(false);
 
   const [stepIndex, setStepIndex] = useState(0); // 0..2
   const [confirmation, setConfirmation] = useState<{
     orderNumber: number; subtotal: number; discount: number; total: number; coupon: string | null;
+    kind: 'confirmed' | 'awaiting_transfer';
+  } | null>(null);
+  const [paymentPending, setPaymentPending] = useState<{
+    checkoutToken: string; paymentId: string; total: number;
   } | null>(null);
 
   const [form, setForm] = useState<FormState>(() => {
@@ -100,12 +120,11 @@ export default function CheckoutPage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // MP Bricks: when the user reaches step 3 with MercadoPago selected we
-  // eagerly create the order + a Preference so the Brick can mount inline.
-  // The Brick's submit handler talks to /api/checkout/mp/process directly.
+  // MP Bricks mount from a non-operational checkout session. No sales order
+  // exists until the server has reconciled an approved payment.
   const [mpReady, setMpReady] = useState<{
-    order_id: string;
-    order_number: number;
+    checkout_id: string;
+    checkout_token: string;
     preference_id: string;
     amount: number;
     discount: number;
@@ -155,9 +174,11 @@ export default function CheckoutPage() {
 
   const discount = couponApplied?.valid ? couponApplied.discount_amount : 0;
   const deliveryFee = DELIVERY_FEE_COP; // TODO: change to conditional when pickup/mesa types are added
-  const totalToPay = Math.max(subtotal - discount + deliveryFee, 0);
-  const minimumOrderMet = meetsMinimumOrder(totalToPay);
-  const minimumOrderMissing = getMinimumOrderMissing(totalToPay);
+  const merchandiseTotal = Math.max(subtotal - discount, 0);
+  const totalToPay = merchandiseTotal + deliveryFee;
+  // The public terms define the minimum before delivery.
+  const minimumOrderMet = meetsMinimumOrder(merchandiseTotal);
+  const minimumOrderMissing = getMinimumOrderMissing(merchandiseTotal);
 
   // Re-validate the coupon if subtotal changes (cart edit) so a stale "applied"
   // doesn't survive a min_subtotal violation or an expiration mid-flow.
@@ -208,18 +229,16 @@ export default function CheckoutPage() {
     setCouponError(null);
   };
 
-  const buildOrderPayload = () => {
+  const buildCheckoutPayload = () => {
     const fullAddress = [form.address.trim(), form.city.trim()].filter(Boolean).join(', ');
     return {
       customer_phone: phoneDigits,
       customer_name: form.fullName.trim(),
       customer_email: form.email.trim() || undefined,
       delivery_address: fullAddress,
-      delivery_fee: deliveryFee,
-      total_amount: totalToPay,
+      notes: form.notes.trim() || undefined,
       type: 'domicilio' as const,
       payment_method: form.paymentMethod,
-      payment_status: 'pendiente' as const,
       source_code: readCheckoutSource(),
       coupon_code: couponApplied?.valid ? couponApplied.code ?? undefined : undefined,
       items: items.map((item) => {
@@ -239,45 +258,50 @@ export default function CheckoutPage() {
     };
   };
 
-  // For Bricks: create the order + preference so the brick can mount.
-  // Only happens once per (step3 + MP selected + valid form). If the user
-  // edits the cart or contact, we tear it down and re-prepare.
+  const prepareCheckoutSession = () => createOrUpdateCheckoutSession(
+    checkoutKeyRef.current,
+    buildCheckoutPayload(),
+  );
+
+  // Create/update a checkout session and one persisted Preference. This is
+  // safe to retry because checkout_key is stable for this browser checkout.
   const prepareMpBrick = async () => {
-    if (mpPreparing || mpReady) return;
+    if (mpPreparingRef.current || mpReady) return;
     if (!minimumOrderMet) {
       setError(`La compra mínima es de ${COP(MINIMUM_ORDER_TOTAL_COP)}. Agrega ${COP(minimumOrderMissing)} más para finalizar tu pedido.`);
       return;
     }
+    mpPreparingRef.current = true;
     setMpPreparing(true);
     setMpRejection(null);
     setError(null);
     try {
-      const result = await createOrderAnon(buildOrderPayload());
+      const checkout = await prepareCheckoutSession();
       const mpResp = await fetch('/api/checkout/mp/preference', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ order_id: result.order_id }),
+        body: JSON.stringify({ checkout_token: checkout.checkout_token }),
       });
       if (!mpResp.ok) {
-        const t = await mpResp.text();
-        throw new Error(`No pudimos preparar el pago (${mpResp.status}). ${t.slice(0, 200)}`);
+        const data = await mpResp.json().catch(() => ({}));
+        throw new Error(data?.error ?? `No pudimos preparar el pago (${mpResp.status}).`);
       }
-      const mpData = (await mpResp.json()) as { preference_id?: string };
+      const mpData = (await mpResp.json()) as { preference_id?: string; amount?: number };
       if (!mpData.preference_id) throw new Error('Mercado Pago no devolvió la preferencia.');
-      clearCheckoutSource();
 
       setMpReady({
-        order_id: result.order_id,
-        order_number: result.order_number,
+        checkout_id: checkout.checkout_id,
+        checkout_token: checkout.checkout_token,
         preference_id: mpData.preference_id,
-        amount: Number(result.total_amount),
-        discount: Number(result.discount_amount ?? 0),
-        coupon: result.coupon_code ?? null,
-        subtotal: Number(result.subtotal ?? subtotal),
+        amount: Number(mpData.amount ?? checkout.total_amount),
+        discount: Number(checkout.discount_amount ?? 0),
+        coupon: checkout.coupon_code ?? null,
+        subtotal: Number(checkout.subtotal ?? subtotal),
       });
     } catch (err: any) {
       setError(err?.message ?? 'No pudimos preparar Mercado Pago. Intenta nuevamente.');
     } finally {
+      mpPreparingRef.current = false;
       setMpPreparing(false);
     }
   };
@@ -293,14 +317,18 @@ export default function CheckoutPage() {
     setSubmitting(true);
     setError(null);
     try {
-      const result = await createOrderAnon(buildOrderPayload());
+      const checkout = await prepareCheckoutSession();
+      const result = await confirmOfflineCheckout(checkout.checkout_token);
+      if (!result.order_number) throw new Error('No recibimos el número del pedido.');
       setConfirmation({
         orderNumber: result.order_number,
-        subtotal: Number(result.subtotal ?? subtotal),
-        discount: Number(result.discount_amount ?? 0),
+        subtotal: Number(result.subtotal),
+        discount: Number(result.discount_amount),
         total: Number(result.total_amount),
         coupon: result.coupon_code ?? null,
+        kind: result.status === 'awaiting_transfer' ? 'awaiting_transfer' : 'confirmed',
       });
+      clearCheckoutKey();
       clearCheckoutSource();
       clearCart();
     } catch (err: any) {
@@ -310,34 +338,96 @@ export default function CheckoutPage() {
     }
   };
 
-  // When the brick reports approved we wrap up locally — the webhook will
-  // also fire and update the order's payment_status to 'pagado'.
-  const handleBrickApproved = (paymentId: string) => {
+  const handleBrickApproved = (result: { paymentId: string; orderNumber: number }) => {
     if (!mpReady) return;
     setConfirmation({
-      orderNumber: mpReady.order_number,
+      orderNumber: result.orderNumber,
       subtotal: mpReady.subtotal,
       discount: mpReady.discount,
       total: mpReady.amount,
       coupon: mpReady.coupon,
+      kind: 'confirmed',
     });
+    clearCheckoutKey();
     clearCheckoutSource();
     clearCart();
-    void paymentId; // for future telemetry
+    void result.paymentId;
+  };
+
+  const handleBrickPending = (result: { paymentId: string }) => {
+    if (!mpReady) return;
+    setPaymentPending({
+      checkoutToken: mpReady.checkout_token,
+      paymentId: result.paymentId,
+      total: mpReady.amount,
+    });
   };
 
   const handleBrickRejected = (info: { status: string; status_detail: string; message?: string }) => {
     setMpRejection({ status_detail: info.status_detail, message: info.message });
   };
 
-  // If the cart, contact or coupon changes after prepare, tear down the
-  // prepared MP order so we don't end up paying for a stale total.
+  useEffect(() => {
+    if (!paymentPending) return;
+    let cancelled = false;
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    const refresh = async () => {
+      try {
+        const status = await getCheckoutStatus(paymentPending.checkoutToken);
+        if (cancelled) return;
+        if (status.status === 'paid' && status.order_number) {
+          setConfirmation({
+            orderNumber: status.order_number,
+            subtotal: Number(status.subtotal),
+            discount: Number(status.discount_amount),
+            total: Number(status.total_amount),
+            coupon: status.coupon_code,
+            kind: 'confirmed',
+          });
+          setPaymentPending(null);
+          clearCheckoutKey();
+          clearCheckoutSource();
+          clearCart();
+          return;
+        }
+      } catch {/* a later webhook/poll can still reconcile */}
+      if (!cancelled) timer = setTimeout(refresh, 4000);
+    };
+    timer = setTimeout(refresh, 1500);
+    return () => {
+      cancelled = true;
+      if (timer) clearTimeout(timer);
+    };
+  }, [paymentPending, clearCart]);
+
+  const checkoutFingerprint = useMemo(() => JSON.stringify({
+    items: items.map((item) => ({
+      id: item.productSlug ?? item.id,
+      quantity: item.quantity,
+      variant: item.variantLabel ?? null,
+      customizations: item.customizations ?? null,
+      comboSelections: item.comboSelections ?? null,
+    })),
+    coupon: couponApplied?.valid ? couponApplied.code : null,
+    contact: {
+      name: form.fullName,
+      phone: form.phone,
+      email: form.email,
+      address: form.address,
+      city: form.city,
+      notes: form.notes,
+    },
+    paymentMethod: form.paymentMethod,
+  }), [items, couponApplied, form]);
+
+  // Any material edit invalidates the mounted Preference. The same checkout
+  // key is upserted, so the database never creates a second order.
   useEffect(() => {
     if (mpReady) {
       setMpReady(null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [subtotal, discount, form.fullName, form.phone, form.address, form.city]);
+  }, [checkoutFingerprint]);
 
   // Auto-prepare when user lands on step 3 with MP selected and form is valid.
   useEffect(() => {
@@ -353,7 +443,7 @@ export default function CheckoutPage() {
       void prepareMpBrick();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [stepIndex, form.paymentMethod, step2Valid, minimumOrderMet]);
+  }, [stepIndex, form.paymentMethod, step2Valid, minimumOrderMet, checkoutFingerprint]);
 
   const goNext = () => {
     if (stepIndex === 0 && !minimumOrderMet) {
@@ -365,6 +455,33 @@ export default function CheckoutPage() {
     setStepIndex((i) => Math.min(i + 1, STEPS.length - 1));
   };
   const goBack = () => setStepIndex((i) => Math.max(i - 1, 0));
+
+  if (paymentPending) {
+    return (
+      <div className="min-h-screen pt-32 pb-12">
+        <Navbar />
+        <div className="max-w-xl mx-auto text-center px-6 py-16 relative z-10">
+          <div className="w-28 h-28 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center mx-auto mb-8">
+            <Loader2 size={46} className="animate-spin" />
+          </div>
+          <h1 className="text-5xl font-serif text-serana-forest mb-4">Pago en revisión</h1>
+          <p className="text-serana-terracotta font-bold tracking-widest uppercase text-sm mb-6">
+            {COP(paymentPending.total)} · referencia {paymentPending.paymentId}
+          </p>
+          <p className="text-xl text-gray-600 mb-5 font-light leading-relaxed">
+            Mercado Pago todavía no ha acreditado el pago. Tu pedido no ha entrado a cocina y no se enviará al sistema operativo hasta recibir la aprobación.
+          </p>
+          <p className="text-sm text-serana-forest/60 mb-10">
+            Esta pantalla se actualiza automáticamente. Conservamos tu canasta mientras llega la confirmación.
+          </p>
+          <Link to="/" className="inline-flex items-center gap-2 text-serana-forest font-bold tracking-widest uppercase text-xs border-b border-serana-forest/30 pb-1 hover:text-serana-olive">
+            Volver al inicio
+          </Link>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   // Empty cart screen (only show before confirmation)
   if (!confirmation && items.length === 0) {
@@ -409,7 +526,9 @@ export default function CheckoutPage() {
                 className="absolute inset-0 bg-serana-olive/20 rounded-full"
               />
             </div>
-            <h1 className="text-5xl md:text-6xl font-serif text-serana-forest mb-4">¡Pedido confirmado!</h1>
+            <h1 className="text-5xl md:text-6xl font-serif text-serana-forest mb-4">
+              {confirmation.kind === 'awaiting_transfer' ? 'Pedido pendiente de pago' : '¡Pedido confirmado!'}
+            </h1>
             <p className="text-serana-terracotta font-bold tracking-widest uppercase text-sm mb-6">
               Pedido #{confirmation.orderNumber} · {COP(confirmation.total)}
             </p>
@@ -420,7 +539,9 @@ export default function CheckoutPage() {
               </p>
             )}
             <p className="text-xl text-gray-600 mb-12 font-light leading-relaxed">
-              Gracias por elegir Serana. Tu pedido entró a la cocina y te escribimos por WhatsApp con cada novedad.
+              {confirmation.kind === 'awaiting_transfer'
+                ? 'Registramos tu solicitud. Te enviaremos los datos de transferencia y el pedido entrará a cocina únicamente cuando confirmemos el pago.'
+                : 'Gracias por elegir Serana. Tu pedido entró a la cocina y te escribimos por WhatsApp con cada novedad.'}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
               <Link to="/" className="inline-flex items-center gap-2 bg-serana-forest text-serana-cream px-10 py-4 rounded-full font-bold hover:bg-serana-olive transition-colors shadow-lg">
@@ -554,9 +675,10 @@ export default function CheckoutPage() {
                           publicKey={MP_PUBLIC_KEY}
                           preferenceId={mpReady.preference_id}
                           amount={mpReady.amount}
-                          orderId={mpReady.order_id}
+                          checkoutToken={mpReady.checkout_token}
                           payerEmail={form.email.trim() || undefined}
                           onApproved={handleBrickApproved}
+                          onPending={handleBrickPending}
                           onRejected={handleBrickRejected}
                         />
                       </>

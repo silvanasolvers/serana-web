@@ -4,11 +4,10 @@
 // working. In prod we serve the built dist/ folder. On top of either layer we
 // expose the small server-only API surface the public site needs:
 //
-//   POST /api/checkout/mp/preference    Create a Mercado Pago Preference for
-//                                        an order that is already in Supabase.
-//   POST /api/webhooks/mercadopago      MP notification handler — fetches the
-//                                        payment, validates it and calls the
-//                                        Supabase RPC register_payment.
+//   POST /api/checkout/mp/preference    Persist one Mercado Pago Preference
+//                                        for a non-operational checkout.
+//   POST /api/webhooks/mercadopago      Validate and reconcile authoritative
+//                                        payment state transactionally.
 //   GET  /api/health                    Used by Dokploy.
 //
 // All Mercado Pago / Supabase service-role secrets stay in env vars and never
@@ -33,11 +32,19 @@ const __dirname = path.dirname(__filename);
 // vars at the process level).
 dotenv.config({ path: path.join(__dirname, '.env.local') });
 dotenv.config({ path: path.join(__dirname, '.env') });
+if (process.env.NODE_ENV === 'production') {
+  // Public build-time values are safe to load server-side as a final fallback;
+  // Dokploy-injected secrets remain authoritative because dotenv does not
+  // override variables already present in the process environment.
+  dotenv.config({ path: path.join(__dirname, '.env.production') });
+}
 
 const PORT = Number(process.env.PORT) || 3000;
 const HOST = '0.0.0.0';
 const APP_URL = process.env.APP_URL
   ?? (process.env.NODE_ENV === 'production' ? 'https://serana.food' : `http://localhost:${PORT}`);
+const MP_WEBHOOK_URL = process.env.MP_WEBHOOK_URL?.trim()
+  || (APP_URL.startsWith('https://') ? `${APP_URL}/api/webhooks/mercadopago` : undefined);
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL ?? process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const MP_ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN;
@@ -69,30 +76,35 @@ const supabaseAdmin = SUPABASE_URL && SUPABASE_SERVICE_ROLE_KEY
     })
   : null;
 
-type OrderRow = {
-  id: string;
-  order_number: number;
-  total_amount: number | string;
-  discount_amount: number | string | null;
-  coupon_code: string | null;
-  payment_method: string | null;
-  payment_status: string;
-  status: string;
-  customer_id: string | null;
-};
-
-type CustomerRow = {
-  id: string;
-  full_name: string;
-  phone: string;
-  email: string | null;
-};
-
 type OrderItemSummary = {
   product_id: string;
   product_name: string;
   quantity: number;
   unit_price: number;
+};
+
+type CheckoutContext = {
+  checkout_id: string;
+  checkout_token: string;
+  status: string;
+  payment_method: string;
+  subtotal: number | string;
+  discount_amount: number | string;
+  delivery_fee: number | string;
+  total_amount: number | string;
+  coupon_code: string | null;
+  preference_id: string | null;
+  version: number;
+  expires_at: string;
+  order_id: string | null;
+  order_number: number | null;
+  order_status: string | null;
+  payment_status: string | null;
+  items: OrderItemSummary[];
+  attempt_key?: string;
+  attempt_status?: string;
+  provider_payment_id?: string | null;
+  status_detail?: string | null;
 };
 
 type SignupPayload = {
@@ -348,6 +360,64 @@ function isLikelyEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
+function isUuid(value: unknown): value is string {
+  return typeof value === 'string'
+    && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
+}
+
+function sanitizeCheckoutPayload(value: unknown) {
+  const payload = value && typeof value === 'object'
+    ? value as Record<string, unknown>
+    : {};
+  const rawItems = Array.isArray(payload.items) ? payload.items.slice(0, 50) : [];
+  const paymentMethod = ['mercado_pago', 'transferencia', 'efectivo'].includes(String(payload.payment_method))
+    ? String(payload.payment_method)
+    : 'mercado_pago';
+  const sourceCode = ['web', 'whatsapp_bot', 'presencial', 'telefono'].includes(String(payload.source_code))
+    ? String(payload.source_code)
+    : 'web';
+
+  return {
+    customer_phone: normalizePhone(payload.customer_phone),
+    customer_name: clippedString(payload.customer_name, 160),
+    customer_email: clippedString(payload.customer_email, 320).toLowerCase() || undefined,
+    delivery_address: clippedString(payload.delivery_address, 500),
+    notes: clippedString(payload.notes, 1000) || undefined,
+    // The public website currently supports delivery only. Financial and
+    // operational fields are deliberately not accepted from the browser.
+    type: 'domicilio',
+    payment_method: paymentMethod,
+    source_code: sourceCode,
+    coupon_code: clippedString(payload.coupon_code, 80) || undefined,
+    items: rawItems.map((raw) => {
+      const item = raw && typeof raw === 'object' ? raw as Record<string, unknown> : {};
+      return {
+        product_slug: clippedString(item.product_slug, 160) || undefined,
+        product_id: isUuid(item.product_id) ? item.product_id : undefined,
+        quantity: Math.max(1, Math.min(100, Math.trunc(Number(item.quantity) || 1))),
+        variant_label: clippedString(item.variant_label, 120) || undefined,
+        customizations: clippedString(item.customizations, 2000) || undefined,
+      };
+    }),
+  };
+}
+
+function publicCheckoutStatus(context: CheckoutContext) {
+  return {
+    status: context.status,
+    payment_method: context.payment_method,
+    payment_status: context.payment_status,
+    order_status: context.order_status,
+    order_number: context.order_number,
+    subtotal: Number(context.subtotal ?? 0),
+    discount_amount: Number(context.discount_amount ?? 0),
+    delivery_fee: Number(context.delivery_fee ?? 0),
+    total_amount: Number(context.total_amount ?? 0),
+    coupon_code: context.coupon_code,
+    expires_at: context.expires_at,
+  };
+}
+
 function signupErrorCode(error: unknown) {
   const message = error instanceof Error ? error.message : String(error ?? '');
   const lower = message.toLowerCase();
@@ -389,69 +459,6 @@ async function customerEmailExists(email: string) {
     .limit(1);
   if (error) throw error;
   return Boolean(data?.length);
-}
-
-async function fetchOrderForCheckout(orderId: string) {
-  if (!supabaseAdmin) throw new Error('supabase_admin_not_configured');
-  const { data: order, error: oErr } = await supabaseAdmin
-    .from('sales.orders'.replace('sales.', '')) // PostgREST exposes public schema; use views/RPC
-    .select('id, order_number, total_amount, discount_amount, coupon_code, payment_method, payment_status, status, customer_id')
-    .eq('id', orderId)
-    .maybeSingle();
-  if (oErr || !order) {
-    // Fall back to the public order_board_view which always exists in public schema.
-    const { data: viewRow, error: vErr } = await supabaseAdmin
-      .from('order_board_view')
-      .select(
-        'order_id, order_number, total_amount, discount_amount, coupon_code, payment_method, payment_status, status, customer_id, customer_name, customer_phone, item_summary',
-      )
-      .eq('order_id', orderId)
-      .maybeSingle();
-    if (vErr || !viewRow) {
-      throw new Error('order_not_found');
-    }
-    return {
-      order: {
-        id: viewRow.order_id as string,
-        order_number: viewRow.order_number as number,
-        total_amount: viewRow.total_amount as number,
-        discount_amount: (viewRow as any).discount_amount ?? 0,
-        coupon_code: (viewRow as any).coupon_code ?? null,
-        payment_method: viewRow.payment_method as string | null,
-        payment_status: viewRow.payment_status as string,
-        status: viewRow.status as string,
-        customer_id: viewRow.customer_id as string | null,
-      } as OrderRow,
-      customer: viewRow.customer_id
-        ? ({
-            id: viewRow.customer_id as string,
-            full_name: (viewRow.customer_name as string) ?? '',
-            phone: (viewRow.customer_phone as string) ?? '',
-            email: null,
-          } as CustomerRow)
-        : null,
-      items: (viewRow.item_summary as OrderItemSummary[] | null) ?? [],
-    };
-  }
-  // direct path
-  const customer = order.customer_id
-    ? (await supabaseAdmin
-        .from('customers_view')
-        .select('id, full_name, phone, email')
-        .eq('id', order.customer_id)
-        .maybeSingle()).data as CustomerRow | null
-    : null;
-  // items via the public board view
-  const { data: boardRow } = await supabaseAdmin
-    .from('order_board_view')
-    .select('item_summary')
-    .eq('order_id', order.id)
-    .maybeSingle();
-  return {
-    order: order as OrderRow,
-    customer,
-    items: (boardRow?.item_summary as OrderItemSummary[] | null) ?? [],
-  };
 }
 
 async function startServer() {
@@ -561,6 +568,9 @@ async function startServer() {
       status: 'ok',
       service: 'serana-web',
       mercadopago: Boolean(MP_ACCESS_TOKEN),
+      mercadopago_public_key: Boolean(process.env.VITE_MP_PUBLIC_KEY),
+      mercadopago_webhook_url: Boolean(MP_WEBHOOK_URL),
+      mercadopago_webhook_signature: Boolean(MP_WEBHOOK_SECRET),
       supabase: Boolean(supabaseAdmin),
       ai: Boolean(OLLAMA_API_KEY),
       knowledge: ['serana.food', 'serana.social'],
@@ -704,83 +714,136 @@ async function startServer() {
     res.redirect(302, '/login');
   });
 
-  // Build a Mercado Pago Preference for a Supabase order. Returns the
-  // init_point we should redirect the user to.
+  // Create or refresh an idempotent checkout session. This endpoint is the
+  // only public writer for web checkout data; the browser never chooses
+  // totals, financial state or operational state.
+  app.post('/api/checkout/session', checkoutLimiter, async (req, res) => {
+    try {
+      if (!supabaseAdmin) return res.status(500).json({ error: 'supabase_not_configured' });
+      const checkoutKey = req.body?.checkout_key;
+      if (!isUuid(checkoutKey)) return res.status(400).json({ error: 'checkout_key_invalid' });
+
+      const payload = sanitizeCheckoutPayload(req.body?.payload);
+      if (payload.customer_phone.length < 7) {
+        return res.status(400).json({ error: 'customer_phone_required' });
+      }
+      if (payload.items.length === 0) return res.status(400).json({ error: 'checkout_items_required' });
+
+      const { data, error } = await supabaseAdmin.rpc('upsert_checkout_session', {
+        p_checkout_key: checkoutKey,
+        payload,
+      });
+      if (error) {
+        const message = error.message ?? 'checkout_session_failed';
+        const status = message.includes('minimum_order_not_met') ? 422
+          : message.includes('coupon_invalid') ? 409
+            : message.includes('checkout_payment_in_progress') || message.includes('checkout_already_finalized') ? 409
+              : 400;
+        return res.status(status).json({ error: message });
+      }
+      return res.json(data as CheckoutContext);
+    } catch (err) {
+      console.error('[checkout/session] error:', err);
+      return res.status(500).json({ error: 'checkout_session_failed' });
+    }
+  });
+
+  app.post('/api/checkout/offline/confirm', checkoutLimiter, async (req, res) => {
+    try {
+      if (!supabaseAdmin) return res.status(500).json({ error: 'supabase_not_configured' });
+      const checkoutToken = req.body?.checkout_token;
+      if (!isUuid(checkoutToken)) return res.status(400).json({ error: 'checkout_token_invalid' });
+      const { data, error } = await supabaseAdmin.rpc('confirm_offline_checkout', {
+        p_checkout_token: checkoutToken,
+      });
+      if (error) {
+        console.error('[checkout/offline] failed:', error.message);
+        return res.status(409).json({ error: error.message });
+      }
+      return res.json(data as CheckoutContext);
+    } catch (err) {
+      console.error('[checkout/offline] error:', err);
+      return res.status(500).json({ error: 'offline_checkout_failed' });
+    }
+  });
+
+  app.get('/api/checkout/status/:token', checkoutLimiter, async (req, res) => {
+    try {
+      if (!supabaseAdmin) return res.status(500).json({ error: 'supabase_not_configured' });
+      const checkoutToken = req.params.token;
+      if (!isUuid(checkoutToken)) return res.status(400).json({ error: 'checkout_token_invalid' });
+      const { data, error } = await supabaseAdmin.rpc('get_checkout_context', {
+        p_checkout_token: checkoutToken,
+      });
+      if (error || !data) return res.status(404).json({ error: 'checkout_not_found' });
+      res.setHeader('Cache-Control', 'no-store');
+      return res.json(publicCheckoutStatus(data as CheckoutContext));
+    } catch (err) {
+      console.error('[checkout/status] error:', err);
+      return res.status(500).json({ error: 'checkout_status_failed' });
+    }
+  });
+
+  // Build and persist one Mercado Pago Preference per checkout version.
   app.post('/api/checkout/mp/preference', checkoutLimiter, async (req, res) => {
     try {
       if (!MP_ACCESS_TOKEN) return res.status(500).json({ error: 'mp_not_configured' });
       if (!supabaseAdmin) return res.status(500).json({ error: 'supabase_not_configured' });
 
-      const { order_id: orderId } = req.body ?? {};
-      if (!orderId || typeof orderId !== 'string') {
-        return res.status(400).json({ error: 'order_id is required' });
+      const checkoutToken = req.body?.checkout_token;
+      if (!isUuid(checkoutToken)) return res.status(400).json({ error: 'checkout_token_invalid' });
+      const { data, error } = await supabaseAdmin.rpc('get_checkout_context', {
+        p_checkout_token: checkoutToken,
+      });
+      if (error || !data) return res.status(404).json({ error: 'checkout_not_found' });
+      const checkout = data as CheckoutContext;
+      if (checkout.payment_method !== 'mercado_pago') {
+        return res.status(409).json({ error: 'checkout_not_mercado_pago' });
       }
-
-      const { order, customer, items } = await fetchOrderForCheckout(orderId);
-
-      if (order.payment_status === 'pagado') {
-        return res.status(409).json({ error: 'order_already_paid' });
+      if (checkout.order_id || ['paid', 'confirmed', 'awaiting_transfer'].includes(checkout.status)) {
+        return res.status(409).json({ error: 'checkout_already_finalized' });
       }
-
-      // If a coupon is applied, MP would otherwise charge the un-discounted
-      // sum of items. Collapse into a single line whose price equals the
-      // post-discount order total so the gateway charge always matches what
-      // the user saw at checkout.
-      const orderDiscount = Number(order.discount_amount ?? 0);
-      const orderTotal = Number(order.total_amount ?? 0);
-      if (orderTotal < MINIMUM_ORDER_TOTAL_COP) {
-        return res.status(422).json({
-          error: 'minimum_order_not_met',
-          minimum_amount: MINIMUM_ORDER_TOTAL_COP,
-          missing_amount: Math.max(MINIMUM_ORDER_TOTAL_COP - orderTotal, 0),
+      if (checkout.preference_id) {
+        return res.json({
+          preference_id: checkout.preference_id,
+          checkout_token: checkout.checkout_token,
+          amount: Number(checkout.total_amount),
         });
       }
 
-      const mpItems = orderDiscount > 0 || items.length === 0
-        ? [
-            {
-              id: order.id,
-              title: order.coupon_code
-                ? `Pedido Serana #${order.order_number} (cupón ${order.coupon_code})`
-                : `Pedido Serana #${order.order_number}`,
-              quantity: 1,
-              unit_price: orderTotal,
-              currency_id: 'COP',
-            },
-          ]
-        : items.map((it) => ({
-            id: it.product_id,
-            title: it.product_name,
-            quantity: Number(it.quantity ?? 1),
-            unit_price: Number(it.unit_price ?? 0),
-            currency_id: 'COP',
-          }));
+      const checkoutTotal = Number(checkout.total_amount ?? 0);
+      const merchandiseTotal = Number(checkout.subtotal ?? 0) - Number(checkout.discount_amount ?? 0);
+      if (merchandiseTotal < MINIMUM_ORDER_TOTAL_COP || checkoutTotal <= 0) {
+        return res.status(422).json({ error: 'minimum_order_not_met' });
+      }
 
-      // Mercado Pago refuses both `auto_return` and `notification_url` on
-      // non-HTTPS hosts, so we only enable them in production.
+      const mpItems = [{
+        id: checkout.checkout_id,
+        title: checkout.coupon_code
+          ? `Compra Serana (cupón ${checkout.coupon_code})`
+          : 'Compra Serana',
+        quantity: 1,
+        unit_price: checkoutTotal,
+        currency_id: 'COP',
+      }];
+
       const isPublicHttps = APP_URL.startsWith('https://');
+      const resultQuery = `checkout=${encodeURIComponent(checkout.checkout_token)}`;
       const preferencePayload: Record<string, unknown> = {
         items: mpItems,
-        external_reference: order.id,
-        metadata: { order_id: order.id, order_number: order.order_number },
-        payer: customer
-          ? {
-              name: customer.full_name,
-              email: customer.email ?? undefined,
-              phone: customer.phone ? { number: customer.phone } : undefined,
-            }
-          : undefined,
+        external_reference: checkout.checkout_id,
+        metadata: { checkout_id: checkout.checkout_id },
         back_urls: {
-          success: `${APP_URL}/checkout/success?order=${order.order_number}`,
-          failure: `${APP_URL}/checkout/failure?order=${order.order_number}`,
-          pending: `${APP_URL}/checkout/pending?order=${order.order_number}`,
+          success: `${APP_URL}/checkout/success?${resultQuery}`,
+          failure: `${APP_URL}/checkout/failure?${resultQuery}`,
+          pending: `${APP_URL}/checkout/pending?${resultQuery}`,
         },
         statement_descriptor: 'SERANA',
       };
       if (isPublicHttps) {
         preferencePayload.auto_return = 'approved';
-        preferencePayload.notification_url = `${APP_URL}/api/webhooks/mercadopago`;
       }
+      if (MP_WEBHOOK_URL) preferencePayload.notification_url = MP_WEBHOOK_URL;
 
       const mpResp = await fetch('https://api.mercadopago.com/checkout/preferences', {
         method: 'POST',
@@ -803,10 +866,22 @@ async function startServer() {
         sandbox_init_point?: string;
       };
 
+      const { data: stored, error: storeError } = await supabaseAdmin.rpc('store_checkout_preference', {
+        p_checkout_token: checkout.checkout_token,
+        p_preference_id: mpData.id,
+        p_expected_version: checkout.version,
+      });
+      if (storeError) {
+        console.error('[mp/preference] could not persist preference:', storeError.message);
+        return res.status(409).json({ error: storeError.message });
+      }
+
       return res.json({
         preference_id: mpData.id,
         init_point: mpData.init_point,
         sandbox_init_point: mpData.sandbox_init_point,
+        checkout_token: checkout.checkout_token,
+        amount: Number((stored as CheckoutContext).total_amount),
       });
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'unknown_error';
@@ -815,55 +890,58 @@ async function startServer() {
     }
   });
 
-  // ─────────────────────────────────────────────────────────────────────
-  // POST /api/checkout/mp/process — Bricks pay-in-place handler.
-  //
-  // The Mercado Pago Payment Brick renders the card form inside our page
-  // and tokenizes the card client-side. Its onSubmit hands us the resulting
-  // formData (token, payment_method_id, installments, payer, …). We forward
-  // that to MP's /v1/payments to capture; the gateway response tells us
-  // approved / in_process / rejected so the user gets feedback in-place.
-  //
-  // The webhook still runs on payment.created/updated so the order's
-  // payment_status becomes the source of truth even if this call times out.
   app.post('/api/checkout/mp/process', checkoutLimiter, async (req, res) => {
     try {
       if (!MP_ACCESS_TOKEN) return res.status(500).json({ error: 'mp_not_configured' });
       if (!supabaseAdmin) return res.status(500).json({ error: 'supabase_not_configured' });
 
-      const { order_id: orderId, formData, selectedPaymentMethod } = req.body ?? {};
-      if (!orderId || typeof orderId !== 'string') {
-        return res.status(400).json({ error: 'order_id is required' });
-      }
+      const { checkout_token: checkoutToken, attempt_id: attemptId, formData, selectedPaymentMethod } = req.body ?? {};
+      if (!isUuid(checkoutToken)) return res.status(400).json({ error: 'checkout_token_invalid' });
+      if (!isUuid(attemptId)) return res.status(400).json({ error: 'attempt_id_invalid' });
       if (!formData || typeof formData !== 'object') {
         return res.status(400).json({ error: 'formData is required' });
       }
 
-      const { order } = await fetchOrderForCheckout(orderId);
-      if (order.payment_status === 'pagado') {
-        return res.status(409).json({ error: 'order_already_paid' });
+      const { data: prepared, error: prepareError } = await supabaseAdmin.rpc('prepare_checkout_payment_attempt', {
+        p_checkout_token: checkoutToken,
+        p_attempt_key: attemptId,
+        p_selected_method: clippedString(selectedPaymentMethod, 80) || null,
+      });
+      if (prepareError || !prepared) {
+        return res.status(409).json({ error: prepareError?.message ?? 'checkout_not_payable' });
       }
-      const orderTotal = Number(order.total_amount ?? 0);
-      if (orderTotal < MINIMUM_ORDER_TOTAL_COP) {
-        return res.status(422).json({
-          error: 'minimum_order_not_met',
-          minimum_amount: MINIMUM_ORDER_TOTAL_COP,
-          missing_amount: Math.max(MINIMUM_ORDER_TOTAL_COP - orderTotal, 0),
+      const checkout = prepared as CheckoutContext;
+      const effectiveAttemptId = checkout.attempt_key ?? attemptId;
+      if (checkout.order_id && checkout.payment_status === 'pagado') {
+        return res.json({
+          id: checkout.provider_payment_id,
+          status: 'approved',
+          order_number: checkout.order_number,
+          checkout_status: checkout.status,
+        });
+      }
+      if (checkout.provider_payment_id && ['pending', 'approved'].includes(checkout.attempt_status ?? '')) {
+        return res.json({
+          id: checkout.provider_payment_id,
+          status: checkout.attempt_status,
+          status_detail: checkout.status_detail,
+          order_number: checkout.order_number,
+          checkout_status: checkout.status,
         });
       }
 
-      const idempotencyKey = `serana-${orderId}-${Date.now()}`;
+      const checkoutTotal = Number(checkout.total_amount ?? 0);
+
+      const idempotencyKey = `serana-mp-${effectiveAttemptId}`;
       const paymentBody: Record<string, unknown> = {
         ...formData,
-        // Force the amount + reference to match our order regardless of
-        // what the brick sent — the client is untrusted.
-        transaction_amount: orderTotal,
-        external_reference: orderId,
-        description: `Pedido Serana #${order.order_number}`,
+        transaction_amount: checkoutTotal,
+        currency_id: 'COP',
+        external_reference: checkout.checkout_id,
+        description: 'Compra Serana',
         statement_descriptor: 'SERANA',
-        notification_url: APP_URL.startsWith('https://')
-          ? `${APP_URL}/api/webhooks/mercadopago`
-          : undefined,
+        metadata: { checkout_id: checkout.checkout_id, attempt_id: effectiveAttemptId },
+        notification_url: MP_WEBHOOK_URL,
       };
 
       const mpResp = await fetch('https://api.mercadopago.com/v1/payments', {
@@ -882,33 +960,68 @@ async function startServer() {
 
       if (!mpResp.ok) {
         console.error('[mp/process] payment rejected:', mpResp.status, text.slice(0, 400));
-        return res.status(mpResp.status).json({
+        const definitive = mpResp.status >= 400 && mpResp.status < 500 && mpResp.status !== 429;
+        if (definitive) {
+          await supabaseAdmin.rpc('record_checkout_payment_attempt', {
+            p_checkout_id: checkout.checkout_id,
+            p_attempt_key: effectiveAttemptId,
+            p_provider_payment_id: mpData?.id ? String(mpData.id) : '',
+            p_status: 'rejected',
+            p_status_detail: mpData?.status_detail ?? mpData?.message ?? 'rejected',
+            p_provider_metadata: mpData,
+          });
+        }
+        return res.status(definitive ? mpResp.status : 502).json({
           error: 'mp_payment_failed',
-          status: mpData?.status ?? 'rejected',
+          retryable: !definitive,
+          status: definitive ? (mpData?.status ?? 'rejected') : 'error',
           status_detail: mpData?.status_detail ?? 'unknown',
           message: mpData?.message ?? 'No pudimos procesar el pago',
         });
       }
 
-      // For approved card payments, register immediately so the dashboard
-      // doesn't wait for the webhook. Idempotency in register_payment by
-      // transaction_id ensures the webhook later is a no-op.
-      if (mpData.status === 'approved' && selectedPaymentMethod !== 'pse') {
-        const { error: rpcErr } = await supabaseAdmin.rpc('register_payment', {
-          p_order_id: orderId,
-          p_amount: Number(mpData.transaction_amount ?? order.total_amount),
-          p_method: 'mercado_pago',
-          p_reference: orderId,
-          p_transaction_id: String(mpData.id),
+      if (mpData.status === 'approved') {
+        const { data: finalized, error: finalizeError } = await supabaseAdmin.rpc('finalize_checkout_payment', {
+          p_checkout_id: checkout.checkout_id,
+          p_attempt_key: effectiveAttemptId,
+          p_provider_payment_id: String(mpData.id),
+          p_amount: Number(mpData.transaction_amount),
+          p_currency: String(mpData.currency_id ?? 'COP'),
+          p_provider_metadata: mpData,
         });
-        if (rpcErr) console.warn('[mp/process] register_payment failed (will rely on webhook):', rpcErr.message);
+        if (finalizeError || !finalized) {
+          console.error('[mp/process] approved payment could not finalize:', finalizeError?.message);
+          return res.status(500).json({ error: 'payment_approved_reconciliation_pending', retryable: true });
+        }
+        const result = finalized as CheckoutContext;
+        return res.json({
+          id: mpData.id,
+          status: 'approved',
+          status_detail: mpData.status_detail,
+          order_number: result.order_number,
+          checkout_status: result.status,
+        });
       }
 
+      const normalizedStatus = ['pending', 'in_process', 'rejected', 'cancelled'].includes(mpData.status)
+        ? mpData.status
+        : 'error';
+      const { error: recordError } = await supabaseAdmin.rpc('record_checkout_payment_attempt', {
+        p_checkout_id: checkout.checkout_id,
+        p_attempt_key: effectiveAttemptId,
+        p_provider_payment_id: mpData?.id ? String(mpData.id) : '',
+        p_status: normalizedStatus,
+        p_status_detail: mpData.status_detail ?? null,
+        p_provider_metadata: mpData,
+      });
+      if (recordError) {
+        console.error('[mp/process] could not persist payment state:', recordError.message);
+        return res.status(500).json({ error: 'payment_state_not_persisted', retryable: true });
+      }
       return res.json({
         id: mpData.id,
-        status: mpData.status,
+        status: normalizedStatus,
         status_detail: mpData.status_detail,
-        // For PSE / bank transfer, MP returns a redirect URL the brick handles
         ...(mpData.transaction_details?.external_resource_url && {
           redirect_url: mpData.transaction_details.external_resource_url,
         }),
@@ -920,19 +1033,13 @@ async function startServer() {
     }
   });
 
-  // Mercado Pago notification endpoint. MP retries on non-2xx, so we always
-  // return 200 unless we explicitly want a retry.
-  //
-  // Signature validation (MP docs):
-  //   Header `x-signature`  → "ts=<timestamp>,v1=<hmac>"
-  //   Header `x-request-id` → request UUID
-  //   manifest = "id:<data.id>;request-id:<x-request-id>;ts:<ts>;"
-  //   v1 = HMAC-SHA256(manifest, MP_WEBHOOK_SECRET) hex
-  // We only enforce when MP_WEBHOOK_SECRET is set so dev keeps working.
+  // Mercado Pago is authoritative. Transient failures return non-2xx so the
+  // gateway retries; a 200 means the event was durably reconciled or safely
+  // ignored because it is a valid non-approved state.
   app.post('/api/webhooks/mercadopago', async (req, res) => {
     try {
       if (!MP_ACCESS_TOKEN || !supabaseAdmin) {
-        return res.status(200).send('ignored: not configured');
+        return res.status(503).send('payment integration not configured');
       }
 
       const body = req.body ?? {};
@@ -947,9 +1054,13 @@ async function startServer() {
         return res.status(200).send('ignored: not a payment topic');
       }
       if (!paymentIdRaw) {
-        return res.status(200).send('ignored: no payment id');
+        return res.status(400).send('missing payment id');
       }
 
+      if (process.env.NODE_ENV === 'production' && !MP_WEBHOOK_SECRET) {
+        console.error('[mp/webhook] MP_WEBHOOK_SECRET is required in production');
+        return res.status(503).send('webhook signature not configured');
+      }
       if (MP_WEBHOOK_SECRET) {
         const sigHeader = String(req.headers['x-signature'] ?? '');
         const requestId = String(req.headers['x-request-id'] ?? '');
@@ -988,46 +1099,85 @@ async function startServer() {
       });
       if (!paymentResp.ok) {
         console.warn('[mp/webhook] could not fetch payment', paymentIdRaw, paymentResp.status);
-        return res.status(200).send('ack');
+        return res.status(502).send('payment lookup failed');
       }
       const payment = (await paymentResp.json()) as {
         id: number | string;
         status: string;
+        status_detail?: string;
         transaction_amount: number;
         external_reference?: string;
         currency_id?: string;
-        payer?: { email?: string };
+        metadata?: { attempt_id?: string };
       };
 
-      // Only act on approved payments. pending/in_process/rejected we just log.
+      const checkoutId = payment.external_reference;
+      if (!isUuid(checkoutId)) {
+        console.warn('[mp/webhook] payment', payment.id, 'has invalid external_reference');
+        return res.status(422).send('invalid external_reference');
+      }
+
+      const attemptKey = isUuid(payment.metadata?.attempt_id) ? payment.metadata?.attempt_id : null;
       if (payment.status !== 'approved') {
-        console.log('[mp/webhook] payment', payment.id, 'status', payment.status, '— skipping register_payment');
+        const trackedStatus = ['pending', 'in_process', 'rejected', 'cancelled'].includes(payment.status)
+          ? payment.status
+          : null;
+        if (trackedStatus && attemptKey) {
+          const { error: recordError } = await supabaseAdmin.rpc('record_checkout_payment_attempt', {
+            p_checkout_id: checkoutId,
+            p_attempt_key: attemptKey,
+            p_provider_payment_id: String(payment.id),
+            p_status: trackedStatus,
+            p_status_detail: payment.status_detail ?? null,
+            p_provider_metadata: payment,
+          });
+          if (recordError) {
+            console.error('[mp/webhook] could not persist non-approved state:', recordError.message);
+            return res.status(500).send('payment state not persisted');
+          }
+        }
+        console.log('[mp/webhook] payment', payment.id, 'status', payment.status, '— no operational order');
         return res.status(200).send('ack');
       }
 
-      const orderId = payment.external_reference;
-      if (!orderId) {
-        console.warn('[mp/webhook] payment', payment.id, 'has no external_reference');
-        return res.status(200).send('ack: no external_reference');
-      }
-
-      const { error: rpcErr, data: paymentRowId } = await supabaseAdmin.rpc('register_payment', {
-        p_order_id: orderId,
+      const { error: rpcErr, data: checkoutResult } = await supabaseAdmin.rpc('finalize_checkout_payment', {
+        p_checkout_id: checkoutId,
+        p_attempt_key: attemptKey,
+        p_provider_payment_id: String(payment.id),
         p_amount: Number(payment.transaction_amount),
-        p_method: 'mercado_pago',
-        p_reference: payment.external_reference ?? null,
-        p_transaction_id: String(payment.id),
+        p_currency: String(payment.currency_id ?? ''),
+        p_provider_metadata: payment,
       });
       if (rpcErr) {
-        console.error('[mp/webhook] register_payment failed:', rpcErr.message);
-      } else {
-        console.log('[mp/webhook] booked payment', payment.id, '-> sales.payments', paymentRowId);
+        // A checkout-v1 payment can be approved after checkout-v2 deploys.
+        // Its external_reference is the pre-created order UUID, not a checkout
+        // session UUID, so reconcile it through the tightly scoped legacy RPC.
+        if (rpcErr.message.includes('checkout_not_found')) {
+          const { error: legacyError, data: legacyResult } = await supabaseAdmin.rpc(
+            'finalize_legacy_mercadopago_payment',
+            {
+              p_order_id: checkoutId,
+              p_provider_payment_id: String(payment.id),
+              p_amount: Number(payment.transaction_amount),
+              p_currency: String(payment.currency_id ?? ''),
+              p_provider_metadata: payment,
+            },
+          );
+          if (!legacyError) {
+            console.log('[mp/webhook] reconciled legacy payment', payment.id, '-> order', legacyResult);
+            return res.status(200).send('ack');
+          }
+          console.error('[mp/webhook] legacy reconciliation failed:', legacyError.message);
+        } else {
+          console.error('[mp/webhook] reconciliation failed:', rpcErr.message);
+        }
+        return res.status(500).send('reconciliation failed');
       }
-
+      console.log('[mp/webhook] reconciled payment', payment.id, '-> order', (checkoutResult as CheckoutContext)?.order_number);
       return res.status(200).send('ack');
     } catch (err) {
       console.error('[mp/webhook] handler error:', err);
-      return res.status(200).send('ack');
+      return res.status(500).send('webhook processing failed');
     }
   });
 

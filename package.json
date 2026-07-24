@@ -7,6 +7,7 @@
     "dev": "tsx server.ts",
     "build": "vite build",
     "images:sync": "node scripts/sync-catalog-images.mjs",
+    "prices:generate": "tsx scripts/generate-checkout-price-migration.ts",
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
