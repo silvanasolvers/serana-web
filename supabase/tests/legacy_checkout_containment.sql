@@ -1,4 +1,4 @@
--- Run after migrations 001 and 002 inside BEGIN/ROLLBACK.
+-- Run after all checkout/payment migrations inside BEGIN/ROLLBACK.
 do $$
 declare
   v_slug text;
@@ -60,7 +60,7 @@ begin
     raise exception 'legacy_mp_not_promoted_after_payment';
   end if;
   select count(*) into v_count from integration.erp_order_outbox where aggregate_id = v_order_id;
-  if v_count <> 1 then raise exception 'legacy_mp_expected_one_erp_event'; end if;
+  if v_count <> 0 then raise exception 'legacy_mp_used_disabled_erp_outbox'; end if;
   select count(*) into v_count from sales.payments
   where order_id = v_order_id and transaction_id = 'legacy-mp-001';
   if v_count <> 1 then raise exception 'legacy_mp_payment_not_idempotent'; end if;

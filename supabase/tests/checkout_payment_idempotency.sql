@@ -1,4 +1,4 @@
--- Run after 20260722_001_checkout_payment_idempotency.sql inside a transaction.
+-- Run after all checkout/payment migrations inside a transaction.
 -- The test runner wraps this in BEGIN/ROLLBACK, so no synthetic rows persist.
 
 do $$
@@ -16,15 +16,31 @@ declare
   v_pending jsonb;
   v_paid jsonb;
   v_replayed jsonb;
+  v_duplicate jsonb;
   v_checkout_id uuid;
   v_order_id uuid;
   v_total numeric;
   v_count integer;
+  v_has_recipe boolean;
 begin
-  select slug, price into v_slug, v_price
-  from catalog.products
-  where active = true and price > 0 and slug is not null
-  order by price desc
+  select
+    p.slug,
+    p.price,
+    exists (
+      select 1
+      from catalog.product_recipes pr
+      where pr.product_id = p.id
+    )
+  into v_slug, v_price, v_has_recipe
+  from catalog.products p
+  where p.active = true and p.price > 0 and p.slug is not null
+  order by
+    exists (
+      select 1
+      from catalog.product_recipes pr
+      where pr.product_id = p.id
+    ) desc,
+    p.price desc
   limit 1;
   if v_slug is null then raise exception 'test_requires_active_catalog_product'; end if;
   v_quantity := greatest(1, ceil(50000 / v_price)::integer);
@@ -90,12 +106,52 @@ begin
   end if;
   v_order_id := (v_paid->>'order_id')::uuid;
 
+  v_duplicate := public.finalize_checkout_payment(
+    v_checkout_id,
+    v_attempt,
+    'test-payment-002',
+    v_total,
+    'COP',
+    '{"duplicate_test":true}'::jsonb
+  );
+  if coalesce((v_duplicate->>'duplicate_payment')::boolean, false) is not true then
+    raise exception 'distinct_second_approval_not_flagged';
+  end if;
+
   select count(*) into v_count from sales.orders where id = v_order_id;
   if v_count <> 1 then raise exception 'expected_exactly_one_order'; end if;
-  select count(*) into v_count from sales.payments where transaction_id = 'test-payment-001';
+  select count(*) into v_count from sales.payments where order_id = v_order_id;
   if v_count <> 1 then raise exception 'expected_exactly_one_payment'; end if;
+  select count(*) into v_count
+  from sales.payment_reconciliation_incidents
+  where checkout_session_id = v_checkout_id
+    and provider_payment_id = 'test-payment-002'
+    and status = 'open';
+  if v_count <> 1 then raise exception 'duplicate_payment_incident_missing'; end if;
+  select count(*) into v_count
+  from sales.payment_attempts
+  where checkout_session_id = v_checkout_id
+    and provider_payment_id = 'test-payment-001';
+  if v_count <> 1 then raise exception 'original_payment_attempt_was_overwritten'; end if;
   select count(*) into v_count from integration.erp_order_outbox where aggregate_id = v_order_id;
-  if v_count <> 1 then raise exception 'expected_exactly_one_erp_event'; end if;
+  if v_count <> 0 then raise exception 'checkout_used_disabled_erp_outbox'; end if;
+
+  perform sales.advance_order_status(
+    v_order_id,
+    'en_preparacion',
+    '{"test":"atomic_inventory"}'::jsonb
+  );
+  perform sales.advance_order_status(
+    v_order_id,
+    'en_preparacion',
+    '{"test":"idempotent_inventory_replay"}'::jsonb
+  );
+  if v_has_recipe then
+    select count(*) into v_count
+    from inventory.order_inventory_consumptions
+    where order_id = v_order_id;
+    if v_count <> 1 then raise exception 'inventory_consumption_not_atomic'; end if;
+  end if;
 end;
 $$;
 
@@ -149,20 +205,37 @@ begin
   end;
 
   v_payment_id := sales.register_payment(
-    v_order_id, v_total, 'transferencia', 'manual-test', 'test-transfer-001'
+    v_order_id,
+    v_total,
+    'transferencia',
+    'dashboard_manual_settlement',
+    'manual-settlement:' || v_order_id::text
   );
   perform sales.register_payment(
-    v_order_id, v_total, 'transferencia', 'manual-test', 'test-transfer-001'
+    v_order_id,
+    v_total,
+    'transferencia',
+    'dashboard_manual_settlement',
+    'manual-settlement:' || v_order_id::text
+  );
+  perform sales.register_payment(
+    v_order_id,
+    v_total,
+    'transferencia',
+    'old_dashboard_retry',
+    null
   );
   select status, payment_status into v_status, v_payment_status
   from sales.orders where id = v_order_id;
   if v_status <> 'recibido' or v_payment_status <> 'pagado' then
     raise exception 'paid_transfer_not_promoted';
   end if;
-  select count(*) into v_count from sales.payments where id = v_payment_id;
+  select count(*) into v_count
+  from sales.payments
+  where order_id = v_order_id;
   if v_count <> 1 then raise exception 'manual_payment_not_idempotent'; end if;
   select count(*) into v_count from integration.erp_order_outbox where aggregate_id = v_order_id;
-  if v_count <> 1 then raise exception 'paid_transfer_expected_one_erp_event'; end if;
+  if v_count <> 0 then raise exception 'paid_transfer_used_disabled_erp_outbox'; end if;
 end;
 $$;
 

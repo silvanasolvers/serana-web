@@ -105,6 +105,8 @@ type CheckoutContext = {
   attempt_status?: string;
   provider_payment_id?: string | null;
   status_detail?: string | null;
+  duplicate_payment?: boolean;
+  duplicate_provider_payment_id?: string | null;
 };
 
 type SignupPayload = {
@@ -994,12 +996,23 @@ async function startServer() {
           return res.status(500).json({ error: 'payment_approved_reconciliation_pending', retryable: true });
         }
         const result = finalized as CheckoutContext;
+        if (result.duplicate_payment) {
+          console.error(
+            '[mp/process] duplicate approved payment requires review:',
+            result.duplicate_provider_payment_id ?? mpData.id,
+            'checkout',
+            checkout.checkout_id,
+          );
+        }
         return res.json({
           id: mpData.id,
           status: 'approved',
           status_detail: mpData.status_detail,
           order_number: result.order_number,
           checkout_status: result.status,
+          ...(result.duplicate_payment && {
+            reconciliation: 'duplicate_payment_review',
+          }),
         });
       }
 
@@ -1172,6 +1185,14 @@ async function startServer() {
           console.error('[mp/webhook] reconciliation failed:', rpcErr.message);
         }
         return res.status(500).send('reconciliation failed');
+      }
+      if ((checkoutResult as CheckoutContext)?.duplicate_payment) {
+        console.error(
+          '[mp/webhook] duplicate approved payment requires review:',
+          payment.id,
+          'checkout',
+          checkoutId,
+        );
       }
       console.log('[mp/webhook] reconciled payment', payment.id, '-> order', (checkoutResult as CheckoutContext)?.order_number);
       return res.status(200).send('ack');
