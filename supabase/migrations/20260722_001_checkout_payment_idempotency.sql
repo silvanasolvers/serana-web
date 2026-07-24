@@ -325,6 +325,13 @@ begin
     raise exception 'checkout_payment_in_progress';
   end if;
 
+  -- A network retry with the exact same draft must be a true no-op. Keeping
+  -- the version and preference stable prevents duplicate Mercado Pago
+  -- preferences when the first HTTP response was lost after commit.
+  if v_session.status = 'draft' and v_session.payload_fingerprint = v_fingerprint then
+    return sales._checkout_result(v_session.id);
+  end if;
+
   delete from sales.checkout_session_items where checkout_session_id = v_session.id;
 
   for v_item in select * from jsonb_array_elements(payload->'items')

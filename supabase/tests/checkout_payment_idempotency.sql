@@ -48,6 +48,9 @@ begin
   if v_first->>'checkout_id' <> v_second->>'checkout_id' then
     raise exception 'same_checkout_key_created_two_sessions';
   end if;
+  if v_first->>'version' <> v_second->>'version' then
+    raise exception 'identical_checkout_retry_changed_version';
+  end if;
   if v_first->>'order_id' is not null then
     raise exception 'draft_checkout_created_operational_order';
   end if;
