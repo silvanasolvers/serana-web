@@ -29,7 +29,33 @@ export interface Product {
   isSubscription?: boolean;
   customizations?: string;
   comboSelections?: ComboSelectionPayload;
+  comboConfiguration?: ComboDefinition;
 }
+
+export type ComboOptionSource = {
+  categories?: string[];
+  slugs?: string[];
+  excludeSlugs?: string[];
+};
+
+export type ComboGroupDefinition = {
+  id: string;
+  label: string;
+  shortLabel: string;
+  helper: string;
+  max: number;
+  min?: number;
+  unitLabel?: string;
+  maxPerOption?: number;
+  perOptionMax?: Record<string, number>;
+  source: ComboOptionSource;
+};
+
+export type ComboDefinition = {
+  slug: string;
+  groups: ComboGroupDefinition[];
+  fixedItems?: string[];
+};
 
 export interface ComboSelectionPayload {
   version: 1;

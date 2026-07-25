@@ -1,7 +1,5 @@
 import { supabase, isSupabaseConfigured } from '../supabase';
-import type { Product } from '../../store/useCartStore';
-import { products as staticProducts } from '../../data/products';
-import { PRICE_LIST_PROFILES } from '../../data/priceListProfiles';
+import type { ComboDefinition, Product } from '../../store/useCartStore';
 import {
   CATALOG_IMAGE_MANIFEST_URL,
   type CatalogImageManifest,
@@ -19,6 +17,13 @@ type ProductRow = {
   active: boolean;
   category_code: string | null;
   category_name: string | null;
+  benefits: string[] | null;
+  health_benefit: string | null;
+  observation: string | null;
+  portions: string | null;
+  public_ingredients: string[] | null;
+  option_groups: Record<string, string[]> | null;
+  combo_configuration: ComboDefinition | null;
 };
 
 type CheckoutPriceRow = {
@@ -33,34 +38,6 @@ type CheckoutPriceProfile = {
   defaultPrice?: number;
   variants: Array<{ label: string; price: number }>;
 };
-
-const FALLBACK_BENEFITS = ['Fresco', 'Natural', 'Sin conservantes'];
-const STATIC_BY_ID = new Map(staticProducts.map((product) => [product.id, product]));
-
-function normalizeUnitLabel(name: string) {
-  return name
-    .replace(/\s*\(Unidad\)/gi, ' (Libra)')
-    .replace(/\s*\(3 unidades\)/gi, ' (Libra)');
-}
-
-function inferStorefrontCategory(row: ProductRow) {
-  const code = row.category_code ?? 'otros';
-  const text = `${row.slug ?? ''} ${row.name ?? ''} ${row.description ?? ''}`.toLowerCase();
-
-  if (code === 'frutas') {
-    return text.includes('picad') || text.includes('baby bowl') || text.includes('bowl')
-      ? 'frutas-picadas'
-      : 'mercado-fresco';
-  }
-  if (code === 'verduras') {
-    return text.includes('picad') || text.includes('baby bowl') || text.includes('bowl')
-      ? 'verduras-picadas'
-      : 'mercado-fresco';
-  }
-  if (code === 'ensaladas') return 'ensaladas-tradicionales';
-  if (code === 'bowls') return text.includes('frut') || text.includes('berry') ? 'frutas-picadas' : 'verduras-picadas';
-  return code;
-}
 
 function arraysEqual(left: string[], right: string[]) {
   return left.length === right.length && left.every((value, index) => value === right[index]);
@@ -92,9 +69,6 @@ function rowToProduct(
   // The cart store uses slug as id so cart entries survive when the UUID changes.
   // Falls back to UUID for catalogue rows that don't have a slug yet.
   const id = row.slug ?? row.id;
-  const staticMatch = STATIC_BY_ID.get(id);
-  const profile = PRICE_LIST_PROFILES[id];
-  const hasProfile = Boolean(profile);
   const imageEntry = getCurrentImageEntry(row, manifest);
   const databaseGallery = row.gallery_urls ?? [];
   const optimizedGallery = imageEntry && arraysEqual(imageEntry.gallerySources, databaseGallery)
@@ -102,23 +76,21 @@ function rowToProduct(
     : databaseGallery;
 
   return {
-    ...(staticMatch ?? {}),
-    ...(profile ?? {}),
     id,
-    name: profile?.name ?? normalizeUnitLabel(row.name || staticMatch?.name || ''),
-    price: Number(checkoutPrice?.defaultPrice ?? profile?.price ?? row.price ?? staticMatch?.price ?? 0),
-    description: profile?.description ?? row.description ?? staticMatch?.description ?? '',
+    name: row.name,
+    price: Number(checkoutPrice?.defaultPrice ?? row.price ?? 0),
+    description: row.description ?? '',
     image: imageEntry?.desktop ?? row.image_url ?? '',
     gallery: optimizedGallery,
-    category: profile?.category ?? inferStorefrontCategory(row) ?? staticMatch?.category ?? 'otros',
-    benefits: profile?.benefits ?? staticMatch?.benefits ?? FALLBACK_BENEFITS,
-    healthBenefit: profile?.healthBenefit ?? staticMatch?.healthBenefit,
-    observation: profile?.observation ?? staticMatch?.observation,
-    portions: profile?.portions ?? staticMatch?.portions,
-    ingredients: profile?.ingredients ?? staticMatch?.ingredients,
-    variants: checkoutPrice?.variants.length
-      ? checkoutPrice.variants
-      : hasProfile ? profile?.variants : staticMatch?.variants,
+    category: row.category_code ?? 'otros',
+    benefits: row.benefits ?? [],
+    healthBenefit: row.health_benefit ?? undefined,
+    observation: row.observation ?? undefined,
+    portions: row.portions ?? undefined,
+    ingredients: row.public_ingredients ?? [],
+    variantes: row.option_groups ?? undefined,
+    variants: checkoutPrice?.variants ?? [],
+    comboConfiguration: row.combo_configuration ?? undefined,
   };
 }
 
@@ -127,7 +99,7 @@ export async function listProducts(): Promise<Product[]> {
   const [{ data, error }, { data: priceRows, error: priceError }, manifest] = await Promise.all([
     supabase
       .from('products_public_view')
-      .select('id, slug, name, description, price, image_url, gallery_urls, active, category_code, category_name')
+      .select('id, slug, name, description, price, image_url, gallery_urls, active, category_code, category_name, benefits, health_benefit, observation, portions, public_ingredients, option_groups, combo_configuration')
       .eq('active', true)
       .order('name', { ascending: true }),
     supabase
