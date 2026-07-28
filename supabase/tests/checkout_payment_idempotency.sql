@@ -191,8 +191,11 @@ begin
 
   select status, payment_status into v_status, v_payment_status
   from sales.orders where id = v_order_id;
-  if v_status <> 'esperando_pago' or v_payment_status <> 'pendiente' then
-    raise exception 'transfer_became_operational_before_payment';
+  if v_status <> 'recibido' or v_payment_status <> 'pendiente' then
+    raise exception 'transfer_not_visible_in_erp_as_pending';
+  end if;
+  if v_order->>'status' <> 'awaiting_transfer' then
+    raise exception 'transfer_checkout_lost_pending_confirmation_state';
   end if;
   select count(*) into v_count
   from sales.payments
