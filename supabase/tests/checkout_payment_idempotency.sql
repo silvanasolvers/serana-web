@@ -316,6 +316,40 @@ begin
   if v_count <> 1 then
     raise exception 'cash_payment_intent_not_visible_to_erp';
   end if;
+
+  perform sales.register_payment(
+    v_order_id,
+    v_total,
+    'efectivo',
+    'dashboard_manual_settlement',
+    'manual-settlement:' || v_order_id::text
+  );
+  perform sales.register_payment(
+    v_order_id,
+    v_total,
+    'efectivo',
+    'dashboard_manual_settlement',
+    'manual-settlement:' || v_order_id::text
+  );
+
+  select count(*) into v_count
+  from sales.payments
+  where order_id = v_order_id
+    and method = 'efectivo'
+    and status = 'pagado'
+    and amount = v_total
+    and transaction_id = 'manual-settlement:' || v_order_id::text;
+  if v_count <> 1 then
+    raise exception 'cash_payment_settlement_not_idempotent';
+  end if;
+
+  select count(*) into v_count
+  from sales.payments
+  where order_id = v_order_id
+    and status = 'pendiente';
+  if v_count <> 0 then
+    raise exception 'settled_cash_kept_pending_payment_intent';
+  end if;
 end;
 $$;
 
