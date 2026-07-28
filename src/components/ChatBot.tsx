@@ -636,7 +636,7 @@ export default function ChatBot() {
   return (
     <>
       <div
-        className={`fixed bottom-4 right-4 z-50 flex-col items-end pointer-events-none sm:bottom-6 sm:right-6 ${
+        className={`fixed bottom-4 left-4 z-50 flex-col items-start pointer-events-none sm:bottom-6 sm:left-6 ${
           isCompactFlow ? 'hidden sm:flex' : 'flex'
         }`}
       >
@@ -656,7 +656,7 @@ export default function ChatBot() {
                   rel="noopener noreferrer"
                   aria-label={label}
                   title={label}
-                  initial={{ opacity: 0, x: 12 }}
+                  initial={{ opacity: 0, x: -12 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: idx * 0.04 }}
                   className="flex h-11 w-11 items-center justify-center rounded-full border border-serana-forest/10 bg-white text-serana-forest shadow-lg transition-colors hover:bg-serana-ochre hover:text-serana-forest"
@@ -671,13 +671,13 @@ export default function ChatBot() {
         <AnimatePresence>
           {!isOpen && hasUnread && (
             <motion.div
-              initial={{ opacity: 0, x: 20, scale: 0.8 }}
+              initial={{ opacity: 0, x: -20, scale: 0.8 }}
               animate={{ opacity: 1, x: 0, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
-              className="relative mb-2 mr-1 hidden rounded-2xl rounded-br-none border border-gray-100 bg-white px-3 py-2 text-xs font-medium text-gray-800 shadow-lg pointer-events-auto sm:block"
+              className="relative mb-2 ml-1 hidden rounded-2xl rounded-bl-none border border-gray-100 bg-white px-3 py-2 text-xs font-medium text-gray-800 shadow-lg pointer-events-auto sm:block"
             >
               <p>Te ayudo a elegir y comprar</p>
-              <div className="absolute -bottom-1.5 right-0 h-2.5 w-2.5 rotate-45 border-b border-r border-gray-100 bg-white" />
+              <div className="absolute -bottom-1.5 left-0 h-2.5 w-2.5 rotate-45 border-b border-l border-gray-100 bg-white" />
             </motion.div>
           )}
         </AnimatePresence>
@@ -702,10 +702,10 @@ export default function ChatBot() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95, x: 20 }}
+            initial={{ opacity: 0, y: 20, scale: 0.95, x: -20 }}
             animate={{ opacity: 1, y: 0, scale: 1, x: 0 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95, x: 20 }}
-            className="fixed inset-x-3 bottom-[calc(6rem+env(safe-area-inset-bottom))] z-50 flex h-[min(440px,calc(100svh-12rem))] min-h-0 flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-2xl sm:inset-x-auto sm:right-6 sm:h-[min(560px,calc(100svh-8rem))] sm:w-[420px]"
+            exit={{ opacity: 0, y: 20, scale: 0.95, x: -20 }}
+            className="fixed inset-x-3 bottom-[calc(6rem+env(safe-area-inset-bottom))] z-50 flex h-[min(440px,calc(100svh-12rem))] min-h-0 flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-2xl sm:inset-x-auto sm:left-6 sm:h-[min(560px,calc(100svh-8rem))] sm:w-[420px]"
           >
             <div className="shrink-0 flex items-center gap-3 bg-serana-forest p-4">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10">
