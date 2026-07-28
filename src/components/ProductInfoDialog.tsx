@@ -319,7 +319,7 @@ export default function ProductInfoDialog({
                       {COP(productForCart.price)}
                     </p>
                   </div>
-                  <div className="flex justify-start sm:justify-end">
+                  <div className="flex justify-end">
                     <ComboCartControl product={productForCart} allProducts={allProducts} variant="dark" fullWidth />
                   </div>
                 </div>

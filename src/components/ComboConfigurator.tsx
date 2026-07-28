@@ -44,7 +44,15 @@ export function ComboCartControl({
     }, 0),
   );
 
-  if (!definition) return <QuantityControl product={product} variant={variant} />;
+  if (!definition) {
+    return (
+      <QuantityControl
+        product={product}
+        variant={variant}
+        showAddLabel={fullWidth}
+      />
+    );
+  }
 
   const stop = (event: React.MouseEvent) => {
     event.stopPropagation();

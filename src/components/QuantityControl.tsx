@@ -16,9 +16,11 @@ type Variant = 'dark' | 'soft';
 export default function QuantityControl({
   product,
   variant = 'dark',
+  showAddLabel = false,
 }: {
   product: Product;
   variant?: Variant;
+  showAddLabel?: boolean;
 }) {
   const items = useCartStore((s) => s.items);
   const addItem = useCartStore((s) => s.addItem);
@@ -33,7 +35,7 @@ export default function QuantityControl({
   };
 
   return (
-    <div className="relative h-9 flex items-center" onClick={stop}>
+    <div className={`relative flex items-center ${showAddLabel ? 'h-11' : 'h-9'}`} onClick={stop}>
       <AnimatePresence mode="wait" initial={false}>
         {qty === 0 ? (
           <motion.button
@@ -50,11 +52,16 @@ export default function QuantityControl({
             aria-label={`Agregar ${product.name}`}
             className={
               variant === 'dark'
-                ? 'w-9 h-9 rounded-full bg-serana-forest text-serana-cream flex items-center justify-center hover:bg-serana-olive transition-colors active:scale-90'
-                : 'w-9 h-9 rounded-full bg-serana-forest/10 text-serana-forest flex items-center justify-center hover:bg-serana-forest hover:text-serana-cream transition-colors active:scale-90'
+                ? `${showAddLabel ? 'h-11 min-w-[132px] gap-2 px-5' : 'h-9 w-9'} rounded-full bg-serana-forest text-serana-cream flex items-center justify-center hover:bg-serana-olive transition-colors active:scale-95`
+                : `${showAddLabel ? 'h-11 min-w-[132px] gap-2 px-5' : 'h-9 w-9'} rounded-full bg-serana-forest/10 text-serana-forest flex items-center justify-center hover:bg-serana-forest hover:text-serana-cream transition-colors active:scale-95`
             }
           >
             <Plus className="w-4 h-4" />
+            {showAddLabel && (
+              <span className="text-[11px] font-black uppercase tracking-[0.18em]">
+                Agregar
+              </span>
+            )}
           </motion.button>
         ) : (
           <motion.div
