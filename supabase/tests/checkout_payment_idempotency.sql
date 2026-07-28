@@ -23,6 +23,21 @@ declare
   v_count integer;
   v_has_recipe boolean;
 begin
+  if has_function_privilege(
+    'anon',
+    'public.list_stale_mercadopago_attempts(integer)',
+    'EXECUTE'
+  ) then
+    raise exception 'anon_can_list_stale_mercadopago_attempts';
+  end if;
+  if not has_function_privilege(
+    'service_role',
+    'public.list_stale_mercadopago_attempts(integer)',
+    'EXECUTE'
+  ) then
+    raise exception 'service_role_cannot_list_stale_mercadopago_attempts';
+  end if;
+
   select
     p.slug,
     p.price,

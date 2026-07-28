@@ -22,7 +22,18 @@ import dotenv from 'dotenv';
 import helmet from 'helmet';
 import compression from 'compression';
 import rateLimit from 'express-rate-limit';
-import crypto from 'crypto';
+import {
+  MercadoPagoConfig,
+  InvalidWebhookSignatureError,
+  Payment,
+  WebhookSignatureValidator,
+} from 'mercadopago';
+import {
+  buildMercadoPagoPaymentBody,
+  normalizeMercadoPagoApiError,
+  PaymentPayloadError,
+  safeMercadoPagoRedirectUrl,
+} from './server/mercadopago.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -74,6 +85,12 @@ const supabaseAdmin = SUPABASE_URL && SUPABASE_SERVICE_ROLE_KEY
   ? createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
       auth: { persistSession: false, autoRefreshToken: false },
     })
+  : null;
+const mercadoPagoPayments = MP_ACCESS_TOKEN
+  ? new Payment(new MercadoPagoConfig({
+      accessToken: MP_ACCESS_TOKEN,
+      options: { timeout: 10_000 },
+    }))
   : null;
 
 type OrderItemSummary = {
@@ -365,6 +382,219 @@ function isLikelyEmail(value: string) {
 function isUuid(value: unknown): value is string {
   return typeof value === 'string'
     && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
+}
+
+type MercadoPagoPaymentResource = {
+  id?: number | string;
+  status?: string;
+  status_detail?: string;
+  transaction_amount?: number;
+  external_reference?: string;
+  currency_id?: string;
+  metadata?: {
+    attempt_id?: string;
+    checkout_id?: string;
+  };
+  transaction_details?: {
+    external_resource_url?: string;
+  };
+};
+
+type ReconciledPayment = {
+  checkout: CheckoutContext | null;
+  status: string;
+  duplicatePayment: boolean;
+  legacy: boolean;
+};
+
+async function reconcileMercadoPagoPayment(
+  payment: MercadoPagoPaymentResource,
+  options: { allowLegacy: boolean },
+): Promise<ReconciledPayment> {
+  if (!supabaseAdmin) throw new Error('supabase_not_configured');
+  if (payment.id === undefined || payment.id === null) {
+    throw new Error('provider_payment_id_missing');
+  }
+  const providerPaymentId = String(payment.id);
+  const checkoutId = payment.external_reference;
+  if (!isUuid(checkoutId)) throw new Error('invalid_external_reference');
+  if (
+    payment.metadata?.checkout_id
+    && payment.metadata.checkout_id !== checkoutId
+  ) {
+    throw new Error('payment_metadata_checkout_mismatch');
+  }
+
+  const attemptKey = isUuid(payment.metadata?.attempt_id)
+    ? payment.metadata.attempt_id
+    : null;
+  const status = String(payment.status ?? 'error');
+
+  if (status !== 'approved') {
+    const trackedStatus = ['pending', 'in_process', 'rejected', 'cancelled'].includes(status)
+      ? status
+      : null;
+    if (trackedStatus && attemptKey) {
+      const { error } = await supabaseAdmin.rpc('record_checkout_payment_attempt', {
+        p_checkout_id: checkoutId,
+        p_attempt_key: attemptKey,
+        p_provider_payment_id: providerPaymentId,
+        p_status: trackedStatus,
+        p_status_detail: payment.status_detail ?? null,
+        p_provider_metadata: payment,
+      });
+      if (error) throw new Error(`payment_state_not_persisted:${error.message}`);
+    }
+    return {
+      checkout: null,
+      status,
+      duplicatePayment: false,
+      legacy: false,
+    };
+  }
+
+  const amount = Number(payment.transaction_amount);
+  const currency = String(payment.currency_id ?? '');
+  if (!Number.isFinite(amount) || amount <= 0) {
+    throw new Error('provider_payment_amount_invalid');
+  }
+
+  const { error, data } = await supabaseAdmin.rpc('finalize_checkout_payment', {
+    p_checkout_id: checkoutId,
+    p_attempt_key: attemptKey,
+    p_provider_payment_id: providerPaymentId,
+    p_amount: amount,
+    p_currency: currency,
+    p_provider_metadata: payment,
+  });
+  if (!error && data) {
+    const checkout = data as CheckoutContext;
+    return {
+      checkout,
+      status,
+      duplicatePayment: Boolean(checkout.duplicate_payment),
+      legacy: false,
+    };
+  }
+
+  if (options.allowLegacy && error?.message.includes('checkout_not_found')) {
+    const { error: legacyError, data: legacyResult } = await supabaseAdmin.rpc(
+      'finalize_legacy_mercadopago_payment',
+      {
+        p_order_id: checkoutId,
+        p_provider_payment_id: providerPaymentId,
+        p_amount: amount,
+        p_currency: currency,
+        p_provider_metadata: payment,
+      },
+    );
+    if (!legacyError) {
+      return {
+        checkout: null,
+        status,
+        duplicatePayment: false,
+        legacy: true,
+      };
+    }
+    throw new Error(`legacy_reconciliation_failed:${legacyError.message}`);
+  }
+  throw new Error(`payment_reconciliation_failed:${error?.message ?? 'unknown'}`);
+}
+
+type StaleMercadoPagoAttempt = {
+  checkout_id: string;
+  attempt_key: string;
+  provider_payment_id?: string | null;
+  status: string;
+  updated_at: string;
+};
+
+let mercadoPagoReconcilerRunning = false;
+
+async function reconcileStaleMercadoPagoAttempts() {
+  if (mercadoPagoReconcilerRunning || !supabaseAdmin || !mercadoPagoPayments) return;
+  mercadoPagoReconcilerRunning = true;
+  try {
+    const { data, error } = await supabaseAdmin.rpc('list_stale_mercadopago_attempts', {
+      p_limit: 25,
+    });
+    if (error) {
+      console.warn('[mp/reconciler] could not load stale attempts:', error.message);
+      return;
+    }
+    const attempts = Array.isArray(data) ? data as StaleMercadoPagoAttempt[] : [];
+    for (const attempt of attempts) {
+      if (!isUuid(attempt.checkout_id) || !isUuid(attempt.attempt_key)) continue;
+      try {
+        let payment: MercadoPagoPaymentResource | null = null;
+        if (attempt.provider_payment_id) {
+          payment = await mercadoPagoPayments.get({
+            id: String(attempt.provider_payment_id),
+          }) as MercadoPagoPaymentResource;
+        } else {
+          // A timeout can happen after Mercado Pago created the payment but
+          // before Serana received the response containing its provider ID.
+          // Search by the server-owned external reference and then require the
+          // exact attempt UUID before reconciling anything.
+          const search = await mercadoPagoPayments.search({
+            options: {
+              external_reference: attempt.checkout_id,
+              sort: 'date_created',
+              criteria: 'desc',
+              limit: 20,
+            },
+          });
+          const match = search.results?.find((candidate) => (
+            candidate.external_reference === attempt.checkout_id
+            && candidate.metadata?.attempt_id === attempt.attempt_key
+          ));
+          if (match?.id) {
+            payment = await mercadoPagoPayments.get({
+              id: String(match.id),
+            }) as MercadoPagoPaymentResource;
+          }
+        }
+        if (!payment) continue;
+        if (
+          payment.metadata?.attempt_id
+          && payment.metadata.attempt_id !== attempt.attempt_key
+        ) {
+          console.error(
+            '[mp/reconciler] attempt mismatch for provider payment',
+            payment.id,
+          );
+          continue;
+        }
+        const reconciled = await reconcileMercadoPagoPayment(payment, {
+          allowLegacy: false,
+        });
+        console.log(
+          '[mp/reconciler] reconciled',
+          payment.id,
+          'status',
+          reconciled.status,
+        );
+      } catch (err) {
+        const providerError = normalizeMercadoPagoApiError(err);
+        console.warn(
+          '[mp/reconciler] attempt failed:',
+          attempt.attempt_key,
+          providerError.httpStatus,
+          providerError.statusDetail,
+        );
+      }
+    }
+  } finally {
+    mercadoPagoReconcilerRunning = false;
+  }
+}
+
+function startMercadoPagoReconciler() {
+  if (process.env.NODE_ENV !== 'production' || !supabaseAdmin || !mercadoPagoPayments) return;
+  const firstRun = setTimeout(() => void reconcileStaleMercadoPagoAttempts(), 30_000);
+  const interval = setInterval(() => void reconcileStaleMercadoPagoAttempts(), 60_000);
+  firstRun.unref();
+  interval.unref();
 }
 
 function sanitizeCheckoutPayload(value: unknown) {
@@ -833,6 +1063,7 @@ async function startServer() {
       const resultQuery = `checkout=${encodeURIComponent(checkout.checkout_token)}`;
       const preferencePayload: Record<string, unknown> = {
         items: mpItems,
+        purpose: 'wallet_purchase',
         external_reference: checkout.checkout_id,
         metadata: { checkout_id: checkout.checkout_id },
         back_urls: {
@@ -840,6 +1071,8 @@ async function startServer() {
           failure: `${APP_URL}/checkout/failure?${resultQuery}`,
           pending: `${APP_URL}/checkout/pending?${resultQuery}`,
         },
+        expires: true,
+        expiration_date_to: new Date(checkout.expires_at).toISOString(),
         statement_descriptor: 'SERANA',
       };
       if (isPublicHttps) {
@@ -894,12 +1127,21 @@ async function startServer() {
 
   app.post('/api/checkout/mp/process', checkoutLimiter, async (req, res) => {
     try {
-      if (!MP_ACCESS_TOKEN) return res.status(500).json({ error: 'mp_not_configured' });
+      if (!mercadoPagoPayments) return res.status(500).json({ error: 'mp_not_configured' });
       if (!supabaseAdmin) return res.status(500).json({ error: 'supabase_not_configured' });
 
       const { checkout_token: checkoutToken, attempt_id: attemptId, formData, selectedPaymentMethod } = req.body ?? {};
       if (!isUuid(checkoutToken)) return res.status(400).json({ error: 'checkout_token_invalid' });
       if (!isUuid(attemptId)) return res.status(400).json({ error: 'attempt_id_invalid' });
+      if (selectedPaymentMethod === 'wallet_purchase') {
+        return res.status(409).json({
+          error: 'wallet_must_use_preference',
+          retryable: false,
+          status: 'error',
+          status_detail: 'wallet_must_use_preference',
+          message: 'La Cuenta Mercado Pago debe continuar mediante la redirección segura.',
+        });
+      }
       if (!formData || typeof formData !== 'object') {
         return res.status(400).json({ error: 'formData is required' });
       }
@@ -934,69 +1176,104 @@ async function startServer() {
 
       const checkoutTotal = Number(checkout.total_amount ?? 0);
 
-      const idempotencyKey = `serana-mp-${effectiveAttemptId}`;
-      const paymentBody: Record<string, unknown> = {
-        ...formData,
-        transaction_amount: checkoutTotal,
-        currency_id: 'COP',
-        external_reference: checkout.checkout_id,
-        description: 'Compra Serana',
-        statement_descriptor: 'SERANA',
-        metadata: { checkout_id: checkout.checkout_id, attempt_id: effectiveAttemptId },
-        notification_url: MP_WEBHOOK_URL,
-      };
-
-      const mpResp = await fetch('https://api.mercadopago.com/v1/payments', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${MP_ACCESS_TOKEN}`,
-          'Content-Type': 'application/json',
-          'X-Idempotency-Key': idempotencyKey,
-        },
-        body: JSON.stringify(paymentBody),
-      });
-
-      const text = await mpResp.text();
       let mpData: any = {};
-      try { mpData = JSON.parse(text); } catch { /* leave empty */ }
+      let paymentBody;
+      try {
+        paymentBody = buildMercadoPagoPaymentBody({
+          selectedPaymentMethod,
+          formData,
+          checkoutId: checkout.checkout_id,
+          checkoutToken: checkout.checkout_token,
+          attemptId: effectiveAttemptId,
+          total: checkoutTotal,
+          appUrl: APP_URL,
+          notificationUrl: MP_WEBHOOK_URL,
+          payerIp: req.ip,
+        });
+      } catch (err) {
+        if (!(err instanceof PaymentPayloadError)) throw err;
+        await supabaseAdmin.rpc('record_checkout_payment_attempt', {
+          p_checkout_id: checkout.checkout_id,
+          p_attempt_key: effectiveAttemptId,
+          p_provider_payment_id: '',
+          p_status: 'rejected',
+          p_status_detail: err.code,
+          p_provider_metadata: {
+            source: 'server_payload_validation',
+            code: err.code,
+          },
+        });
+        return res.status(400).json({
+          error: 'mp_payment_payload_invalid',
+          retryable: false,
+          status: 'rejected',
+          status_detail: err.code,
+          message: 'Revisa los datos del medio de pago e intenta nuevamente.',
+        });
+      }
 
-      if (!mpResp.ok) {
-        console.error('[mp/process] payment rejected:', mpResp.status, text.slice(0, 400));
-        const definitive = mpResp.status >= 400 && mpResp.status < 500 && mpResp.status !== 429;
-        if (definitive) {
-          await supabaseAdmin.rpc('record_checkout_payment_attempt', {
+      try {
+        // The UUID belongs to one logical attempt and is reused verbatim for
+        // SDK retries, browser retries and cross-device convergence.
+        mpData = await mercadoPagoPayments.create({
+          body: paymentBody,
+          requestOptions: { idempotencyKey: effectiveAttemptId },
+        });
+      } catch (err) {
+        const mpError = normalizeMercadoPagoApiError(err);
+        console.error(
+          '[mp/process] provider rejected request:',
+          mpError.httpStatus,
+          mpError.statusDetail,
+        );
+        if (!mpError.retryable) {
+          const { error: recordError } = await supabaseAdmin.rpc('record_checkout_payment_attempt', {
             p_checkout_id: checkout.checkout_id,
             p_attempt_key: effectiveAttemptId,
-            p_provider_payment_id: mpData?.id ? String(mpData.id) : '',
+            p_provider_payment_id: '',
             p_status: 'rejected',
-            p_status_detail: mpData?.status_detail ?? mpData?.message ?? 'rejected',
-            p_provider_metadata: mpData,
+            p_status_detail: mpError.statusDetail,
+            p_provider_metadata: mpError.metadata,
           });
+          if (recordError) {
+            console.error('[mp/process] could not persist provider rejection:', recordError.message);
+            return res.status(500).json({
+              error: 'payment_state_not_persisted',
+              retryable: true,
+            });
+          }
         }
-        return res.status(definitive ? mpResp.status : 502).json({
+        const browserStatus = [400, 408, 409, 422, 425, 429].includes(mpError.httpStatus)
+          ? mpError.httpStatus
+          : 502;
+        return res.status(browserStatus).json({
           error: 'mp_payment_failed',
-          retryable: !definitive,
-          status: definitive ? (mpData?.status ?? 'rejected') : 'error',
-          status_detail: mpData?.status_detail ?? 'unknown',
-          message: mpData?.message ?? 'No pudimos procesar el pago',
+          retryable: mpError.retryable,
+          status: mpError.status,
+          status_detail: mpError.statusDetail,
+          message: mpError.message,
         });
       }
 
       if (mpData.status === 'approved') {
-        const { data: finalized, error: finalizeError } = await supabaseAdmin.rpc('finalize_checkout_payment', {
-          p_checkout_id: checkout.checkout_id,
-          p_attempt_key: effectiveAttemptId,
-          p_provider_payment_id: String(mpData.id),
-          p_amount: Number(mpData.transaction_amount),
-          p_currency: String(mpData.currency_id ?? 'COP'),
-          p_provider_metadata: mpData,
-        });
-        if (finalizeError || !finalized) {
-          console.error('[mp/process] approved payment could not finalize:', finalizeError?.message);
+        let reconciliation: ReconciledPayment;
+        try {
+          reconciliation = await reconcileMercadoPagoPayment(
+            mpData as MercadoPagoPaymentResource,
+            { allowLegacy: false },
+          );
+        } catch (err) {
+          console.error(
+            '[mp/process] approved payment could not finalize:',
+            err instanceof Error ? err.message : 'unknown_error',
+          );
           return res.status(500).json({ error: 'payment_approved_reconciliation_pending', retryable: true });
         }
-        const result = finalized as CheckoutContext;
-        if (result.duplicate_payment) {
+        const result = reconciliation.checkout;
+        if (!result) {
+          return res.status(500).json({ error: 'payment_approved_reconciliation_pending', retryable: true });
+        }
+        if (reconciliation.duplicatePayment) {
           console.error(
             '[mp/process] duplicate approved payment requires review:',
             result.duplicate_provider_payment_id ?? mpData.id,
@@ -1010,7 +1287,7 @@ async function startServer() {
           status_detail: mpData.status_detail,
           order_number: result.order_number,
           checkout_status: result.status,
-          ...(result.duplicate_payment && {
+          ...(reconciliation.duplicatePayment && {
             reconciliation: 'duplicate_payment_review',
           }),
         });
@@ -1031,13 +1308,14 @@ async function startServer() {
         console.error('[mp/process] could not persist payment state:', recordError.message);
         return res.status(500).json({ error: 'payment_state_not_persisted', retryable: true });
       }
+      const redirectUrl = safeMercadoPagoRedirectUrl(
+        mpData.transaction_details?.external_resource_url,
+      );
       return res.json({
         id: mpData.id,
         status: normalizedStatus,
         status_detail: mpData.status_detail,
-        ...(mpData.transaction_details?.external_resource_url && {
-          redirect_url: mpData.transaction_details.external_resource_url,
-        }),
+        ...(redirectUrl && { redirect_url: redirectUrl }),
       });
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'unknown_error';
@@ -1051,17 +1329,19 @@ async function startServer() {
   // ignored because it is a valid non-approved state.
   app.post('/api/webhooks/mercadopago', async (req, res) => {
     try {
-      if (!MP_ACCESS_TOKEN || !supabaseAdmin) {
+      if (!mercadoPagoPayments || !supabaseAdmin) {
         return res.status(503).send('payment integration not configured');
       }
 
       const body = req.body ?? {};
-      const topic = req.query.topic ?? body.type;
-      const paymentIdRaw =
-        req.query['data.id'] ??
-        body?.data?.id ??
-        body?.id ??
-        null;
+      const queryTopic = typeof req.query.topic === 'string' ? req.query.topic : null;
+      const topic = queryTopic ?? body.type;
+      const signedDataId = req.query['data.id'];
+      const paymentIdRaw = typeof signedDataId === 'string'
+        ? signedDataId.trim()
+        : Array.isArray(signedDataId) && typeof signedDataId[0] === 'string'
+          ? signedDataId[0].trim()
+          : '';
 
       if (topic !== 'payment' && topic !== 'payment.created' && topic !== 'payment.updated') {
         return res.status(200).send('ignored: not a payment topic');
@@ -1075,126 +1355,88 @@ async function startServer() {
         return res.status(503).send('webhook signature not configured');
       }
       if (MP_WEBHOOK_SECRET) {
-        const sigHeader = String(req.headers['x-signature'] ?? '');
-        const requestId = String(req.headers['x-request-id'] ?? '');
-        const parts = Object.fromEntries(
-          sigHeader.split(',').map((kv) => {
-            const [k, v] = kv.split('=').map((s) => s.trim());
-            return [k, v];
-          }),
-        ) as { ts?: string; v1?: string };
-
-        if (!parts.ts || !parts.v1 || !requestId) {
-          console.warn('[mp/webhook] rejected: missing signature headers');
-          return res.status(401).send('missing signature');
-        }
-
-        const manifest = `id:${paymentIdRaw};request-id:${requestId};ts:${parts.ts};`;
-        const expected = crypto
-          .createHmac('sha256', MP_WEBHOOK_SECRET)
-          .update(manifest)
-          .digest('hex');
-
-        // Constant-time compare; both must be Buffers of equal length.
-        const expectedBuf = Buffer.from(expected, 'hex');
-        const givenBuf = Buffer.from(parts.v1, 'hex');
-        const ok =
-          expectedBuf.length === givenBuf.length &&
-          crypto.timingSafeEqual(expectedBuf, givenBuf);
-        if (!ok) {
-          console.warn('[mp/webhook] rejected: bad signature for payment', paymentIdRaw);
-          return res.status(401).send('bad signature');
+        try {
+          WebhookSignatureValidator.validate({
+            xSignature: req.headers['x-signature'],
+            xRequestId: req.headers['x-request-id'],
+            // Mercado Pago requires alphanumeric data.id values to be signed
+            // in lowercase. Payment IDs are currently numeric, but keeping the
+            // documented normalization avoids a future signature mismatch.
+            dataId: paymentIdRaw.toLowerCase(),
+            secret: MP_WEBHOOK_SECRET,
+          });
+        } catch (err) {
+          if (err instanceof InvalidWebhookSignatureError) {
+            console.warn(
+              '[mp/webhook] rejected signature:',
+              err.reason,
+              err.requestId ?? 'without-request-id',
+            );
+            return res.status(401).send('bad signature');
+          }
+          throw err;
         }
       }
 
-      const paymentResp = await fetch(`https://api.mercadopago.com/v1/payments/${paymentIdRaw}`, {
-        headers: { Authorization: `Bearer ${MP_ACCESS_TOKEN}` },
-      });
-      if (!paymentResp.ok) {
-        console.warn('[mp/webhook] could not fetch payment', paymentIdRaw, paymentResp.status);
+      let payment: any;
+      try {
+        payment = await mercadoPagoPayments.get({ id: paymentIdRaw });
+      } catch (err) {
+        const mpError = normalizeMercadoPagoApiError(err);
+        console.warn(
+          '[mp/webhook] could not fetch payment',
+          paymentIdRaw,
+          mpError.httpStatus,
+          mpError.statusDetail,
+        );
         return res.status(502).send('payment lookup failed');
       }
-      const payment = (await paymentResp.json()) as {
-        id: number | string;
-        status: string;
-        status_detail?: string;
-        transaction_amount: number;
-        external_reference?: string;
-        currency_id?: string;
-        metadata?: { attempt_id?: string };
-      };
-
-      const checkoutId = payment.external_reference;
-      if (!isUuid(checkoutId)) {
-        console.warn('[mp/webhook] payment', payment.id, 'has invalid external_reference');
-        return res.status(422).send('invalid external_reference');
+      if (String(payment.id) !== paymentIdRaw) {
+        console.warn('[mp/webhook] provider returned a different payment id');
+        return res.status(502).send('payment lookup mismatch');
       }
 
-      const attemptKey = isUuid(payment.metadata?.attempt_id) ? payment.metadata?.attempt_id : null;
-      if (payment.status !== 'approved') {
-        const trackedStatus = ['pending', 'in_process', 'rejected', 'cancelled'].includes(payment.status)
-          ? payment.status
-          : null;
-        if (trackedStatus && attemptKey) {
-          const { error: recordError } = await supabaseAdmin.rpc('record_checkout_payment_attempt', {
-            p_checkout_id: checkoutId,
-            p_attempt_key: attemptKey,
-            p_provider_payment_id: String(payment.id),
-            p_status: trackedStatus,
-            p_status_detail: payment.status_detail ?? null,
-            p_provider_metadata: payment,
-          });
-          if (recordError) {
-            console.error('[mp/webhook] could not persist non-approved state:', recordError.message);
-            return res.status(500).send('payment state not persisted');
-          }
-        }
-        console.log('[mp/webhook] payment', payment.id, 'status', payment.status, '— no operational order');
-        return res.status(200).send('ack');
-      }
-
-      const { error: rpcErr, data: checkoutResult } = await supabaseAdmin.rpc('finalize_checkout_payment', {
-        p_checkout_id: checkoutId,
-        p_attempt_key: attemptKey,
-        p_provider_payment_id: String(payment.id),
-        p_amount: Number(payment.transaction_amount),
-        p_currency: String(payment.currency_id ?? ''),
-        p_provider_metadata: payment,
-      });
-      if (rpcErr) {
-        // A checkout-v1 payment can be approved after checkout-v2 deploys.
-        // Its external_reference is the pre-created order UUID, not a checkout
-        // session UUID, so reconcile it through the tightly scoped legacy RPC.
-        if (rpcErr.message.includes('checkout_not_found')) {
-          const { error: legacyError, data: legacyResult } = await supabaseAdmin.rpc(
-            'finalize_legacy_mercadopago_payment',
-            {
-              p_order_id: checkoutId,
-              p_provider_payment_id: String(payment.id),
-              p_amount: Number(payment.transaction_amount),
-              p_currency: String(payment.currency_id ?? ''),
-              p_provider_metadata: payment,
-            },
-          );
-          if (!legacyError) {
-            console.log('[mp/webhook] reconciled legacy payment', payment.id, '-> order', legacyResult);
-            return res.status(200).send('ack');
-          }
-          console.error('[mp/webhook] legacy reconciliation failed:', legacyError.message);
-        } else {
-          console.error('[mp/webhook] reconciliation failed:', rpcErr.message);
-        }
+      let reconciliation: ReconciledPayment;
+      try {
+        reconciliation = await reconcileMercadoPagoPayment(
+          payment as MercadoPagoPaymentResource,
+          { allowLegacy: true },
+        );
+      } catch (err) {
+        console.error(
+          '[mp/webhook] reconciliation failed:',
+          err instanceof Error ? err.message : 'unknown_error',
+        );
         return res.status(500).send('reconciliation failed');
       }
-      if ((checkoutResult as CheckoutContext)?.duplicate_payment) {
+      if (reconciliation.status !== 'approved') {
+        console.log(
+          '[mp/webhook] payment',
+          payment.id,
+          'status',
+          reconciliation.status,
+          '— no operational order',
+        );
+        return res.status(200).send('ack');
+      }
+      if (reconciliation.legacy) {
+        console.log('[mp/webhook] reconciled legacy payment', payment.id);
+        return res.status(200).send('ack');
+      }
+      if (reconciliation.duplicatePayment) {
         console.error(
           '[mp/webhook] duplicate approved payment requires review:',
           payment.id,
           'checkout',
-          checkoutId,
+          payment.external_reference,
         );
       }
-      console.log('[mp/webhook] reconciled payment', payment.id, '-> order', (checkoutResult as CheckoutContext)?.order_number);
+      console.log(
+        '[mp/webhook] reconciled payment',
+        payment.id,
+        '-> order',
+        reconciliation.checkout?.order_number,
+      );
       return res.status(200).send('ack');
     } catch (err) {
       console.error('[mp/webhook] handler error:', err);
@@ -1227,6 +1469,7 @@ async function startServer() {
 
   app.listen(PORT, HOST, () => {
     console.log(`[serana-web] listening on http://${HOST}:${PORT}  (APP_URL=${APP_URL})`);
+    startMercadoPagoReconciler();
   });
 }
 

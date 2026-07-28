@@ -29,6 +29,14 @@ type BrickFormData = {
   [k: string]: unknown;
 };
 
+type BrickPaymentMethod =
+  | 'credit_card'
+  | 'debit_card'
+  | 'ticket'
+  | 'bank_transfer'
+  | 'wallet_purchase'
+  | 'atm';
+
 type BrickSettings = {
   initialization: {
     amount: number;
@@ -36,15 +44,15 @@ type BrickSettings = {
     payer?: { email?: string };
   };
   customization?: {
-    paymentMethods?: Record<string, string>;
+    paymentMethods?: Record<string, string | string[]>;
     visual?: { style?: Record<string, unknown> };
   };
   callbacks: {
     onReady: () => void;
     onError: (err: { type: string; message: string; cause?: unknown }) => void;
     onSubmit: (data: {
-      selectedPaymentMethod: string;
-      formData: BrickFormData;
+      selectedPaymentMethod: BrickPaymentMethod;
+      formData: BrickFormData | null;
     }) => Promise<void>;
   };
 };
@@ -120,9 +128,11 @@ export default function MercadoPagoBrick({
             paymentMethods: {
               creditCard: 'all',
               debitCard: 'all',
-              ticket: 'all',
-              bankTransfer: 'all',
-              mercadoPago: 'all',
+              // Efecty remains hidden until its delayed-payment operational
+              // workflow is explicitly enabled and tested end to end.
+              ticket: [],
+              bankTransfer: ['pse'],
+              mercadoPago: 'wallet_purchase',
             },
             visual: {
               style: {
@@ -148,7 +158,12 @@ export default function MercadoPagoBrick({
               }
             },
             onSubmit: async ({ selectedPaymentMethod, formData }) => {
+              // Wallet is completed by Mercado Pago through the preferenceId.
+              // Sending its null formData to /v1/payments is explicitly
+              // unsupported by the Payment Brick contract.
+              if (selectedPaymentMethod === 'wallet_purchase') return;
               if (submittingRef.current) return;
+              if (!formData) throw new Error('mp_form_data_missing');
               submittingRef.current = true;
               const attemptStorageKey = `serana:mp-attempt:${checkoutToken}`;
               attemptIdRef.current ??= localStorage.getItem(attemptStorageKey) || crypto.randomUUID();
