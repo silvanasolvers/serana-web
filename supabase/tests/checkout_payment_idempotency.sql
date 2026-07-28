@@ -194,6 +194,16 @@ begin
   if v_status <> 'esperando_pago' or v_payment_status <> 'pendiente' then
     raise exception 'transfer_became_operational_before_payment';
   end if;
+  select count(*) into v_count
+  from sales.payments
+  where order_id = v_order_id
+    and method = 'transferencia'
+    and status = 'pendiente'
+    and amount = v_total
+    and transaction_id = 'manual-intent:' || v_order_id::text;
+  if v_count <> 1 then
+    raise exception 'transfer_payment_intent_not_visible_to_erp';
+  end if;
   select count(*) into v_count from integration.erp_order_outbox where aggregate_id = v_order_id;
   if v_count <> 0 then raise exception 'transfer_emitted_erp_event_before_payment'; end if;
 
@@ -234,12 +244,82 @@ begin
   from sales.payments
   where order_id = v_order_id;
   if v_count <> 1 then raise exception 'manual_payment_not_idempotent'; end if;
+  select count(*) into v_count
+  from sales.payments
+  where order_id = v_order_id
+    and status = 'pendiente';
+  if v_count <> 0 then raise exception 'settled_transfer_kept_pending_payment_intent'; end if;
   select count(*) into v_count from integration.erp_order_outbox where aggregate_id = v_order_id;
   if v_count <> 0 then raise exception 'paid_transfer_used_disabled_erp_outbox'; end if;
 end;
 $$;
 
 select 'checkout_payment_idempotency_ok' as result;
+
+do $$
+declare
+  v_slug text;
+  v_price numeric;
+  v_quantity integer;
+  v_checkout jsonb;
+  v_order jsonb;
+  v_order_id uuid;
+  v_total numeric;
+  v_count integer;
+begin
+  select slug, price into v_slug, v_price
+  from catalog.products
+  where active = true and price > 0 and slug is not null
+  order by price desc
+  limit 1;
+  v_quantity := greatest(1, ceil(50000 / v_price)::integer);
+
+  v_checkout := public.upsert_checkout_session(
+    gen_random_uuid(),
+    jsonb_build_object(
+      'customer_phone', '3009990007',
+      'customer_name', 'Cash Test',
+      'delivery_address', 'Calle Efectivo 1, Medellín',
+      'payment_method', 'efectivo',
+      'items', jsonb_build_array(jsonb_build_object(
+        'product_slug', v_slug,
+        'quantity', v_quantity
+      ))
+    )
+  );
+  v_order := public.confirm_offline_checkout(
+    (v_checkout->>'checkout_token')::uuid
+  );
+  perform public.confirm_offline_checkout(
+    (v_checkout->>'checkout_token')::uuid
+  );
+  v_order_id := (v_order->>'order_id')::uuid;
+  v_total := (v_order->>'total_amount')::numeric;
+
+  select count(*) into v_count
+  from sales.orders
+  where id = v_order_id
+    and status = 'recibido'
+    and payment_status = 'pendiente'
+    and payment_method = 'efectivo';
+  if v_count <> 1 then
+    raise exception 'cash_order_not_confirmed_once';
+  end if;
+
+  select count(*) into v_count
+  from sales.payments
+  where order_id = v_order_id
+    and method = 'efectivo'
+    and status = 'pendiente'
+    and amount = v_total
+    and transaction_id = 'manual-intent:' || v_order_id::text;
+  if v_count <> 1 then
+    raise exception 'cash_payment_intent_not_visible_to_erp';
+  end if;
+end;
+$$;
+
+select 'checkout_cash_payment_intent_ok' as result;
 
 do $$
 declare
