@@ -626,7 +626,7 @@ export default function CheckoutPage() {
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-[1fr_380px] gap-12">
+        <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-12 lg:grid-cols-[minmax(0,1fr)_380px]">
           {/* Step content */}
           <motion.div
             ref={checkoutStepRef}
@@ -764,7 +764,7 @@ export default function CheckoutPage() {
           </motion.div>
 
           {/* Sticky summary */}
-          <aside className="order-2">
+          <aside className="order-2 min-w-0">
             <div className="bg-white/70 backdrop-blur-md p-7 rounded-[1.75rem] shadow-sm border border-serana-forest/5 lg:sticky lg:top-32">
               <h2 className="font-serif text-xl text-serana-forest mb-5">Tu pedido</h2>
 
