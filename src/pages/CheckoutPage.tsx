@@ -21,6 +21,13 @@ import {
 } from '../data/comboCustomizations';
 import { clearCheckoutSource, readCheckoutSource } from '../lib/checkoutSource';
 import { getMinimumOrderMissing, meetsMinimumOrder, MINIMUM_ORDER_TOTAL_COP } from '../lib/purchaseRules';
+import {
+  createBrowserUuid,
+  isBrowserUuid,
+  readBrowserStorage,
+  removeBrowserStorage,
+  writeBrowserStorage,
+} from '../lib/browserRuntime';
 
 const MP_PUBLIC_KEY = import.meta.env.VITE_MP_PUBLIC_KEY ?? '';
 
@@ -56,16 +63,15 @@ const CHECKOUT_KEY_STORAGE = 'serana:checkout:key:v2';
 const DELIVERY_FEE_COP = 12500;
 
 function newCheckoutKey() {
-  if (typeof window === 'undefined') return crypto.randomUUID();
-  const saved = sessionStorage.getItem(CHECKOUT_KEY_STORAGE);
-  if (saved) return saved;
-  const key = crypto.randomUUID();
-  sessionStorage.setItem(CHECKOUT_KEY_STORAGE, key);
+  const saved = readBrowserStorage('sessionStorage', CHECKOUT_KEY_STORAGE);
+  if (isBrowserUuid(saved)) return saved;
+  const key = createBrowserUuid();
+  writeBrowserStorage('sessionStorage', CHECKOUT_KEY_STORAGE, key);
   return key;
 }
 
 function clearCheckoutKey() {
-  if (typeof window !== 'undefined') sessionStorage.removeItem(CHECKOUT_KEY_STORAGE);
+  removeBrowserStorage('sessionStorage', CHECKOUT_KEY_STORAGE);
 }
 
 const STEPS = [
@@ -95,6 +101,8 @@ export default function CheckoutPage() {
   const subtotal = total();
   const checkoutKeyRef = useRef<string>(newCheckoutKey());
   const mpPreparingRef = useRef(false);
+  const checkoutStepRef = useRef<HTMLDivElement | null>(null);
+  const previousStepRef = useRef(0);
 
   const [stepIndex, setStepIndex] = useState(0); // 0..2
   const [confirmation, setConfirmation] = useState<{
@@ -456,6 +464,18 @@ export default function CheckoutPage() {
   };
   const goBack = () => setStepIndex((i) => Math.max(i - 1, 0));
 
+  useEffect(() => {
+    if (previousStepRef.current === stepIndex) return;
+    previousStepRef.current = stepIndex;
+    const frame = window.requestAnimationFrame(() => {
+      checkoutStepRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [stepIndex]);
+
   if (paymentPending) {
     return (
       <div className="min-h-screen pt-32 pb-12">
@@ -604,11 +624,12 @@ export default function CheckoutPage() {
         <div className="grid lg:grid-cols-[1fr_380px] gap-12">
           {/* Step content */}
           <motion.div
+            ref={checkoutStepRef}
             key={stepIndex}
             initial={{ opacity: 0, x: 16 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="order-2 lg:order-1"
+            className="order-1 scroll-mt-28 min-w-0"
           >
             {stepIndex === 0 && (
               <Step1Cart
@@ -671,16 +692,18 @@ export default function CheckoutPage() {
                             </div>
                           </div>
                         )}
-                        <MercadoPagoBrick
-                          publicKey={MP_PUBLIC_KEY}
-                          preferenceId={mpReady.preference_id}
-                          amount={mpReady.amount}
-                          checkoutToken={mpReady.checkout_token}
-                          payerEmail={form.email.trim() || undefined}
-                          onApproved={handleBrickApproved}
-                          onPending={handleBrickPending}
-                          onRejected={handleBrickRejected}
-                        />
+                        <div className="-mx-6 overflow-x-clip sm:mx-0">
+                          <MercadoPagoBrick
+                            publicKey={MP_PUBLIC_KEY}
+                            preferenceId={mpReady.preference_id}
+                            amount={mpReady.amount}
+                            checkoutToken={mpReady.checkout_token}
+                            payerEmail={form.email.trim() || undefined}
+                            onApproved={handleBrickApproved}
+                            onPending={handleBrickPending}
+                            onRejected={handleBrickRejected}
+                          />
+                        </div>
                       </>
                     ) : null}
                   </div>
@@ -736,7 +759,7 @@ export default function CheckoutPage() {
           </motion.div>
 
           {/* Sticky summary */}
-          <aside className="order-1 lg:order-2">
+          <aside className="order-2">
             <div className="bg-white/70 backdrop-blur-md p-7 rounded-[1.75rem] shadow-sm border border-serana-forest/5 lg:sticky lg:top-32">
               <h2 className="font-serif text-xl text-serana-forest mb-5">Tu pedido</h2>
 

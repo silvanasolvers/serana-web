@@ -17,7 +17,7 @@ const base = {
   checkoutToken: '061eb9b0-3c4a-47c0-8344-0cb8f0d22db2',
   attemptId: '2178dccd-8d61-4b9d-a13a-a5816baad946',
   total: 108_200,
-  appUrl: 'https://serana.solversai.cloud',
+  appUrl: 'https://serana.food',
   notificationUrl: 'https://serana.solversai.cloud/api/webhooks/mercadopago',
 };
 
@@ -107,6 +107,82 @@ test('PSE rejects an incomplete payer instead of forwarding malformed data', () 
     }),
     (error) => error instanceof PaymentPayloadError
       && error.code === 'payer_entity_type_invalid',
+  );
+});
+
+test('PSE uses the storefront person selector when the Brick omits entity_type', () => {
+  const body = buildMercadoPagoPaymentBody({
+    ...base,
+    payerEntityType: 'individual',
+    selectedPaymentMethod: 'bank_transfer',
+    formData: {
+      payment_method_id: 'pse',
+      transaction_details: { financial_institution: '1009' },
+      payer: {
+        email: 'pse@example.com',
+        identification: { type: 'CC', number: '1030123456' },
+      },
+    },
+  });
+
+  assert.equal(body.payer.entity_type, 'individual');
+  assert.equal(body.payer.identification?.type, 'CC');
+});
+
+test('PSE accepts a company only with NIT and rejects inconsistent person data', () => {
+  const company = buildMercadoPagoPaymentBody({
+    ...base,
+    payerEntityType: 'association',
+    selectedPaymentMethod: 'bank_transfer',
+    formData: {
+      payment_method_id: 'pse',
+      transaction_details: { financial_institution: '1009' },
+      payer: {
+        email: 'tesoreria@example.com',
+        entity_type: 'association',
+        identification: { type: 'NIT', number: '901234567' },
+      },
+    },
+  });
+  assert.equal(company.payer.entity_type, 'association');
+  assert.equal(company.payer.identification?.type, 'NIT');
+
+  assert.throws(
+    () => buildMercadoPagoPaymentBody({
+      ...base,
+      payerEntityType: 'association',
+      selectedPaymentMethod: 'bank_transfer',
+      formData: {
+        payment_method_id: 'pse',
+        transaction_details: { financial_institution: '1009' },
+        payer: {
+          email: 'tesoreria@example.com',
+          entity_type: 'individual',
+          identification: { type: 'CC', number: '1030123456' },
+        },
+      },
+    }),
+    (error) => error instanceof PaymentPayloadError
+      && error.code === 'payer_entity_type_mismatch',
+  );
+
+  assert.throws(
+    () => buildMercadoPagoPaymentBody({
+      ...base,
+      payerEntityType: 'association',
+      selectedPaymentMethod: 'bank_transfer',
+      formData: {
+        payment_method_id: 'pse',
+        transaction_details: { financial_institution: '1009' },
+        payer: {
+          email: 'tesoreria@example.com',
+          entity_type: 'association',
+          identification: { type: 'CC', number: '1030123456' },
+        },
+      },
+    }),
+    (error) => error instanceof PaymentPayloadError
+      && error.code === 'association_requires_nit',
   );
 });
 

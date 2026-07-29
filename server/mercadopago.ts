@@ -58,6 +58,7 @@ export type BuildPaymentBodyInput = {
   appUrl: string;
   notificationUrl: string | undefined;
   payerIp?: string;
+  payerEntityType?: unknown;
 };
 
 export class PaymentPayloadError extends Error {
@@ -154,6 +155,14 @@ function requiredPositiveInteger(value: unknown, code: string, max: number) {
   return Number(normalized);
 }
 
+function normalizePayerEntityType(value: unknown) {
+  if (typeof value !== 'string') return undefined;
+  const normalized = value.trim().toLowerCase();
+  return normalized === 'individual' || normalized === 'association'
+    ? normalized
+    : undefined;
+}
+
 function requirePublicUrl(value: string | undefined, code: string) {
   if (!value) throw new PaymentPayloadError(code);
   let parsed: URL;
@@ -241,13 +250,36 @@ export function buildMercadoPagoPaymentBody(
       throw new PaymentPayloadError('financial_institution_invalid');
     }
 
-    const entityType = requiredString(
-      payer.entity_type,
-      'payer_entity_type_invalid',
-      20,
-    ).toLowerCase();
-    if (entityType !== 'individual' && entityType !== 'association') {
+    const brickEntityType = normalizePayerEntityType(payer.entity_type);
+    const selectedEntityType = normalizePayerEntityType(input.payerEntityType);
+    if (
+      payer.entity_type !== undefined
+      && !brickEntityType
+    ) {
       throw new PaymentPayloadError('payer_entity_type_invalid');
+    }
+    if (
+      input.payerEntityType !== undefined
+      && !selectedEntityType
+    ) {
+      throw new PaymentPayloadError('payer_entity_type_invalid');
+    }
+    if (
+      brickEntityType
+      && selectedEntityType
+      && brickEntityType !== selectedEntityType
+    ) {
+      throw new PaymentPayloadError('payer_entity_type_mismatch');
+    }
+    const entityType = brickEntityType ?? selectedEntityType;
+    if (!entityType) throw new PaymentPayloadError('payer_entity_type_invalid');
+
+    const identification = requiredIdentification(payer.identification);
+    if (entityType === 'association' && identification.type !== 'NIT') {
+      throw new PaymentPayloadError('association_requires_nit');
+    }
+    if (entityType === 'individual' && identification.type === 'NIT') {
+      throw new PaymentPayloadError('individual_identification_invalid');
     }
 
     const callbackUrl = requirePublicUrl(input.appUrl, 'callback_url_invalid');
@@ -265,7 +297,7 @@ export function buildMercadoPagoPaymentBody(
       payer: {
         email: requiredEmail(payer.email),
         entity_type: entityType,
-        identification: requiredIdentification(payer.identification),
+        identification,
         ...(firstName ? { first_name: firstName } : {}),
         ...(lastName ? { last_name: lastName } : {}),
       },

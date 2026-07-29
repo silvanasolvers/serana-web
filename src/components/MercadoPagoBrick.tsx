@@ -1,5 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import { Loader2, AlertCircle } from 'lucide-react';
+import { Loader2, AlertCircle, Building2, UserRound } from 'lucide-react';
+import {
+  createBrowserUuid,
+  isBrowserUuid,
+  readBrowserStorage,
+  removeBrowserStorage,
+  writeBrowserStorage,
+} from '../lib/browserRuntime';
 
 const MP_SDK_SRC = 'https://sdk.mercadopago.com/js/v2';
 
@@ -37,11 +44,16 @@ type BrickPaymentMethod =
   | 'wallet_purchase'
   | 'atm';
 
+type PayerEntityType = 'individual' | 'association';
+
 type BrickSettings = {
   initialization: {
     amount: number;
     preferenceId?: string;
-    payer?: { email?: string };
+    payer?: {
+      email?: string;
+      entityType?: PayerEntityType;
+    };
   };
   customization?: {
     paymentMethods?: Record<string, string | string[]>;
@@ -102,11 +114,15 @@ export default function MercadoPagoBrick({
   const controllerRef = useRef<BrickController | null>(null);
   const submittingRef = useRef(false);
   const attemptIdRef = useRef<string | null>(null);
+  const [payerEntityType, setPayerEntityType] =
+    useState<PayerEntityType>('individual');
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
+    setStatus('loading');
+    setErrorMsg(null);
 
     (async () => {
       try {
@@ -122,7 +138,10 @@ export default function MercadoPagoBrick({
           initialization: {
             amount,
             preferenceId,
-            ...(payerEmail ? { payer: { email: payerEmail } } : {}),
+            payer: {
+              entityType: payerEntityType,
+              ...(payerEmail ? { email: payerEmail } : {}),
+            },
           },
           customization: {
             paymentMethods: {
@@ -166,8 +185,15 @@ export default function MercadoPagoBrick({
               if (!formData) throw new Error('mp_form_data_missing');
               submittingRef.current = true;
               const attemptStorageKey = `serana:mp-attempt:${checkoutToken}`;
-              attemptIdRef.current ??= localStorage.getItem(attemptStorageKey) || crypto.randomUUID();
-              localStorage.setItem(attemptStorageKey, attemptIdRef.current);
+              const savedAttempt = readBrowserStorage('localStorage', attemptStorageKey);
+              attemptIdRef.current ??= isBrowserUuid(savedAttempt)
+                ? savedAttempt
+                : createBrowserUuid();
+              writeBrowserStorage(
+                'localStorage',
+                attemptStorageKey,
+                attemptIdRef.current,
+              );
               try {
                 const resp = await fetch('/api/checkout/mp/process', {
                   method: 'POST',
@@ -176,6 +202,7 @@ export default function MercadoPagoBrick({
                     checkout_token: checkoutToken,
                     attempt_id: attemptIdRef.current,
                     selectedPaymentMethod,
+                    payerEntityType,
                     formData,
                   }),
                 });
@@ -188,7 +215,7 @@ export default function MercadoPagoBrick({
                   // cannot create a second charge.
                   if (data?.retryable !== true) {
                     attemptIdRef.current = null;
-                    localStorage.removeItem(attemptStorageKey);
+                    removeBrowserStorage('localStorage', attemptStorageKey);
                   }
                   onRejected({
                     status: data?.status ?? 'error',
@@ -205,7 +232,7 @@ export default function MercadoPagoBrick({
 
                 if (data.status === 'approved') {
                   if (!data.order_number) throw new Error('approved_payment_missing_order');
-                  localStorage.removeItem(attemptStorageKey);
+                  removeBrowserStorage('localStorage', attemptStorageKey);
                   onApproved({ paymentId: String(data.id), orderNumber: Number(data.order_number) });
                   return;
                 }
@@ -221,7 +248,7 @@ export default function MercadoPagoBrick({
                   message: data?.message,
                 });
                 attemptIdRef.current = null;
-                localStorage.removeItem(attemptStorageKey);
+                removeBrowserStorage('localStorage', attemptStorageKey);
                 throw new Error(data?.message ?? 'mp_process_failed');
               } catch (err) {
                 if (err instanceof TypeError) {
@@ -254,13 +281,53 @@ export default function MercadoPagoBrick({
       } catch { /* ignore */ }
       controllerRef.current = null;
     };
-    // Only re-mount the brick when the preference changes — recreating it on
-    // every parent render would reset the user's typed-in card details.
+    // Re-mount only when the preference or PSE person type changes. Recreating
+    // it on ordinary parent renders would reset typed-in payment details.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [preferenceId]);
+  }, [preferenceId, payerEntityType]);
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 min-w-0">
+      <div className="mx-4 sm:mx-0 rounded-2xl border border-serana-forest/10 bg-white/70 p-3.5">
+        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-serana-forest/55 mb-2.5">
+          Si pagas por PSE
+        </p>
+        <div
+          className="grid grid-cols-2 gap-2"
+          role="group"
+          aria-label="Tipo de persona para PSE"
+        >
+          <button
+            type="button"
+            aria-pressed={payerEntityType === 'individual'}
+            onClick={() => setPayerEntityType('individual')}
+            className={`flex min-w-0 items-center justify-center gap-2 rounded-xl border px-3 py-3 text-xs font-semibold transition ${
+              payerEntityType === 'individual'
+                ? 'border-serana-forest bg-serana-forest text-white'
+                : 'border-serana-forest/15 bg-white text-serana-forest hover:border-serana-forest/35'
+            }`}
+          >
+            <UserRound className="h-4 w-4 shrink-0" />
+            <span>Persona natural</span>
+          </button>
+          <button
+            type="button"
+            aria-pressed={payerEntityType === 'association'}
+            onClick={() => setPayerEntityType('association')}
+            className={`flex min-w-0 items-center justify-center gap-2 rounded-xl border px-3 py-3 text-xs font-semibold transition ${
+              payerEntityType === 'association'
+                ? 'border-serana-forest bg-serana-forest text-white'
+                : 'border-serana-forest/15 bg-white text-serana-forest hover:border-serana-forest/35'
+            }`}
+          >
+            <Building2 className="h-4 w-4 shrink-0" />
+            <span>Empresa</span>
+          </button>
+        </div>
+        <p className="mt-2 text-[11px] leading-relaxed text-serana-forest/55">
+          Para empresa, selecciona NIT como documento dentro del formulario.
+        </p>
+      </div>
       {status === 'loading' && (
         <div className="flex items-center gap-3 text-serana-forest/70 px-4 py-8 rounded-2xl bg-white/60 border border-serana-forest/10 justify-center">
           <Loader2 className="w-5 h-5 animate-spin text-serana-olive" />
@@ -276,7 +343,10 @@ export default function MercadoPagoBrick({
           </div>
         </div>
       )}
-      <div id={CONTAINER_ID} className={status === 'ready' ? '' : 'hidden'} />
+      <div
+        id={CONTAINER_ID}
+        className={`${status === 'ready' ? '' : 'hidden'} min-w-0 w-full`}
+      />
     </div>
   );
 }

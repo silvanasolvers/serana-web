@@ -54,6 +54,8 @@ const PORT = Number(process.env.PORT) || 3000;
 const HOST = '0.0.0.0';
 const APP_URL = process.env.APP_URL
   ?? (process.env.NODE_ENV === 'production' ? 'https://serana.food' : `http://localhost:${PORT}`);
+const CHECKOUT_RETURN_URL = process.env.CHECKOUT_RETURN_URL?.trim()
+  || (process.env.NODE_ENV === 'production' ? 'https://serana.food' : APP_URL);
 const MP_WEBHOOK_URL = process.env.MP_WEBHOOK_URL?.trim()
   || (APP_URL.startsWith('https://') ? `${APP_URL}/api/webhooks/mercadopago` : undefined);
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL ?? process.env.SUPABASE_URL;
@@ -1059,7 +1061,7 @@ async function startServer() {
         currency_id: 'COP',
       }];
 
-      const isPublicHttps = APP_URL.startsWith('https://');
+      const isPublicHttps = CHECKOUT_RETURN_URL.startsWith('https://');
       const resultQuery = `checkout=${encodeURIComponent(checkout.checkout_token)}`;
       const preferencePayload: Record<string, unknown> = {
         items: mpItems,
@@ -1067,9 +1069,9 @@ async function startServer() {
         external_reference: checkout.checkout_id,
         metadata: { checkout_id: checkout.checkout_id },
         back_urls: {
-          success: `${APP_URL}/checkout/success?${resultQuery}`,
-          failure: `${APP_URL}/checkout/failure?${resultQuery}`,
-          pending: `${APP_URL}/checkout/pending?${resultQuery}`,
+          success: `${CHECKOUT_RETURN_URL}/checkout/success?${resultQuery}`,
+          failure: `${CHECKOUT_RETURN_URL}/checkout/failure?${resultQuery}`,
+          pending: `${CHECKOUT_RETURN_URL}/checkout/pending?${resultQuery}`,
         },
         expires: true,
         expiration_date_to: new Date(checkout.expires_at).toISOString(),
@@ -1130,7 +1132,13 @@ async function startServer() {
       if (!mercadoPagoPayments) return res.status(500).json({ error: 'mp_not_configured' });
       if (!supabaseAdmin) return res.status(500).json({ error: 'supabase_not_configured' });
 
-      const { checkout_token: checkoutToken, attempt_id: attemptId, formData, selectedPaymentMethod } = req.body ?? {};
+      const {
+        checkout_token: checkoutToken,
+        attempt_id: attemptId,
+        formData,
+        selectedPaymentMethod,
+        payerEntityType,
+      } = req.body ?? {};
       if (!isUuid(checkoutToken)) return res.status(400).json({ error: 'checkout_token_invalid' });
       if (!isUuid(attemptId)) return res.status(400).json({ error: 'attempt_id_invalid' });
       if (selectedPaymentMethod === 'wallet_purchase') {
@@ -1186,9 +1194,10 @@ async function startServer() {
           checkoutToken: checkout.checkout_token,
           attemptId: effectiveAttemptId,
           total: checkoutTotal,
-          appUrl: APP_URL,
+          appUrl: CHECKOUT_RETURN_URL,
           notificationUrl: MP_WEBHOOK_URL,
           payerIp: req.ip,
+          payerEntityType,
         });
       } catch (err) {
         if (!(err instanceof PaymentPayloadError)) throw err;
