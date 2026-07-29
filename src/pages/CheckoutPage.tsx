@@ -5,7 +5,7 @@ import Footer from '../components/Footer';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   CheckCircle, Truck, ArrowLeft, ArrowRight, AlertCircle, Loader2,
-  Tag, X, Check, MapPin, User, CreditCard, LogIn, Landmark, Banknote,
+  Tag, X, Check, MapPin, User, CreditCard, LogIn, Landmark, Banknote, Store, Clock, Home,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import {
@@ -37,6 +37,8 @@ const COP = (n: number) =>
     minimumFractionDigits: 0, maximumFractionDigits: 0,
   }).format(n);
 
+type DeliveryType = 'domicilio' | 'recogida';
+
 type FormState = {
   fullName: string;
   phone: string;
@@ -45,6 +47,7 @@ type FormState = {
   city: string;
   notes: string;
   paymentMethod: PaymentMethod;
+  deliveryType: DeliveryType;
 };
 
 const initialForm: FormState = {
@@ -55,6 +58,7 @@ const initialForm: FormState = {
   city: 'Medellín',
   notes: '',
   paymentMethod: 'mercado_pago',
+  deliveryType: 'domicilio',
 };
 
 const STORAGE_KEY = 'serana:checkout:contact';
@@ -182,11 +186,11 @@ export default function CheckoutPage() {
 
   const phoneDigits = form.phone.replace(/\D/g, '');
   const contactValid = form.fullName.trim().length >= 2 && phoneDigits.length >= 7;
-  const addressValid = form.address.trim().length >= 5;
+  const addressValid = form.deliveryType === 'recogida' || form.address.trim().length >= 5;
   const step2Valid = contactValid && addressValid;
 
   const discount = couponApplied?.valid ? couponApplied.discount_amount : 0;
-  const deliveryFee = DELIVERY_FEE_COP; // TODO: change to conditional when pickup/mesa types are added
+  const deliveryFee = form.deliveryType === 'recogida' ? 0 : DELIVERY_FEE_COP;
   const merchandiseTotal = Math.max(subtotal - discount, 0);
   const totalToPay = merchandiseTotal + deliveryFee;
   // The public terms define the minimum before delivery.
@@ -243,14 +247,16 @@ export default function CheckoutPage() {
   };
 
   const buildCheckoutPayload = () => {
-    const fullAddress = [form.address.trim(), form.city.trim()].filter(Boolean).join(', ');
+    const fullAddress = form.deliveryType === 'recogida'
+      ? 'Recogida en tienda · Carrera 45F #40 sur 03, Barrio Alcalá, Envigado, Urb Villas del Vallejuelo'
+      : [form.address.trim(), form.city.trim()].filter(Boolean).join(', ');
     return {
       customer_phone: phoneDigits,
       customer_name: form.fullName.trim(),
       customer_email: form.email.trim() || undefined,
       delivery_address: fullAddress,
       notes: form.notes.trim() || undefined,
-      type: 'domicilio' as const,
+      type: form.deliveryType,
       payment_method: form.paymentMethod,
       source_code: readCheckoutSource(),
       coupon_code: couponApplied?.valid ? couponApplied.code ?? undefined : undefined,
@@ -380,39 +386,6 @@ export default function CheckoutPage() {
     setMpRejection({ status_detail: info.status_detail, message: info.message });
   };
 
-  useEffect(() => {
-    if (!paymentPending) return;
-    let cancelled = false;
-    let timer: ReturnType<typeof setTimeout> | null = null;
-    const refresh = async () => {
-      try {
-        const status = await getCheckoutStatus(paymentPending.checkoutToken);
-        if (cancelled) return;
-        if (status.status === 'paid' && status.order_number) {
-          setConfirmation({
-            orderNumber: status.order_number,
-            subtotal: Number(status.subtotal),
-            discount: Number(status.discount_amount),
-            total: Number(status.total_amount),
-            coupon: status.coupon_code,
-            kind: 'confirmed',
-          });
-          setPaymentPending(null);
-          clearCheckoutKey();
-          clearCheckoutSource();
-          clearCart();
-          return;
-        }
-      } catch {/* a later webhook/poll can still reconcile */}
-      if (!cancelled) timer = setTimeout(refresh, 4000);
-    };
-    timer = setTimeout(refresh, 1500);
-    return () => {
-      cancelled = true;
-      if (timer) clearTimeout(timer);
-    };
-  }, [paymentPending, clearCart]);
-
   const checkoutFingerprint = useMemo(() => JSON.stringify({
     items: items.map((item) => ({
       id: item.productSlug ?? item.id,
@@ -431,6 +404,7 @@ export default function CheckoutPage() {
       notes: form.notes,
     },
     paymentMethod: form.paymentMethod,
+    deliveryType: form.deliveryType,
   }), [items, couponApplied, form]);
 
   // Any material edit invalidates the mounted Preference. The same checkout
@@ -642,6 +616,14 @@ export default function CheckoutPage() {
                 subtotal={subtotal}
                 minimumOrderMet={minimumOrderMet}
                 minimumOrderMissing={minimumOrderMissing}
+                deliveryType={form.deliveryType}
+                onChangeDeliveryType={(t) => {
+                  setForm((prev) => {
+                    const next = { ...prev, deliveryType: t };
+                    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(next)); } catch {/* ignore */}
+                    return next;
+                  });
+                }}
               />
             )}
 
@@ -845,10 +827,12 @@ export default function CheckoutPage() {
                     <span>− {COP(discount)}</span>
                   </div>
                 )}
-                <div className="flex justify-between text-gray-600 font-light">
-                  <span>Domicilio</span>
-                  <span className="text-serana-olive">{COP(DELIVERY_FEE_COP)}</span>
-                </div>
+                {form.deliveryType === 'domicilio' && (
+                  <div className="flex justify-between text-gray-600 font-light">
+                    <span>Domicilio</span>
+                    <span className="text-serana-olive">{COP(DELIVERY_FEE_COP)}</span>
+                  </div>
+                )}
                 <div className="flex justify-between text-xl font-serif text-serana-forest pt-3 border-t border-serana-forest/10">
                   <span>Total</span>
                   <span>{COP(totalToPay)}</span>
@@ -926,11 +910,15 @@ function Step1Cart({
   subtotal,
   minimumOrderMet,
   minimumOrderMissing,
+  deliveryType,
+  onChangeDeliveryType,
 }: {
   items: CartItem[];
   subtotal: number;
   minimumOrderMet: boolean;
   minimumOrderMissing: number;
+  deliveryType: DeliveryType;
+  onChangeDeliveryType: (t: DeliveryType) => void;
 }) {
   return (
     <div className="space-y-6">
@@ -939,6 +927,70 @@ function Step1Cart({
         Te confirmamos cada paso por WhatsApp.
       </p>
       {!minimumOrderMet && <MinimumOrderNotice missing={minimumOrderMissing} />}
+
+      {/* Delivery type selector */}
+      <section>
+        <h2 className="text-xl font-serif text-serana-forest mb-4 flex items-center gap-3">
+          <span className="w-7 h-7 rounded-full bg-serana-forest text-serana-cream flex items-center justify-center">
+            <Truck className="w-3.5 h-3.5" />
+          </span>
+          ¿Cómo recibes tu pedido?
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <button
+            type="button"
+            onClick={() => onChangeDeliveryType('domicilio')}
+            className={`text-left p-5 rounded-2xl border-2 transition-all ${
+              deliveryType === 'domicilio'
+                ? 'border-serana-forest bg-white shadow-md'
+                : 'border-serana-forest/10 bg-white/40 hover:border-serana-forest/30'
+            }`}
+          >
+            <div className="flex items-center gap-3 mb-2">
+              <span className={`w-9 h-9 rounded-full flex items-center justify-center ${
+                deliveryType === 'domicilio' ? 'bg-serana-forest text-serana-cream' : 'bg-serana-forest/10 text-serana-forest'
+              }`}>
+                <Home className="w-4 h-4" />
+              </span>
+              <p className="font-bold text-serana-forest">Domicilio</p>
+            </div>
+            <p className="text-xs text-gray-500 leading-relaxed">
+              Te lo llevamos a tu casa en Medellín y Envigado.
+            </p>
+            <p className="text-[11px] uppercase tracking-widest text-serana-forest/60 mt-3 font-bold">
+              + {COP(DELIVERY_FEE_COP)} envío
+            </p>
+          </button>
+          <button
+            type="button"
+            onClick={() => onChangeDeliveryType('recogida')}
+            className={`text-left p-5 rounded-2xl border-2 transition-all relative ${
+              deliveryType === 'recogida'
+                ? 'border-serana-forest bg-white shadow-md'
+                : 'border-serana-forest/10 bg-white/40 hover:border-serana-forest/30'
+            }`}
+          >
+            <div className="absolute top-3 right-3 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-serana-olive/15 text-serana-olive text-[9px] font-bold uppercase tracking-widest">
+              Gratis
+            </div>
+            <div className="flex items-center gap-3 mb-2">
+              <span className={`w-9 h-9 rounded-full flex items-center justify-center ${
+                deliveryType === 'recogida' ? 'bg-serana-forest text-serana-cream' : 'bg-serana-forest/10 text-serana-forest'
+              }`}>
+                <Store className="w-4 h-4" />
+              </span>
+              <p className="font-bold text-serana-forest">Recogida en tienda</p>
+            </div>
+            <p className="text-xs text-gray-500 leading-relaxed">
+              Pasas a recogerlo a nuestra tienda en Envigado. Te avisamos por WhatsApp cuando esté listo.
+            </p>
+            <p className="text-[11px] uppercase tracking-widest text-serana-olive mt-3 font-bold">
+              Sin costo de envío
+            </p>
+          </button>
+        </div>
+      </section>
+
       <div className="bg-white/70 rounded-2xl border border-serana-forest/5 divide-y divide-serana-forest/5">
         {items.map((it) => (
           <div key={it.id} className="flex items-center gap-4 p-4">
@@ -1026,39 +1078,92 @@ function Step2Delivery({
         )}
       </section>
 
-      <section>
-        <h2 className="text-xl font-serif text-serana-forest mb-4 flex items-center gap-3">
-          <span className="w-7 h-7 rounded-full bg-serana-forest text-serana-cream flex items-center justify-center">
-            <MapPin className="w-3.5 h-3.5" />
-          </span>
-          Dirección de entrega
-        </h2>
-        <div className="grid grid-cols-2 gap-4">
-          <input
-            required
-            placeholder="Dirección (calle, número, apto, barrio)"
-            value={form.address}
-            onChange={update('address')}
-            className="col-span-2 p-4 rounded-xl border border-serana-forest/10 bg-white/60 focus:bg-white focus:border-serana-forest/30 outline-none transition"
-          />
-          <input
-            placeholder="Ciudad"
-            value={form.city}
-            onChange={update('city')}
-            className="col-span-2 sm:col-span-1 p-4 rounded-xl border border-serana-forest/10 bg-white/60 focus:bg-white focus:border-serana-forest/30 outline-none transition"
-          />
-          <textarea
-            placeholder="Notas para el repartidor (opcional)"
-            value={form.notes}
-            onChange={update('notes')}
-            rows={2}
-            className="col-span-2 sm:col-span-1 p-4 rounded-xl border border-serana-forest/10 bg-white/60 focus:bg-white focus:border-serana-forest/30 outline-none transition resize-none"
-          />
-        </div>
-        {!addressValid && form.address.length > 0 && (
-          <p className="text-[11px] text-rose-600 mt-2">La dirección debe tener al menos 5 caracteres.</p>
-        )}
-      </section>
+      {form.deliveryType === 'domicilio' && (
+        <section>
+          <h2 className="text-xl font-serif text-serana-forest mb-4 flex items-center gap-3">
+            <span className="w-7 h-7 rounded-full bg-serana-forest text-serana-cream flex items-center justify-center">
+              <MapPin className="w-3.5 h-3.5" />
+            </span>
+            Dirección de entrega
+          </h2>
+          <div className="grid grid-cols-2 gap-4">
+            <input
+              required
+              placeholder="Dirección (calle, número, apto, barrio)"
+              value={form.address}
+              onChange={update('address')}
+              className="col-span-2 p-4 rounded-xl border border-serana-forest/10 bg-white/60 focus:bg-white focus:border-serana-forest/30 outline-none transition"
+            />
+            <input
+              placeholder="Ciudad"
+              value={form.city}
+              onChange={update('city')}
+              className="col-span-2 sm:col-span-1 p-4 rounded-xl border border-serana-forest/10 bg-white/60 focus:bg-white focus:border-serana-forest/30 outline-none transition"
+            />
+            <textarea
+              placeholder="Notas para el repartidor (opcional)"
+              value={form.notes}
+              onChange={update('notes')}
+              rows={2}
+              className="col-span-2 sm:col-span-1 p-4 rounded-xl border border-serana-forest/10 bg-white/60 focus:bg-white focus:border-serana-forest/30 outline-none transition resize-none"
+            />
+          </div>
+          {!addressValid && form.address.length > 0 && (
+            <p className="text-[11px] text-rose-600 mt-2">La dirección debe tener al menos 5 caracteres.</p>
+          )}
+        </section>
+      )}
+
+      {form.deliveryType === 'recogida' && (
+        <section>
+          <h2 className="text-xl font-serif text-serana-forest mb-4 flex items-center gap-3">
+            <span className="w-7 h-7 rounded-full bg-serana-forest text-serana-cream flex items-center justify-center">
+              <Store className="w-3.5 h-3.5" />
+            </span>
+            Recogida en tienda
+          </h2>
+          <div className="rounded-2xl border border-serana-forest/10 bg-serana-cream/40 p-5 space-y-4">
+            <div className="flex items-start gap-3">
+              <span className="w-9 h-9 rounded-full bg-serana-forest text-serana-cream flex items-center justify-center shrink-0">
+                <MapPin className="w-4 h-4" />
+              </span>
+              <div className="flex-1 min-w-0">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-serana-terracotta mb-1">Dirección</p>
+                <p className="font-serif text-lg text-serana-forest leading-snug">
+                  Carrera 45F #40 sur 03
+                </p>
+                <p className="text-sm text-serana-forest/70 leading-snug">
+                  Barrio Alcalá, Envigado
+                </p>
+                <p className="text-sm text-serana-forest/70 leading-snug">
+                  Urb. Villas del Vallejuelo
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <span className="w-9 h-9 rounded-full bg-serana-forest text-serana-cream flex items-center justify-center shrink-0">
+                <Clock className="w-4 h-4" />
+              </span>
+              <div className="flex-1 min-w-0">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-serana-terracotta mb-1">Horario de atención</p>
+                <p className="font-medium text-serana-forest">Lunes a Sábado</p>
+                <p className="text-sm text-serana-forest/70">8:00 a.m. — 6:00 p.m.</p>
+              </div>
+            </div>
+            <p className="text-[12px] text-serana-forest/65 leading-relaxed pt-3 border-t border-serana-forest/10">
+              Te avisamos por WhatsApp en cuanto tu pedido esté listo para recoger.
+              Si necesitas algo especial para la recogida, cuéntanoslo aquí:
+            </p>
+            <textarea
+              placeholder="Notas para la recogida (opcional)"
+              value={form.notes}
+              onChange={update('notes')}
+              rows={2}
+              className="w-full p-3 rounded-xl border border-serana-forest/10 bg-white/60 focus:bg-white focus:border-serana-forest/30 outline-none transition resize-none text-sm"
+            />
+          </div>
+        </section>
+      )}
     </div>
   );
 }
