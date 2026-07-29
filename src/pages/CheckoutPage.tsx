@@ -5,7 +5,7 @@ import Footer from '../components/Footer';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   CheckCircle, Truck, ArrowLeft, ArrowRight, AlertCircle, Loader2,
-  Tag, X, Check, MapPin, User, CreditCard, LogIn,
+  Tag, X, Check, MapPin, User, CreditCard, LogIn, Landmark, Banknote,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import {
@@ -80,10 +80,15 @@ const STEPS = [
   { id: 3, label: 'Pago', Icon: CreditCard },
 ] as const;
 
-const PAYMENT_OPTIONS: Array<{ value: PaymentMethod; label: string; hint: string }> = [
-  { value: 'mercado_pago', label: 'Mercado Pago', hint: 'Tarjeta · PSE · Nequi' },
-  { value: 'transferencia', label: 'Transferencia', hint: 'Te enviamos los datos' },
-  { value: 'efectivo', label: 'Efectivo', hint: 'Pagas al recibir' },
+const PAYMENT_OPTIONS: Array<{
+  value: PaymentMethod;
+  label: string;
+  hint: string;
+  Icon: React.ComponentType<{ className?: string }>;
+}> = [
+  { value: 'mercado_pago', label: 'Mercado Pago', hint: 'Tarjeta · PSE · Nequi', Icon: CreditCard },
+  { value: 'transferencia', label: 'Transferencia', hint: 'Te enviamos los datos', Icon: Landmark },
+  { value: 'efectivo', label: 'Efectivo', hint: 'Pagas al recibir', Icon: Banknote },
 ];
 
 const COUPON_REASONS: Record<string, string> = {
@@ -1064,40 +1069,66 @@ function Step3Payment({
   return (
     <div className="space-y-5">
       <p className="text-gray-600 leading-relaxed">
-        Elige cómo te queda más cómodo. Si pagas con tarjeta o débito, te llevamos a Mercado Pago.
+        Elige cómo te queda más cómodo. Todos los métodos están disponibles también desde el celular.
       </p>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        {PAYMENT_OPTIONS.map((opt) => (
-          <button
-            key={opt.value}
-            type="button"
-            onClick={() => onChange(opt.value)}
-            className={`text-left p-4 rounded-xl border-2 transition-all ${
-              method === opt.value
-                ? 'border-serana-forest bg-white shadow'
-                : 'border-serana-forest/10 bg-white/40 hover:border-serana-forest/30'
-            }`}
-          >
-            <p className="font-bold text-serana-forest">{opt.label}</p>
-            <p className="text-xs text-gray-500 mt-1">{opt.hint}</p>
-          </button>
-        ))}
+      <div className="sticky top-[66px] z-30 -mx-2 rounded-2xl border border-serana-forest/10 bg-serana-cream/95 p-2 shadow-sm backdrop-blur-md sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:p-0 sm:shadow-none">
+        <p className="px-1 pb-2 text-[9px] font-bold uppercase tracking-[0.18em] text-serana-forest/55 sm:hidden">
+          Métodos de pago
+        </p>
+        <div
+          className="grid grid-cols-3 gap-1.5 sm:gap-3"
+          role="radiogroup"
+          aria-label="Métodos de pago disponibles"
+          data-testid="payment-method-options"
+        >
+          {PAYMENT_OPTIONS.map((opt) => {
+            const selected = method === opt.value;
+            const Icon = opt.Icon;
+            return (
+              <button
+                key={opt.value}
+                type="button"
+                role="radio"
+                aria-checked={selected}
+                data-testid={`payment-method-${opt.value}`}
+                onClick={() => onChange(opt.value)}
+                className={`flex min-h-[72px] min-w-0 flex-col items-center justify-center rounded-xl border-2 px-1.5 py-2 text-center transition-all sm:min-h-0 sm:items-start sm:p-4 sm:text-left ${
+                  selected
+                    ? 'border-serana-forest bg-white shadow'
+                    : 'border-serana-forest/10 bg-white/60 hover:border-serana-forest/30'
+                }`}
+              >
+                <Icon
+                  className={`mb-1 h-4 w-4 shrink-0 ${
+                    selected ? 'text-serana-forest' : 'text-serana-olive'
+                  }`}
+                />
+                <span className="text-[11px] font-bold leading-tight text-serana-forest sm:text-base">
+                  {opt.label}
+                </span>
+                <span className="mt-1 hidden text-xs text-gray-500 sm:block">
+                  {opt.hint}
+                </span>
+              </button>
+            );
+          })}
+        </div>
       </div>
       {method === 'mercado_pago' && (
         <div className="flex items-start gap-3 p-4 rounded-xl bg-serana-cream/60 border border-serana-forest/10 text-serana-forest/75 text-[13px] leading-relaxed">
           <CreditCard className="w-4 h-4 shrink-0 mt-0.5 text-serana-olive" />
-          Después de confirmar te llevamos a Mercado Pago para completar el pago. Puedes pagar con tarjeta, PSE, Nequi o transferencia.
+          En Mercado Pago puedes usar tarjeta, PSE, Wallet o Nequi. También puedes cambiar arriba a transferencia bancaria o efectivo.
         </div>
       )}
       {method === 'transferencia' && (
         <div className="flex items-start gap-3 p-4 rounded-xl bg-serana-cream/60 border border-serana-forest/10 text-serana-forest/75 text-[13px] leading-relaxed">
-          <CreditCard className="w-4 h-4 shrink-0 mt-0.5 text-serana-olive" />
+          <Landmark className="w-4 h-4 shrink-0 mt-0.5 text-serana-olive" />
           Recibirás los datos bancarios por WhatsApp. Tu pedido entra a cocina cuando confirmemos el pago.
         </div>
       )}
       {method === 'efectivo' && (
         <div className="flex items-start gap-3 p-4 rounded-xl bg-serana-cream/60 border border-serana-forest/10 text-serana-forest/75 text-[13px] leading-relaxed">
-          <CreditCard className="w-4 h-4 shrink-0 mt-0.5 text-serana-olive" />
+          <Banknote className="w-4 h-4 shrink-0 mt-0.5 text-serana-olive" />
           Pagas en efectivo cuando recibas tu pedido. Confirmamos por WhatsApp el horario de entrega.
         </div>
       )}
