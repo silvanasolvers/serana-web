@@ -28,6 +28,12 @@ import {
   removeBrowserStorage,
   writeBrowserStorage,
 } from '../lib/browserRuntime';
+import {
+  DELIVERY_FEE_COP,
+  STORE_PICKUP,
+  STORE_PICKUP_CHECKOUT_ADDRESS,
+  type WebDeliveryType,
+} from '../../shared/checkout';
 
 const MP_PUBLIC_KEY = import.meta.env.VITE_MP_PUBLIC_KEY ?? '';
 
@@ -37,8 +43,6 @@ const COP = (n: number) =>
     minimumFractionDigits: 0, maximumFractionDigits: 0,
   }).format(n);
 
-type DeliveryType = 'domicilio' | 'recogida';
-
 type FormState = {
   fullName: string;
   phone: string;
@@ -47,7 +51,7 @@ type FormState = {
   city: string;
   notes: string;
   paymentMethod: PaymentMethod;
-  deliveryType: DeliveryType;
+  deliveryType: WebDeliveryType;
 };
 
 const initialForm: FormState = {
@@ -63,8 +67,6 @@ const initialForm: FormState = {
 
 const STORAGE_KEY = 'serana:checkout:contact';
 const CHECKOUT_KEY_STORAGE = 'serana:checkout:key:v2';
-
-const DELIVERY_FEE_COP = 12500;
 
 function newCheckoutKey() {
   const saved = readBrowserStorage('sessionStorage', CHECKOUT_KEY_STORAGE);
@@ -248,7 +250,7 @@ export default function CheckoutPage() {
 
   const buildCheckoutPayload = () => {
     const fullAddress = form.deliveryType === 'recogida'
-      ? 'Recogida en tienda · Carrera 45F #40 sur 03, Barrio Alcalá, Envigado, Urb Villas del Vallejuelo'
+      ? STORE_PICKUP_CHECKOUT_ADDRESS
       : [form.address.trim(), form.city.trim()].filter(Boolean).join(', ');
     return {
       customer_phone: phoneDigits,
@@ -385,6 +387,39 @@ export default function CheckoutPage() {
   const handleBrickRejected = (info: { status: string; status_detail: string; message?: string }) => {
     setMpRejection({ status_detail: info.status_detail, message: info.message });
   };
+
+  useEffect(() => {
+    if (!paymentPending) return;
+    let cancelled = false;
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    const refresh = async () => {
+      try {
+        const status = await getCheckoutStatus(paymentPending.checkoutToken);
+        if (cancelled) return;
+        if (status.status === 'paid' && status.order_number) {
+          setConfirmation({
+            orderNumber: status.order_number,
+            subtotal: Number(status.subtotal),
+            discount: Number(status.discount_amount),
+            total: Number(status.total_amount),
+            coupon: status.coupon_code,
+            kind: 'confirmed',
+          });
+          setPaymentPending(null);
+          clearCheckoutKey();
+          clearCheckoutSource();
+          clearCart();
+          return;
+        }
+      } catch {/* a later webhook/poll can still reconcile */}
+      if (!cancelled) timer = setTimeout(refresh, 4000);
+    };
+    timer = setTimeout(refresh, 1500);
+    return () => {
+      cancelled = true;
+      if (timer) clearTimeout(timer);
+    };
+  }, [paymentPending, clearCart]);
 
   const checkoutFingerprint = useMemo(() => JSON.stringify({
     items: items.map((item) => ({
@@ -540,7 +575,9 @@ export default function CheckoutPage() {
             <p className="text-xl text-gray-600 mb-12 font-light leading-relaxed">
               {confirmation.kind === 'awaiting_transfer'
                 ? 'Registramos tu solicitud. Te enviaremos los datos de transferencia y el pedido entrará a cocina únicamente cuando confirmemos el pago.'
-                : 'Gracias por elegir Serana. Tu pedido entró a la cocina y te escribimos por WhatsApp con cada novedad.'}
+                : form.deliveryType === 'recogida'
+                  ? 'Gracias por elegir Serana. Tu pedido entró a la cocina y te avisaremos por WhatsApp cuando esté listo para recoger.'
+                  : 'Gracias por elegir Serana. Tu pedido entró a la cocina y te escribimos por WhatsApp con cada novedad.'}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
               <Link to="/" className="inline-flex items-center gap-2 bg-serana-forest text-serana-cream px-10 py-4 rounded-full font-bold hover:bg-serana-olive transition-colors shadow-lg">
@@ -571,11 +608,15 @@ export default function CheckoutPage() {
           </div>
           <h1 className="font-serif text-4xl md:text-5xl text-serana-forest mb-6 leading-tight">
             {stepIndex === 0 && (<>Revisa tu <span className="italic text-serana-olive">canasta</span>.</>)}
-            {stepIndex === 1 && (<>¿Adónde te lo <span className="italic text-serana-olive">enviamos</span>?</>)}
+            {stepIndex === 1 && (
+              form.deliveryType === 'recogida'
+                ? (<>Datos para tu <span className="italic text-serana-olive">recogida</span>.</>)
+                : (<>¿Adónde te lo <span className="italic text-serana-olive">enviamos</span>?</>)
+            )}
             {stepIndex === 2 && (<>Elige cómo <span className="italic text-serana-olive">pagas</span>.</>)}
           </h1>
 
-          <div className="flex items-center gap-3">
+          <div className="grid grid-cols-3 gap-1.5 sm:flex sm:items-center sm:gap-3">
             {STEPS.map((s, i) => {
               const Icon = s.Icon;
               const done = i < stepIndex;
@@ -586,7 +627,7 @@ export default function CheckoutPage() {
                   type="button"
                   onClick={() => i < stepIndex && setStepIndex(i)}
                   disabled={i > stepIndex}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-[10px] font-bold uppercase tracking-widest transition ${
+                  className={`flex min-w-0 items-center justify-center gap-1 px-2 py-1.5 rounded-full border text-[9px] font-bold uppercase tracking-[0.08em] transition sm:gap-2 sm:px-3 sm:text-[10px] sm:tracking-widest ${
                     active ? 'bg-serana-forest text-serana-cream border-serana-forest'
                     : done ? 'bg-serana-olive/10 text-serana-olive border-serana-olive/40 hover:border-serana-olive cursor-pointer'
                     : 'bg-white text-serana-forest/40 border-serana-forest/10'
@@ -643,6 +684,7 @@ export default function CheckoutPage() {
               <>
                 <Step3Payment
                   method={form.paymentMethod}
+                  deliveryType={form.deliveryType}
                   onChange={(m) => setForm((prev) => {
                     const next = { ...prev, paymentMethod: m };
                     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(next)); } catch {/* ignore */}
@@ -917,8 +959,8 @@ function Step1Cart({
   subtotal: number;
   minimumOrderMet: boolean;
   minimumOrderMissing: number;
-  deliveryType: DeliveryType;
-  onChangeDeliveryType: (t: DeliveryType) => void;
+  deliveryType: WebDeliveryType;
+  onChangeDeliveryType: (t: WebDeliveryType) => void;
 }) {
   return (
     <div className="space-y-6">
@@ -1130,13 +1172,13 @@ function Step2Delivery({
               <div className="flex-1 min-w-0">
                 <p className="text-[10px] font-bold uppercase tracking-widest text-serana-terracotta mb-1">Dirección</p>
                 <p className="font-serif text-lg text-serana-forest leading-snug">
-                  Carrera 45F #40 sur 03
+                  {STORE_PICKUP.addressLine}
                 </p>
                 <p className="text-sm text-serana-forest/70 leading-snug">
-                  Barrio Alcalá, Envigado
+                  {STORE_PICKUP.areaLine}
                 </p>
                 <p className="text-sm text-serana-forest/70 leading-snug">
-                  Urb. Villas del Vallejuelo
+                  {STORE_PICKUP.detailLine}
                 </p>
               </div>
             </div>
@@ -1146,8 +1188,8 @@ function Step2Delivery({
               </span>
               <div className="flex-1 min-w-0">
                 <p className="text-[10px] font-bold uppercase tracking-widest text-serana-terracotta mb-1">Horario de atención</p>
-                <p className="font-medium text-serana-forest">Lunes a Sábado</p>
-                <p className="text-sm text-serana-forest/70">8:00 a.m. — 6:00 p.m.</p>
+                <p className="font-medium text-serana-forest">{STORE_PICKUP.scheduleDays}</p>
+                <p className="text-sm text-serana-forest/70">{STORE_PICKUP.scheduleHours}</p>
               </div>
             </div>
             <p className="text-[12px] text-serana-forest/65 leading-relaxed pt-3 border-t border-serana-forest/10">
@@ -1169,8 +1211,12 @@ function Step2Delivery({
 }
 
 function Step3Payment({
-  method, onChange,
-}: { method: PaymentMethod; onChange: (m: PaymentMethod) => void }) {
+  method, deliveryType, onChange,
+}: {
+  method: PaymentMethod;
+  deliveryType: WebDeliveryType;
+  onChange: (m: PaymentMethod) => void;
+}) {
   return (
     <div className="space-y-5">
       <p className="text-gray-600 leading-relaxed">
@@ -1234,7 +1280,9 @@ function Step3Payment({
       {method === 'efectivo' && (
         <div className="flex items-start gap-3 p-4 rounded-xl bg-serana-cream/60 border border-serana-forest/10 text-serana-forest/75 text-[13px] leading-relaxed">
           <Banknote className="w-4 h-4 shrink-0 mt-0.5 text-serana-olive" />
-          Pagas en efectivo cuando recibas tu pedido. Confirmamos por WhatsApp el horario de entrega.
+          {deliveryType === 'recogida'
+            ? 'Pagas en efectivo cuando recojas tu pedido. Te avisamos por WhatsApp cuando esté listo.'
+            : 'Pagas en efectivo cuando recibas tu pedido. Confirmamos por WhatsApp el horario de entrega.'}
         </div>
       )}
     </div>

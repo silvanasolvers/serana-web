@@ -34,6 +34,7 @@ import {
   PaymentPayloadError,
   safeMercadoPagoRedirectUrl,
 } from './server/mercadopago.ts';
+import { sanitizeCheckoutPayload } from './server/checkout.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -597,43 +598,6 @@ function startMercadoPagoReconciler() {
   const interval = setInterval(() => void reconcileStaleMercadoPagoAttempts(), 60_000);
   firstRun.unref();
   interval.unref();
-}
-
-function sanitizeCheckoutPayload(value: unknown) {
-  const payload = value && typeof value === 'object'
-    ? value as Record<string, unknown>
-    : {};
-  const rawItems = Array.isArray(payload.items) ? payload.items.slice(0, 50) : [];
-  const paymentMethod = ['mercado_pago', 'transferencia', 'efectivo'].includes(String(payload.payment_method))
-    ? String(payload.payment_method)
-    : 'mercado_pago';
-  const sourceCode = ['web', 'whatsapp_bot', 'presencial', 'telefono'].includes(String(payload.source_code))
-    ? String(payload.source_code)
-    : 'web';
-
-  return {
-    customer_phone: normalizePhone(payload.customer_phone),
-    customer_name: clippedString(payload.customer_name, 160),
-    customer_email: clippedString(payload.customer_email, 320).toLowerCase() || undefined,
-    delivery_address: clippedString(payload.delivery_address, 500),
-    notes: clippedString(payload.notes, 1000) || undefined,
-    // The public website currently supports delivery only. Financial and
-    // operational fields are deliberately not accepted from the browser.
-    type: 'domicilio',
-    payment_method: paymentMethod,
-    source_code: sourceCode,
-    coupon_code: clippedString(payload.coupon_code, 80) || undefined,
-    items: rawItems.map((raw) => {
-      const item = raw && typeof raw === 'object' ? raw as Record<string, unknown> : {};
-      return {
-        product_slug: clippedString(item.product_slug, 160) || undefined,
-        product_id: isUuid(item.product_id) ? item.product_id : undefined,
-        quantity: Math.max(1, Math.min(100, Math.trunc(Number(item.quantity) || 1))),
-        variant_label: clippedString(item.variant_label, 120) || undefined,
-        customizations: clippedString(item.customizations, 2000) || undefined,
-      };
-    }),
-  };
 }
 
 function publicCheckoutStatus(context: CheckoutContext) {
